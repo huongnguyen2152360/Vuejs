@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="obj">
+        <div v-on:mousemove='timtoado'>
+            <input type="text" v-on:input="changeValue">
+            <p>{{ noidung }} </p>
+            <a :href="link">Google Page</a>
+            <h4 v-once>{{ noidung2 }} - {{ updateP() }}</h4>
+            <p v-html="maHTML"></p>
+            <hr>
+            <button v-on:click="tanggiatri">Click to see me count</button>
+            <button v-on:click="count++">Click to see me count (Using JS)</button>
+            <p>Count: {{ count }}</p>
+            <p>Message: {{ count >15 ? "Bạn đã vượt qua giới hạn cho phép" : "Bạn vẫn trong giới hạn cho phép"}}</p>
+            <p>Mouse position: {{ x }} / {{ y }}</p>
+            <p v-on:mousemove="dungchuot" style="height: 50px;">Stop event</p>
+            <input type="text" v-on:keyup.enter="banphim">
+        </div>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el: "#obj",
+            data: {
+                noidung: "Haloooooo~",
+                link: "http://google.com",
+                noidung2: "Content cũ",
+                maHTML: '<a href="http://dantri.com">Get password here</a>',
+                count: 0,
+                x: 0,
+                y: 0,
+                content1: "Hello",
+                content2: ""
+            },
+            methods: {
+                changeValue: function (event) {
+                    this.noidung = event.target.value;
+                },
+                updateP: function () {
+                    this.noidung2 = "Content vừa cập nhật";
+                    return this.noidung2;
+                },
+                tanggiatri: function () {
+                    this.count++;
+                },
+                timtoado: function (event) {
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                },
+                dungchuot: function(event) {
+                    event.stopPropagation();
+                },
+                banphim: function(event) {
+                    this.content2 = event.target.value;
+                    alert(this.content1 + " " + this.content2);
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
