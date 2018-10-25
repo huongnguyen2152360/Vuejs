@@ -1,0 +1,35 @@
+#app {
+    padding: 3rem 20rem;
+}
+.you-img, .monster-img {
+    width: 100%;
+}
+.healthbar {
+    background-color: rgb(196, 196, 196);
+    height: 25px;
+    margin: 1rem 0;
+    color: white;
+}
+.healthbar2 {
+    background-color: red;
+    height: 25px;
+    margin: 1rem 0;
+    color: white;
+}
+.startgame {
+    margin: 2rem 0;
+}
+.controls button {
+    margin: 2rem 5px;
+}
+.log ul {
+    list-style-type: none;
+}
+.log {
+    height: 200px;
+    overflow: scroll;
+}
+.player-turn {
+    color: #ff7675;
+    font-style: italic;
+}

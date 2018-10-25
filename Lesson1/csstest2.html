@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CSS test</title>
+</head>
+<body>
+    <div id="app">
+        <div class="squareTest">
+            <div class="square" :style="{backgroundColor: color}"></div>
+            <div class="square" :style="customStyles"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+        </div>
+        <p>First square's current color: <input type="text" v-model="color" style="padding: 0 5px"></p>
+        <input type="text" v-model="width">
+        <input type="text" v-model="height">
+        <hr>
+        <p>Are you female?</p>
+        <p v-if="yess">Confirmed.</p>
+        <p v-else>Not confirmed.</p>
+        <button @click="yess = !yess">Confirm/ Not confirm</button>
+        <template v-if="yess">
+            <div class="cf" style="padding-top: 1rem">Confirmed</div>
+            <div class="cf">Confirmed</div>
+            <div class="cf">Confirmed</div>
+            <div class="cf">Confirmed</div>
+            <div class="cf">Confirmed</div>
+        </template>
+        <p v-show="yess">Show this if you're female.</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+    new Vue({
+        el: "#app",
+        data: {
+            color: "gray",
+            width: 200,
+            height: 200,
+            yess: true
+        },
+        computed : {
+            customStyles: function() {
+                return {
+                    width: this.width + "px",
+                    height: this.height + "px"
+                }
+            }
+        }
+    })
+    
+    </script>
+</body>
+</html>

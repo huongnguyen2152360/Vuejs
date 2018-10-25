@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-for</title>
+</head>
+<body>
+    <div id="app">
+       <ul>
+           <li v-for="(el,i) in elements">{{ el }} - Index: {{ i }}</li>
+       </ul>
+       <button @click="elements.push('test')">Add new menu item(s)</button>
+       
+       <ul>
+           <li v-for="student in students">
+               <p v-for="(value,key,index) in student">{{ key }}: {{ value }} [{{ index }}]</p>
+           </li>
+       </ul>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+    new Vue({
+        el: "#app",
+        data: {
+            elements: ["Home", "About", "Blog", "Contact", "FAQ"],
+            students: [
+                {name: "Sky", age: "34", class:"NodeJs"},
+                {name: "Anthony", age: "21", class:"HTML/CSS"},
+                {name: "Isla", age: "15", class:"VueJs"},
+                {name: "Nice", age: "6", class:"Database"},
+                {name: "Namee", age: "47", class:"IOS"},     
+            ]
+        }
+    });
+    </script>
+</body>
+</html>

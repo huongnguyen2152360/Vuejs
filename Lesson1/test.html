@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test VueJs</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>Value A: {{ counta }}</p>
+        <p>Value B: {{ countb }}</p>
+        <button @click="a++">Click to count A</button>
+        <button @click="b++">Click to count B</button>
+        <hr>
+        <p>Bạn A: {{ diem }} điểm.</p>
+    </div>
+
+
+    <script src="./vue.js"></script>
+    <script>
+        const app = new Vue({
+            el: "#app",
+            data: {
+                a: 0,
+                b: 0,
+                diem: "7"
+            },
+            computed: {
+                counta: function() {
+                    console.log("Function counta");
+                    return this.a;
+                },
+                countb: function() {
+                    console.log("Function countb");
+                    return this.b;
+                }            
+            },
+            watch: {
+                diem: function(newValue) {
+                    console.log("Điểm đã được sửa lại.");
+                }
+            }
+        });
+        // Sau khi người khác chỉnh sửa điểm
+        app.diem = "8"
+
+    </script>
+</body>
+
+</html>

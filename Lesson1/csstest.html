@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CSS test</title>
+</head>
+<style>
+    .squareTest {
+        display: flex;
+    }
+    .square {
+        background-color: gray;
+        width: 200px;
+        height: 200px;
+        margin: 2rem 1rem;
+    }
+    .red, .wrong {
+        background-color: darkred;
+    }
+    .blue {
+        background-color: blue;
+    }
+    .green, .right {
+        background-color:green;
+    }
+</style>
+<body>
+    <div id="app">
+        <div class="squareTest">
+            <div class="square" @click="turnRed = !turnRed" :class="{red: turnRed}"></div>
+            <div class="square" :class="{red: turnRed}"></div>
+            <div class="square"></div>
+            <div class="square" :class="[color, {red: turnRed}]"></div>
+        </div>
+        <p>Last square's current color: <input type="text" v-model="color" style="padding: 0 5px"></p>
+        <hr>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+    new Vue({
+        el: "#app",
+        data: {
+            turnRed: false,
+            color: "green",
+            graysquare: "gray",
+            right: true,
+            noidung: "abc"
+        },
+        computed: {
+            divClasses: function() {
+                return {
+                    red: this.turnRed,
+                    blue: !this.turnRed
+                }
+            }
+        }
+    })
+    
+    </script>
+</body>
+</html>
