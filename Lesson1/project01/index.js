@@ -18,7 +18,7 @@ new Vue({
       if (this.checkPlayerOptions()) {
         return;
       }
-      // Monster
+      // Monster being attacked
       damage = this.inputDamage(10, 2);
       this.monsterHealth -= damage;
       this.turns.unshift({
@@ -26,13 +26,7 @@ new Vue({
         textLog: "Player hits monters for " + damage
       });
 
-      // Player
-      // damage = this.inputDamage(15, 5)
-      // this.playerHealth -= damage;
-      // this.turns.unshift({
-      //   isPlayer: false, // Player turn
-      //   textLog: 'Monster hits player for ' + damage
-      // })
+      // Player being attacked
       this.monsterAttack();
     },
     specialAttack: function() {
