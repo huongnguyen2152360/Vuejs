@@ -1,60 +1,52 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 text-center mt-5">
+          <button class="btn btn-outline-danger" @click=" compSelected = 'appCard' ">Card</button>
+          <button class="btn btn-outline-info" @click=" compSelected = 'appContact' ">Contact</button>
+          <button class="btn btn-outline-warning" @click=" compSelected = 'appAbout' ">About</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <keep-alive>
+            <component :is="compSelected"></component>
+          </keep-alive>
+          <!-- <div class="text-center pt-3">
+                <p>{{ compSelected }}</p>
+              </div> -->
+          <app-card cardWord="Car">
+            <h2 slot="lam1">{{ cardTitle }}</h2>
+            <p slot="lam1">Lamborghini Gallador</p>
+            <p slot="lam2">Lamborghini Murcielago</p>
+          </app-card>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import Card from "./components/Card.vue"
+  import Contact from "./components/Contact.vue"
+  import About from "./components/About.vue"
+  export default {
+    data: function () {
+      return {
+        cardTitle: "Luxury Cars",
+        compSelected: "appCard"
+      }
+    },
+    components: {
+      appCard: Card,
+      appContact: Contact,
+      appAbout: About
     }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
