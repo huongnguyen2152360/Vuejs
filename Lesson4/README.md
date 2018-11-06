@@ -1,6 +1,6 @@
 # lesson4
 
-> a Vue.js project
+> section 10 - practice
 
 ## Build Setup
 

@@ -1,60 +1,53 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <app-header :itemsCount="items.length" :itemsMax="maxItems"></app-header>
+    <app-new-items @itemAdded="addItems"></app-new-items>
+    <app-items-layout :itemss="items" @itemRemoved="removeItemm"></app-items-layout>
+    <div class="row">
+      <div class="col-12">
+        <div class="alert alert-success text-center mt-2">
+          Click on an Item to delete it
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import ItemsLayout from './components/ItemsLayout.vue'
+  import NewItems from './components/NewItems.vue'
+  import Header from './components/Header.vue'
+  export default {
+    data: function () {
+      return {
+        items: [
+          'Life is tough, my darling. But so are you!', 'What"s stopping you? That"s right. Nothing!'
+        ],
+        maxItems: 10
+      }
+    },
+    components: {
+      appItemsLayout: ItemsLayout,
+      appNewItems: NewItems,
+      appHeader: Header
+    },
+    methods: {
+      addItems(item) {
+        if (this.items.length >= this.maxItems) {
+          return alert('You can only add up to 10 items.')
+        } else {
+          this.items.push(item)
+        }
+      },
+      removeItemm(index) {
+        this.items.splice(index, 1)
+      }
     }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  #app {
+    margin: 2rem 30px;
+  }
 </style>
