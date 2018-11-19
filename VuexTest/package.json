@@ -1,20 +1,17 @@
 {
-  "name": "lesson5",
-  "description": "Blog project",
+  "name": "vuextest",
+  "description": "a Vuex project",
   "version": "1.0.0",
   "author": "huongnguyen2152360",
-  "license": "MIT",
+  "license": "",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "start": "node server.js"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "express": "^4.16.4",
     "vue": "^2.5.11",
-    "vue-resource": "^1.5.1",
-    "vue-router": "^3.0.1"
+    "vuex": "^3.0.1"
   },
   "browserslist": [
     "> 1%",
