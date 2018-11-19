@@ -43,8 +43,8 @@
             <td>
               <button
                 class="btn btn-danger list-delete"
-                data-toggle="modal"
-                data-target="#exampleModal"
+                data-toggle="modal" data-target="#exampleModal"
+                @click='removeContact(user)'
               >-</button>
             </td>
           </tr>
@@ -69,7 +69,7 @@
             <div class="modal-body">Are you sure you want to delete this contact?</div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary" @click="removeContact(user)">Delete</button>
+              <button type="button" class="btn btn-danger" >Delete</button>
             </div>
           </div>
         </div>
@@ -105,8 +105,7 @@ export default {
       this.newUser.address = "";
     },
     removeContact: function(user) {
-      usersRef.child(user[".key"]).remove();
-      // user[".key"].remove();
+      // usersRef.child(user[".key"]).remove();
     }
   }
 };
