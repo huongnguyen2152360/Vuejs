@@ -1,151 +1,140 @@
 <template>
   <div id="app">
-    <div class="container">
-      <h1 class="list-title">Contact list</h1>
-      <div class="card">
-        <div class="card-header">Add New Contact</div>
-        <div class="card-body">
-          <form class="form-inline">
-            <div class="form-group">
-              <label for="name">Name:</label>
-              <input class="form-control" type="text" id="name" v-model="newUser.name">
-              <label for="email">Email:</label>
-              <input class="form-control" type="text" id="email" v-model="newUser.email">
-              <label for="phone">Phone:</label>
-              <input class="form-control" type="text" id="phone" v-model="newUser.phone">
-              <label for="address">Address:</label>
-              <input class="form-control" type="text" id="address" v-model="newUser.address">
-              <button class="btn btn-info" @click.prevent="addContact">Add Contact</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Address</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody v-for="(user,number) in users" :key="number">
-          <tr>
-            <td scope="row">{{ number + 1 }}</td>
-            <td>{{ user[".key"].slice(1) }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phone }}</td>
-            <td>{{ user.address }}</td>
-            <td>
-              <button
-                class="btn btn-danger list-delete"
-                data-toggle="modal" data-target="#exampleModal"
-                @click='removeContact(user)'
-              >-</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">Are you sure you want to delete this contact?</div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-danger" >Delete</button>
-            </div>
+    <el-container>
+      <el-header><h1 class="list-title">Contact list</h1></el-header>
+      <el-main>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span class="list-add-title">Add New Contact</span>
           </div>
-        </div>
-      </div>
-    </div>
+          <el-row :gutter="15">
+            <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5">
+              <el-input placeholder="Name" v-model="newUser.name"></el-input>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5"
+              ><el-input
+                placeholder="Email"
+                type="email"
+                v-model="newUser.email"
+              ></el-input
+            ></el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5"
+              ><el-input
+                placeholder="Phone"
+                type="number"
+                v-model="newUser.phone"
+              ></el-input
+            ></el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5"
+              ><el-input
+                placeholder="Address"
+                v-model="newUser.address"
+              ></el-input
+            ></el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4"
+              ><el-button type="primary" plain @click.prevent="addContact"
+                >Add Contact</el-button
+              ></el-col
+            >
+          </el-row>
+        </el-card>
+        <el-table height="250" style="width: 100%" :data="tableData">
+          <el-table-column
+            label="#"
+            width="100"
+            prop="number"
+          ></el-table-column>
+          <el-table-column label="ID" width="180" prop="id"></el-table-column>
+          <el-table-column
+            label="Name"
+            width="180"
+            prop="name"
+          ></el-table-column>
+          <el-table-column
+            label="Email"
+            width="180"
+            prop="email"
+          ></el-table-column>
+          <el-table-column
+            label="Phone"
+            width="180"
+            prop="phone"
+          ></el-table-column>
+          <el-table-column
+            label="Address"
+            width="180"
+            prop="address"
+          ></el-table-column>
+        </el-table>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
-import { usersRef } from "./firebase.js";
+  import { usersRef } from "./firebase.js";
 
-export default {
-  name: "app",
-  firebase: {
-    users: usersRef
-  },
-  data() {
-    return {
-      newUser: {
-        name: "",
-        email: "",
-        phone: "",
-        address: ""
-      }
-    };
-  },
-  methods: {
-    addContact: function() {
-      usersRef.push(this.newUser);
-      this.newUser.name = "";
-      this.newUser.email = "";
-      this.newUser.phone = "";
-      this.newUser.address = "";
+  export default {
+    name: "app",
+    firebase: {
+      users: usersRef
     },
-    removeContact: function(user) {
-      // usersRef.child(user[".key"]).remove();
+    created() {
+      let i = 1;
+      this.users.forEach(user => {
+        const data = {
+          id: user[".key"].slice(1),
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          number: i++
+        };
+        this.tableData.push(data);
+      });
+    },
+    data() {
+      return {
+        tableData: [],
+        newUser: {
+          name: "",
+          email: "",
+          phone: "",
+          address: ""
+        },
+        modalUser: {}
+      };
+    },
+    methods: {
+      addContact: function() {
+        usersRef.push(this.newUser);
+        this.newUser.name = "";
+        this.newUser.email = "";
+        this.newUser.phone = "";
+        this.newUser.address = "";
+        this.tableData.push(this.newUser)
+      },
+      toRemove: function(user) {
+        this.modalUser = user;
+      },
+      removeContact: function() {
+        usersRef.child(this.modalUser[".key"]).remove();
+      }
     }
-  }
-};
+  };
 </script>
 
 <style>
-.container {
-  margin: 3rem auto;
-}
-.list-title {
-  text-align: center;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-}
-.table td {
-  vertical-align: middle !important;
-}
-tr:hover {
-  background-color: rgb(235, 233, 233);
-}
-.card {
-  margin-bottom: 2rem;
-}
-.card-header {
-  font-weight: bold;
-}
-.form-inline input {
-  width: 12vw !important;
-}
-.form-inline button {
-  margin-left: 15px;
-  font-size: 0.9em;
-}
-.form-inline label {
-  margin: 0.5rem 5px;
-  font-size: 0.9em;
-  font-weight: bold;
-}
-.list-delete {
-  padding: 2px 10px !important;
-  font-weight: bold;
-}
+  .list-add-title {
+    font-weight: bold;
+  }
+  .list-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  .el-input {
+    margin-bottom: 1rem;
+  }
 </style>
