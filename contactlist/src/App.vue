@@ -38,8 +38,8 @@
           <el-table-column label="Phone" width="180" prop="phone"></el-table-column>
           <el-table-column label="Address" width="180" prop="address"></el-table-column>
           <el-table-column label="##" width="100">
-            <template slot-scope="scope">
-              <el-button type="danger" @click="cfRemove"></el-button>
+            <template slot-scope="scope"> 
+              <el-button size="mini" type="danger" @click="cfRemove">Delete</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -92,29 +92,29 @@ export default {
       this.newUser.address = "";
       this.tableData.push(this.newUser);
     },
-    // cfRemove: function() {
-    //   this.$confirm(
-    //     "This will permanently delete the contact. Continue?",
-    //     "Warning",
-    //     {
-    //       confirmButtonText: "OK",
-    //       cancelButtonText: "Cancel",
-    //       type: "warning"
-    //     }
-    //   )
-    //     .then(() => {
-    //       this.$message({
-    //         type: "success",
-    //         message: "Delete completed"
-    //       });
-    //     })
-    //     .catch(() => {
-    //       this.$message({
-    //         type: "info",
-    //         message: "Delete canceled"
-    //       });
-    //     });
-    // },
+    cfRemove: function() {
+      this.$confirm(
+        "This will permanently delete the contact. Continue?",
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "Delete completed"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled"
+          });
+        });
+    },
     toRemove: function(user) {
       this.modalUser = user;
     },
