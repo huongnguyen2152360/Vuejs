@@ -38,8 +38,8 @@
           <el-table-column label="Phone" width="180" prop="phone"></el-table-column>
           <el-table-column label="Address" width="180" prop="address"></el-table-column>
           <el-table-column label="##" width="100">
-            <template slot-scope="scope"> 
-              <el-button size="mini" type="danger" @click="cfRemove">Delete</el-button>
+            <template slot-scope="scope">
+              <el-button size="mini" type="danger" @click="cfRemove(tableData)">Delete</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,49 +57,70 @@ export default {
   firebase: {
     users: usersRef
   },
-  created() {
-    let i = 1;
-    this.users.forEach(user => {
-      const data = {
-        id: user[".key"].slice(1),
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        number: i++
-      };
-      this.tableData.push(data);
-    });
-  },
   data() {
     return {
       tableData: [],
-      newUser: {
-        name: "",
-        email: "",
-        phone: "",
-        address: ""
-      },
+      newUser: {},
       modalUser: {}
     };
   },
+  created() {
+    this.getUserData();
+  },
   methods: {
-    addContact: function() {
-      usersRef.push(this.newUser);
-      this.newUser.name = "";
-      this.newUser.email = "";
-      this.newUser.phone = "";
-      this.newUser.address = "";
-      this.tableData.push(this.newUser);
+    getUserData: function() {
+      let i = 1;
+      const dis = this;
+      usersRef.once("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          let childKey = childSnapshot.key;
+          let childData = childSnapshot.val();
+          const data = {
+            id: childKey.slice(1),
+            name: childData.name,
+            email: childData.email,
+            phone: childData.phone,
+            address: childData.address,
+            number: i++
+          };
+          dis.tableData.push(data);
+        });
+      });
     },
-    cfRemove: function() {
+    addContact: function() {
+      usersRef.push(this.newUser).then(contact => {
+        // newUser trả về 1 structor có lv1 là key của contact, lv2 là name, phone, ...
+        // cần dùng once vs tên là "value" để lắng nghe event emit từ firebase rằng: trả data lv1 (key) và lv2 (name, phone, ...) của contact
+        // để trả được về thì phải lấy data từ contact
+        usersRef.child(contact.key).once("value", snapshot => {
+          console.log(snapshot.val());
+          let snapValue = snapshot.val();
+          this.tableData.push({
+            id: contact.key.slice(1),
+            name: snapValue.name,
+            email: snapValue.email,
+            phone: snapValue.phone,
+            address: snapValue.address,
+            number: tableData.length + 1
+          });
+        });
+      });
+    },
+    cfRemove: function(tableData) {
       this.$confirm(
         "This will permanently delete the contact. Continue?",
         "Warning",
         {
           confirmButtonText: "OK",
           cancelButtonText: "Cancel",
-          type: "warning"
+          type: "warning",
+          beforeClose: (action, instance, done) => {
+            if (action == "confirm") {
+              console.log(tableData);
+            } else {
+              done();
+            }
+          }
         }
       )
         .then(() => {
