@@ -39,7 +39,11 @@
           <el-table-column label="Address" prop="address"></el-table-column>
           <el-table-column label="##">
             <template slot-scope="scope">
-              <el-button size="mini" type="info" @click="editBtn(scope.$index, scope.row)">Edit</el-button>
+              <el-button
+                size="mini"
+                type="info"
+                @click="editBtn(scope.$index, scope.row), dialogFormVisible = true"
+              >Edit</el-button>
             </template>
           </el-table-column>
           <el-table-column label="##">
@@ -49,6 +53,26 @@
           </el-table-column>
         </el-table>
         <!-- End of table -->
+        <el-dialog title="Edit Form" :visible.sync="dialogFormVisible">
+          <el-form :data="tableData">
+            <el-form-item label="Name">
+              <el-input autocomplete="off" v-model="editUser.name"></el-input>
+            </el-form-item>
+            <el-form-item label="Email">
+              <el-input autocomplete="off" v-model="editUser.email"></el-input>
+            </el-form-item>
+            <el-form-item label="Phone">
+              <el-input autocomplete="off" v-model="editUser.phone"></el-input>
+            </el-form-item>
+            <el-form-item label="Address">
+              <el-input autocomplete="off" v-model="editUser.address"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="cfEdit(),dialogFormVisible = false">Confirm</el-button>
+          </span>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -65,7 +89,9 @@ export default {
   data() {
     return {
       tableData: [],
-      newUser: {}
+      newUser: {},
+      dialogFormVisible: false,
+      editUser: {}
     };
   },
   created() {
@@ -80,11 +106,8 @@ export default {
           let childKey = childSnapshot.key;
           let childData = childSnapshot.val();
           const data = {
+            ...childData,
             id: childKey.slice(1),
-            name: childData.name,
-            email: childData.email,
-            phone: childData.phone,
-            address: childData.address,
             number: i++
           };
           dis.tableData.push(data);
@@ -97,15 +120,14 @@ export default {
         // cần dùng once vs tên là "value" để lắng nghe event emit từ firebase rằng: trả data lv1 (key) và lv2 (name, phone, ...) của contact
         // để trả được về thì phải lấy data từ contact
         usersRef.child(contact.key).once("value", snapshot => {
-          console.log(snapshot.val());
           let snapValue = snapshot.val();
           this.tableData.push({
-            id: contact.key.slice(1),
             name: snapValue.name,
             email: snapValue.email,
             phone: snapValue.phone,
             address: snapValue.address,
-            number: tableData.length + 1
+            id: contact.key.slice(1),
+            number: this.tableData.length + 1
           });
         });
       });
@@ -140,19 +162,26 @@ export default {
         });
     },
     editBtn: function(index, contact) {
-      this.$confirm(
-        "Input your edit",
-        "Tip",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "info"
-        }
-      )
-        .then(() => {
-          console.log(contact.name);
-        })
-        .catch(() => {});
+      // Hiển thị info trong form
+      this.editUser.name = contact.name;
+      this.editUser.phone = contact.phone;
+      this.editUser.email = contact.email;
+      this.editUser.address = contact.address;
+      this.editUser.id = contact.id;
+      this.editUser.number = contact.number;
+    },
+    cfEdit: function() {
+      let updates = {};
+      // usersRef.child(this.editUser.id).once("value", snapshot => {
+      //   console.log(snapshot.val());
+      // console.log(this.editUser);
+      updates['name'] = this.editUser.name;
+      updates['phone'] = this.editUser.phone;
+      updates['email'] = this.editUser.email;
+      updates['address'] = this.editUser.address;
+      console.log(updates);
+      console.log(usersRef.update(updates));
+      // usersRef.child(editUserValue.id).update(editUserValue);
     }
   }
 };
@@ -173,5 +202,8 @@ export default {
 }
 .el-table {
   margin: 2rem auto;
+}
+.el-form-item {
+  margin-bottom: 0;
 }
 </style>
