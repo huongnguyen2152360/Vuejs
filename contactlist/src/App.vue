@@ -31,15 +31,20 @@
         <!-- End of Add Contact -->
         <!-- Table -->
         <el-table height="500" style="width: 100%" :data="tableData">
-          <el-table-column label="#" width="100" prop="number"></el-table-column>
-          <el-table-column label="ID" width="180" prop="id"></el-table-column>
-          <el-table-column label="Name" width="180" prop="name"></el-table-column>
-          <el-table-column label="Email" width="180" prop="email"></el-table-column>
-          <el-table-column label="Phone" width="180" prop="phone"></el-table-column>
-          <el-table-column label="Address" width="180" prop="address"></el-table-column>
-          <el-table-column label="##" width="100">
+          <el-table-column label="#" width="70" prop="number"></el-table-column>
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="Name" prop="name"></el-table-column>
+          <el-table-column label="Email" prop="email"></el-table-column>
+          <el-table-column label="Phone" prop="phone"></el-table-column>
+          <el-table-column label="Address" prop="address"></el-table-column>
+          <el-table-column label="##">
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="cfRemove(tableData)">Delete</el-button>
+              <el-button size="mini" type="info" @click="editBtn(scope.$index, scope.row)">Edit</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="##">
+            <template slot-scope="scope">
+              <el-button size="mini" type="danger" @click="cfRemove(scope.$index, scope.row)">Delete</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,8 +65,7 @@ export default {
   data() {
     return {
       tableData: [],
-      newUser: {},
-      modalUser: {}
+      newUser: {}
     };
   },
   created() {
@@ -106,28 +110,27 @@ export default {
         });
       });
     },
-    cfRemove: function(tableData) {
+    cfRemove: function(index, contact) {
       this.$confirm(
         "This will permanently delete the contact. Continue?",
         "Warning",
         {
           confirmButtonText: "OK",
           cancelButtonText: "Cancel",
-          type: "warning",
-          beforeClose: (action, instance, done) => {
-            if (action == "confirm") {
-              console.log(tableData);
-            } else {
-              done();
-            }
-          }
+          type: "warning"
         }
       )
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "Delete completed"
-          });
+          usersRef
+            .child(`-${contact.id}`)
+            .remove()
+            .then(() => {
+              this.tableData.splice(index, 1);
+              this.$message({
+                type: "success",
+                message: `Delete completed: "${contact.name}"`
+              });
+            });
         })
         .catch(() => {
           this.$message({
@@ -136,11 +139,20 @@ export default {
           });
         });
     },
-    toRemove: function(user) {
-      this.modalUser = user;
-    },
-    removeContact: function() {
-      usersRef.child(this.modalUser[".key"]).remove();
+    editBtn: function(index, contact) {
+      this.$confirm(
+        "Input your edit",
+        "Tip",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "info"
+        }
+      )
+        .then(() => {
+          console.log(contact.name);
+        })
+        .catch(() => {});
     }
   }
 };
