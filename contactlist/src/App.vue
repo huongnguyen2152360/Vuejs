@@ -27,7 +27,6 @@
               <el-button type="primary" plain @click.prevent="addContact">Add Contact</el-button>
             </el-col>
           </el-row>
-          <mycompo></mycompo>
         </el-card>
         <!-- End of Add Contact -->
         <!-- Table -->
@@ -80,11 +79,7 @@
 
 <script>
 import { usersRef } from "./firebase.js";
-import Compo from "./Abc.vue";
 export default {
-  components: {
-    "mycompo": Compo
-  },
   name: "app",
   firebase: {
     users: usersRef
@@ -94,7 +89,8 @@ export default {
       tableData: [],
       newUser: {},
       dialogFormVisible: false,
-      editUser: {}
+      editUser: {},
+      search: ''
     };
   },
   created() {
