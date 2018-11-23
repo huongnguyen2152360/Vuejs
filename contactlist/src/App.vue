@@ -12,42 +12,42 @@
           <!-- Add Contact -->
           <el-row :gutter="15">
             <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5">
-              <el-input placeholder="Name" v-model="newUser.name"></el-input>
+              <el-input placeholder="Name" v-model="newUser.name" class="contact-add"></el-input>
             </el-col>
             <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5">
-              <el-input placeholder="Email" v-model="newUser.email"></el-input>
+              <el-input placeholder="Email" v-model="newUser.email" class="contact-add"></el-input>
             </el-col>
             <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5">
-              <el-input placeholder="Phone" v-model="newUser.phone"></el-input>
+              <el-input placeholder="Phone" v-model="newUser.phone" class="contact-add"></el-input>
             </el-col>
             <el-col :xs="12" :sm="12" :md="8" :lg="5" :xl="5">
-              <el-input placeholder="Address" v-model="newUser.address"></el-input>
+              <el-input placeholder="Address" v-model="newUser.address" class="contact-add"></el-input>
             </el-col>
             <el-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4">
               <el-button type="primary" plain @click.prevent="addContact">Add Contact</el-button>
             </el-col>
           </el-row>
+          <mycompo></mycompo>
         </el-card>
         <!-- End of Add Contact -->
         <!-- Table -->
-        <el-table height="500" style="width: 100%" :data="tableData">
+        <el-table height="500" style="width: 100%" :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
           <el-table-column label="#" width="70" prop="number"></el-table-column>
           <el-table-column label="ID" prop="id"></el-table-column>
           <el-table-column label="Name" prop="name"></el-table-column>
           <el-table-column label="Email" prop="email"></el-table-column>
           <el-table-column label="Phone" prop="phone"></el-table-column>
           <el-table-column label="Address" prop="address"></el-table-column>
-          <el-table-column label="##">
+          <el-table-column width="200" align="left">
+            <template slot="header" slot-scope="scope">
+              <el-input v-model="search" size="mini" placeholder="Type to search" class="contact-search"/>
+            </template>
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="info"
                 @click="editBtn(scope.$index, scope.row), dialogFormVisible = true"
               >Edit</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="##">
-            <template slot-scope="scope">
               <el-button size="mini" type="danger" @click="cfRemove(scope.$index, scope.row)">Delete</el-button>
             </template>
           </el-table-column>
@@ -80,8 +80,11 @@
 
 <script>
 import { usersRef } from "./firebase.js";
-
+import Compo from "./Abc.vue";
 export default {
+  components: {
+    "mycompo": Compo
+  },
   name: "app",
   firebase: {
     users: usersRef
@@ -111,6 +114,7 @@ export default {
             number: i++
           };
           dis.tableData.push(data);
+          console.log(dis.tableData);
         });
       });
     },
@@ -175,14 +179,14 @@ export default {
       // usersRef.child(this.editUser.id).once("value", snapshot => {
       //   console.log(snapshot.val());
       // console.log(this.editUser);
-      updates['name'] = this.editUser.name;
-      updates['phone'] = this.editUser.phone;
-      updates['email'] = this.editUser.email;
-      updates['address'] = this.editUser.address;
-      console.log(updates);
-      console.log(usersRef.update(updates));
-      // usersRef.child(editUserValue.id).update(editUserValue);
+      updates["name"] = this.editUser.name;
+      updates["phone"] = this.editUser.phone;
+      updates["email"] = this.editUser.email;
+      updates["address"] = this.editUser.address;
+      // console.log(`-${this.editUser.id}`);
+      usersRef.child(`-${this.editUser.id}`).set(updates);
     }
+    // usersRef.child(editUserValue.id).update(editUserValue);
   }
 };
 </script>
@@ -197,7 +201,7 @@ export default {
   font-weight: bold;
   margin-bottom: 2rem;
 }
-.el-input {
+.contact-add {
   margin-bottom: 1rem;
 }
 .el-table {
@@ -205,5 +209,8 @@ export default {
 }
 .el-form-item {
   margin-bottom: 0;
+}
+.contact-search {
+  padding-left: 0 !important;
 }
 </style>
