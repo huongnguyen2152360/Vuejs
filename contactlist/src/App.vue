@@ -39,7 +39,7 @@
           <el-table-column label="Address" prop="address"></el-table-column>
           <el-table-column width="200" align="left">
             <template slot="header" slot-scope="scope">
-              <el-input v-model="search" size="mini" placeholder="Type to search" class="contact-search"/>
+              <el-input v-model="search" size="mini" placeholder="Type to search name" class="contact-search"/>
             </template>
             <template slot-scope="scope">
               <el-button
@@ -79,6 +79,7 @@
 
 <script>
 import { usersRef } from "./firebase.js";
+
 export default {
   name: "app",
   firebase: {
