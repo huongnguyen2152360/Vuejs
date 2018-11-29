@@ -1,0 +1,21 @@
+{
+  "name": "hrcontactlist-server",
+  "version": "1.0.0",
+  "description": "hrcontactlist server",
+  "main": "index.js",
+  "author": "huongnguyen2152360",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.3.14"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.47",
+    "@types/koa-router": "^7.0.35",
+    "@types/mongoose": "^5.3.1",
+    "@types/node": "^10.12.10",
+    "nodemon": "^1.18.7",
+    "typescript": "^3.1.6"
+  }
+}
