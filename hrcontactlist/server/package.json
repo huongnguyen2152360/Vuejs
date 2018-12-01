@@ -5,17 +5,27 @@
   "main": "index.js",
   "author": "huongnguyen2152360",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "node dist/index.js",
+    "build": "ttsc"
+  },
   "dependencies": {
+    "@koa/cors": "2",
     "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "mongoose": "^5.3.14"
   },
   "devDependencies": {
     "@types/koa": "^2.0.47",
+    "@types/koa-bodyparser": "^4.2.1",
     "@types/koa-router": "^7.0.35",
     "@types/mongoose": "^5.3.1",
     "@types/node": "^10.12.10",
     "nodemon": "^1.18.7",
+    "ts-node": "^7.0.0",
+    "tsconfig-paths": "^3.6.0",
     "typescript": "^3.1.6"
   }
 }
