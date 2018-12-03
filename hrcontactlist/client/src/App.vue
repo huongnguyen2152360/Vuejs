@@ -32,7 +32,7 @@
         <!-- Table -->
         <el-table height="500" style="width: 100%" :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
           <el-table-column label="#" width="70" prop="number"></el-table-column>
-          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="ID" prop="_id"></el-table-column>
           <el-table-column label="Name" prop="name"></el-table-column>
           <el-table-column label="Email" prop="email"></el-table-column>
           <el-table-column label="Phone" prop="phone"></el-table-column>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 export default {
   name: 'app',
 
@@ -92,10 +92,19 @@ export default {
   },
   methods: {
     getUserData: function() {
-      let i = 1
-      const dis = this
+      axios({
+        method: 'get',
+        url: 'http://localhost:3000/getContacts'
+      }).then(rs => {
+        this.tableData = rs.data
+        let number = 1
+        this.tableData.forEach(data => {
+          data['number'] = number++
+        })
+      })
     },
     addContact: function() {
+      const vm = this
       axios({
         method: 'post',
         url: 'http://localhost:3000/addContact',
@@ -104,7 +113,9 @@ export default {
           ...this.newUser
         }
       }).then(rs => {
-        console.log('da tao thanh cong');
+        console.log(vm.tableData[vm.tableData.length]);
+        // rs.data[number] = vm.tableData[vm.tableData.length].number +1
+        // vm.tableData.push(rs.data)
       })
     },
     cfRemove: function(index, contact) {
@@ -113,7 +124,19 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       })
-        .then(() => {})
+        .then( () => {
+          axios({
+            method: 'post',
+            url: 'http://localhost:3000/deleteContact',
+            // gui len url
+            data: { id: contact._id }
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: 'Delete successfully'
+            })
+          })
+        })
         .catch(() => {
           this.$message({
             type: 'info',
