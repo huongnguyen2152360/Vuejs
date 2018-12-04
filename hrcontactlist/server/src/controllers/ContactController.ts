@@ -7,6 +7,7 @@ interface IUserInfo {
   phone: string | ''
   email: string | ''
   address: string
+  _id: string
 }
 export default class ContactList {
   static async createUser(ctx: Context) {
@@ -24,8 +25,7 @@ export default class ContactList {
     ctx.body = await ContactModel.deleteOne({ _id: id })
   }
   static async editContact(ctx: Context) {
-    const { id } = ctx.request.body
     const editData = ctx.request.body as IUserInfo
-    ctx.body = await ContactModel.updateOne({ _id: id }, { ...editData })
+    ctx.body = await ContactModel.updateOne({ _id: editData._id }, { ...editData })
   }
 }

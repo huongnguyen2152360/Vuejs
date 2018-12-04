@@ -118,7 +118,6 @@ export default {
       })
     },
     cfRemove: function(index, contact) {
-      const vm = this
       this.$confirm('This will permanently delete the contact. Continue?', 'Warning', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
@@ -131,7 +130,7 @@ export default {
             // gui len url
             data: { id: contact._id }
           }).then(() => {
-            vm.tableData.splice(vm.tableData[index], 1)
+            this.tableData.splice(index, 1)
             this.$message({
               type: 'success',
               message: 'Delete successfully'
@@ -147,12 +146,7 @@ export default {
     },
     editBtn: function(index, contact) {
       // Hiển thị info trong form
-      this.editUser.name = contact.name
-      this.editUser.phone = contact.phone
-      this.editUser.email = contact.email
-      this.editUser.address = contact.address
-      this.editUser.id = contact._id
-      this.editUser.number = contact.number
+      this.editUser = contact
       this.editUser.index = index
     },
     cfEdit: function() {
