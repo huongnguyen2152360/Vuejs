@@ -23,4 +23,9 @@ export default class ContactList {
     const { id } = ctx.request.body
     ctx.body = await ContactModel.deleteOne({ _id: id })
   }
+  static async editContact(ctx: Context) {
+    const { id } = ctx.request.body
+    const editData = ctx.request.body as IUserInfo
+    ctx.body = await ContactModel.updateOne({ _id: id }, { ...editData })
+  }
 }

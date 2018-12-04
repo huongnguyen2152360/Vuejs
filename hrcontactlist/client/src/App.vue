@@ -113,7 +113,7 @@ export default {
           ...this.newUser
         }
       }).then(rs => {
-        rs.data['number'] = vm.tableData[vm.tableData.length-1].number + 1
+        rs.data['number'] = vm.tableData[vm.tableData.length - 1].number + 1
         vm.tableData.push(rs.data)
       })
     },
@@ -131,9 +131,7 @@ export default {
             // gui len url
             data: { id: contact._id }
           }).then(() => {
-            console.log(contact);
-            console.log(vm.tableData[contact.number-1]);
-            delete vm.tableData[contact.number-1]
+            vm.tableData.splice(vm.tableData[index], 1)
             this.$message({
               type: 'success',
               message: 'Delete successfully'
@@ -153,20 +151,22 @@ export default {
       this.editUser.phone = contact.phone
       this.editUser.email = contact.email
       this.editUser.address = contact.address
-      this.editUser.id = contact.id
+      this.editUser.id = contact._id
       this.editUser.number = contact.number
+      this.editUser.index = index
     },
     cfEdit: function() {
-      let updates = {}
-      // usersRef.child(this.editUser.id).once("value", snapshot => {
-      //   console.log(snapshot.val());
-      // console.log(this.editUser);
-      updates['name'] = this.editUser.name
-      updates['phone'] = this.editUser.phone
-      updates['email'] = this.editUser.email
-      updates['address'] = this.editUser.address
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/editContact',
+        data: {
+          ...this.editUser
+        }
+      }).then(() => {
+        this.tableData[this.editUser.index] = this.editUser
+        // this.tableData[this.editUser.index].number = this.editUser.number
+      })
     }
-    // usersRef.child(editUserValue.id).update(editUserValue);
   }
 }
 </script>
