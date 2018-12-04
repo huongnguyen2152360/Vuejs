@@ -21,7 +21,6 @@ export default class ContactList {
   static async deleteContact(ctx: Context) {
     // ctx.request.body.<bất cứ thứ gì - any>
     const { id } = ctx.request.body
-    await ContactModel.deleteOne({ _id: id })
-    ctx.body = 'ok'
+    ctx.body = await ContactModel.deleteOne({ _id: id })
   }
 }

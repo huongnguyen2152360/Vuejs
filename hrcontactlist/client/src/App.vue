@@ -113,24 +113,27 @@ export default {
           ...this.newUser
         }
       }).then(rs => {
-        console.log(vm.tableData[vm.tableData.length]);
-        // rs.data[number] = vm.tableData[vm.tableData.length].number +1
-        // vm.tableData.push(rs.data)
+        rs.data['number'] = vm.tableData[vm.tableData.length-1].number + 1
+        vm.tableData.push(rs.data)
       })
     },
     cfRemove: function(index, contact) {
+      const vm = this
       this.$confirm('This will permanently delete the contact. Continue?', 'Warning', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         type: 'warning'
       })
-        .then( () => {
+        .then(() => {
           axios({
             method: 'post',
             url: 'http://localhost:3000/deleteContact',
             // gui len url
             data: { id: contact._id }
           }).then(() => {
+            console.log(contact);
+            console.log(vm.tableData[contact.number-1]);
+            delete vm.tableData[contact.number-1]
             this.$message({
               type: 'success',
               message: 'Delete successfully'
