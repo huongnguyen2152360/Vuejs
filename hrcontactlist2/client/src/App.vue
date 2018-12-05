@@ -111,7 +111,7 @@ export default {
           ...this.newUser
         }
       }).then(rs => {
-        rs.data['number'] = vm.tableData[vm.tableData.length-1].number
+        rs.data['number'] = vm.tableData[vm.tableData.length-1].number + 1
         vm.tableData.push(rs.data)
       })
     },
@@ -126,8 +126,15 @@ export default {
             method: 'post',
             url: 'http://localhost:3000/deleteContact',
             data: {
-              id: contact.id
+              id: contact._id
             }
+          }).then(() => {
+            this.tableData.splice(index,1)
+            console.log(contact['number']);
+            this.$message({
+              type: 'success',
+              message: 'Deleted successfully'
+            })
           })
         })
         .catch(() => {
@@ -139,8 +146,20 @@ export default {
     },
     editBtn: function(index, contact) {
       // Hiển thị info trong form
+      this.editUser = contact
+      this.editUser.index = index
     },
-    cfEdit: function() {}
+    cfEdit: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/editContact',
+        data: {
+          ...this.editUser
+        }
+      }).then(() => {
+        this.tableData[this.editUser.index] = this.editUser
+      })
+    }
   }
 }
 </script>

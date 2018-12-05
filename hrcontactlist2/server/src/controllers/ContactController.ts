@@ -6,6 +6,7 @@ interface IContactInfo {
   email: string | ''
   phone: string | ''
   address: string | ''
+  _id: string | ''
 }
 
 export default class ContactList {
@@ -19,6 +20,9 @@ export default class ContactList {
   static async deleteContact(ctx: Context) {
     const { id } = ctx.request.body
     ctx.body = await ContactModel.deleteOne({ _id: id })
-    console.log(ctx.body);
+  }
+  static async editContact(ctx: Context) {
+    const editData = ctx.request.body as IContactInfo
+    ctx.body = await ContactModel.updateOne({ _id: editData._id }, {...editData})
   }
 }

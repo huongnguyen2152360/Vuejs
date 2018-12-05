@@ -6,5 +6,6 @@ import ContactController from '@/controllers/ContactController'
 router.post('/addContact', bodyParser(), ContactController.addContact)
 router.get('/getContacts', ContactController.getAllContacts)
 router.post('/deleteContact', bodyParser(), ContactController.deleteContact)
+router.post('/editContact', bodyParser(), ContactController.editContact)
 
 export = router
