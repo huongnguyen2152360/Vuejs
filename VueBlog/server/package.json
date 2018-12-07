@@ -1,0 +1,8 @@
+{
+  "name": "vueBlog",
+  "version": "1.0.0",
+  "description": "Blog with VueJs and MongoDB, Typescript, KoaJs",
+  "main": "index.js",
+  "author": "huongnguyen2152360",
+  "license": "MIT"
+}
