@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <app-header></app-header>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import AppHeader from './Header'
+
 export default {
   components: {
     appHeader: AppHeader
@@ -23,9 +25,11 @@ export default {
 
 a {
   color: #42b983;
+  text-decoration: none;
 }
 
 h2 {
   margin: 0;
 }
+
 </style>
