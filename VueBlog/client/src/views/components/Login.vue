@@ -7,29 +7,28 @@
       </el-breadcrumb>
       <el-row>
         <el-col :span="12" class="login-left">
-          <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="Username/Email">
-              <el-input v-model="form.name"></el-input>
+          <el-form ref="form" :model="registerForm" label-width="120px">
+            <el-form-item label="Display Name">
+              <el-input v-model="registerForm.displayname"></el-input>
+            </el-form-item>
+            <el-form-item label="Email">
+              <el-input type="email" v-model="registerForm.email" ></el-input>
             </el-form-item>
             <el-form-item label="Password">
-              <el-input type="password" v-model="form.password"></el-input>
+              <el-input type="password" v-model="registerForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox-group v-model="form.type">
-                <el-checkbox label="Remember me?" name="type"></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">Login</el-button>
+              <el-button type="primary" plain @click="userRegister">Register</el-button>
+              <el-button type="success" plain >Login</el-button>
               <p>Forgot password?</p>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="11" :offset="1" class="login-right">
-            <h3>Alternative Logins</h3>
-            <v-icon name="brands/facebook" scale="3" class="login-fb"/>
-            <v-icon name="brands/github" scale="3" class="login-github"/>
-            <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
+          <h3>Alternative Logins</h3>
+          <v-icon name="brands/facebook" scale="3" class="login-fb"/>
+          <v-icon name="brands/github" scale="3" class="login-github"/>
+          <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
         </el-col>
       </el-row>
     </el-main>
@@ -37,24 +36,22 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
-      form: {
-        name: '',
-        password: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
+      registerForm: {}
     }
   },
   methods: {
-    onSubmit() {
-      console.log('submit!')
+    userRegister: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/register',
+        data: {
+          ...this.registerForm
+        }
+      })
     }
   }
 }
@@ -67,20 +64,21 @@ export default {
 .el-row {
   margin: 3rem 0;
 }
-.login-left, .login-right {
-    background-color: #ebeef5;
-    border-radius: 5px;
-    padding: 2rem 2rem 1rem 2rem;
+.login-left,
+.login-right {
+  background-color: #ebeef5;
+  border-radius: 5px;
+  padding: 2rem 2rem 1rem 2rem;
 }
 .login-fb {
-    color: #3b5998;
-    padding-right: 0.5rem;
+  color: #3b5998;
+  padding-right: 0.5rem;
 }
 .login-github {
-    color: #337ab7;
-    padding-right: 0.5rem;
+  color: #337ab7;
+  padding-right: 0.5rem;
 }
 .login-gg {
-    color: #df5138;
+  color: #df5138;
 }
 </style>
