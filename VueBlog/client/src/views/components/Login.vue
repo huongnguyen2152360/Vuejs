@@ -7,26 +7,47 @@
       </el-breadcrumb>
       <el-row>
         <el-col :span="12" class="login-left">
-          <el-form ref="form" :model="registerForm" label-width="120px">
+          <el-form ref="form" :model="userInfo" label-width="120px" v-if="seen">
             <el-form-item label="Display Name">
-              <el-input v-model="registerForm.displayname"></el-input>
+              <el-input v-model="userInfo.displayname"></el-input>
             </el-form-item>
             <el-form-item label="Email">
-              <el-input type="email" v-model="registerForm.email" ></el-input>
+              <el-input type="email" v-model="userInfo.email"></el-input>
             </el-form-item>
             <el-form-item label="Password">
-              <el-input type="password" v-model="registerForm.password"></el-input>
+              <el-input type="password" v-model="userInfo.password"></el-input>
+            </el-form-item>
+            <el-form-item label="Confirm">
+              <el-input type="password" v-model="userInfo.repassword"></el-input>
+            </el-form-item>
+            <el-form-item label="Avatar" class="needtohide">
+              <el-input v-model="userInfo.avatar"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" plain @click="userRegister">Register</el-button>
-              <el-button type="success" plain >Login</el-button>
-              <p>Forgot password?</p>
+              <el-button type="primary" @click="userRegister">REGISTER</el-button>
+              <p @click="loginShow" class="memberCf">Already a member?</p>
+              <!-- <p>Forgot password?</p> -->
+            </el-form-item>
+          </el-form>
+          <el-form ref="form" :model="userLoginInfo" label-width="120px" v-else>
+            <el-form-item label="Email">
+              <el-input type="email" v-model="userLoginInfo.email"></el-input>
+            </el-form-item>
+            <el-form-item label="Password">
+              <el-input type="password" v-model="userLoginInfo.password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="userLogin">LOGIN</el-button>
+              <p @click="registerShow" class="memberCf">Not a member?</p>
+              <!-- <p>Forgot password?</p> -->
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="11" :offset="1" class="login-right">
           <h3>Alternative Logins</h3>
-          <v-icon name="brands/facebook" scale="3" class="login-fb"/>
+          <a href="http://localhost:3000/auth/login/facebook">
+            <v-icon name="brands/facebook" scale="3" class="login-fb"/>
+          </a>
           <v-icon name="brands/github" scale="3" class="login-github"/>
           <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
         </el-col>
@@ -40,19 +61,30 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      registerForm: {}
+      userInfo: {},
+      seen: true,
+      userLoginInfo: {}
     }
   },
   methods: {
     userRegister: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/register',
-        data: {
-          ...this.registerForm
-        }
+        url: 'http://localhost:3000/users/register',
+        data: this.userInfo
+      }).then(() => {
+        window.location = '/'
       })
-    }
+    },
+    loginShow: function() {
+      this.seen = false
+      console.log('login Show')
+    },
+    registerShow: function() {
+      this.seen = true
+      console.log('register show')
+    },
+    userLogin: function() {}
   }
 }
 </script>
@@ -80,5 +112,18 @@ export default {
 }
 .login-gg {
   color: #df5138;
+}
+.memberCf {
+  cursor: pointer;
+  text-align: center;
+}
+.memberCf:hover {
+  color: #409eff;
+}
+.el-button--primary {
+  width: 100%;
+}
+.needtohide {
+  display: none;
 }
 </style>

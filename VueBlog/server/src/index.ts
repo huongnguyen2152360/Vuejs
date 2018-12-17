@@ -1,7 +1,9 @@
 const Koa = require('koa')
 const cors = require('@koa/cors')
 import * as router from '@/routes/route'
+// import loginPassport from '@/routes/loginPassport'
 const mongoose = require('mongoose')
+// import UserController from '@/controllers/UserController'
 
 const app = new Koa()
 
@@ -12,6 +14,7 @@ mongoose.connect(
 
 app.use(cors())
 app.use(router.routes()).use(router.allowedMethods())
+// app.use('/auth', loginPassport)
 
 app.listen(3000)
 console.log('Running Port 3000~~~')

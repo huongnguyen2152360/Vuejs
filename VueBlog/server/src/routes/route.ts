@@ -3,6 +3,6 @@ const router = new Router()
 import UserController from '@/controllers/UserController'
 import * as bodyParser from 'koa-bodyparser'
 
-router.post('/register', bodyParser(), UserController.createUser)
+router.post('/users/register', bodyParser(), UserController.createUser)
 
 export = router
