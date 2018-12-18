@@ -23,6 +23,9 @@
             <el-form-item label="Avatar" class="needtohide">
               <el-input v-model="userInfo.avatar"></el-input>
             </el-form-item>
+            <el-form-item label="ID" class="needtohide">
+              <el-input v-model="userInfo.id"></el-input>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="userRegister">REGISTER</el-button>
               <p @click="loginShow" class="memberCf">Already a member?</p>
@@ -70,7 +73,7 @@ export default {
     userRegister: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/users/register',
+        url: 'http://localhost:3000/register',
         data: this.userInfo
       }).then(() => {
         window.location = '/'
@@ -78,13 +81,27 @@ export default {
     },
     loginShow: function() {
       this.seen = false
-      console.log('login Show')
     },
     registerShow: function() {
       this.seen = true
-      console.log('register show')
     },
-    userLogin: function() {}
+    userLogin: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/getUser',
+        data: this.userLoginInfo
+      }).then(rs => {
+        if(this.userLoginInfo.password == rs.data.password ) {
+          window.location = '/'
+        }
+        else {
+          this.$message({
+            type: "error",
+            message: "Incorrect Username or Password"
+          })
+        }
+      })
+    }
   }
 }
 </script>
