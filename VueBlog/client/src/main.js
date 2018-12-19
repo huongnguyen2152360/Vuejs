@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import Route from './routes/route'
 import Icons from 'vue-awesome'
 import App from './views/App.vue'
+import * as store from './stores/store'
 
 Vue.use(ElementUI, { locale })
 Vue.use(VueRouter)
@@ -17,6 +18,7 @@ const router = new VueRouter({
 
 new Vue({
   el: '#app',
+  store: store,
   render: h => h(App),
   router: router
 })

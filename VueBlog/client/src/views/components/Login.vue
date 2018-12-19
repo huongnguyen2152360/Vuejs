@@ -88,18 +88,15 @@ export default {
     userLogin: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getUser',
+        url: 'http://localhost:3000/login',
         data: this.userLoginInfo
       }).then(rs => {
-        if(this.userLoginInfo.password == rs.data.password ) {
-          window.location = '/'
-        }
-        else {
+        window.location = "/"
+      }).catch(error => {
           this.$message({
-            type: "error",
-            message: "Incorrect Username or Password"
+            type: 'error',
+            message: 'Incorrect Password!'
           })
-        }
       })
     }
   }
