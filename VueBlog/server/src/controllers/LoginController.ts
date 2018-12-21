@@ -12,6 +12,8 @@ export default class UserLogin {
     const inputData = ctx.request.body as IUserLoginInfo
     const userData = await UserModel.findOne({ email: inputData.email }).lean()
     if (inputData.password == userData.password) {
+    //   console.log(userData.password)
+    //   console.log(inputData.password)
       ctx.session.user = userData
       ctx.body = userData
     } else {

@@ -62,6 +62,11 @@
 <script>
 import axios from 'axios'
 export default {
+  computed: {
+    userSession() {
+      return this.$store.state.userSession
+    }
+  },
   data() {
     return {
       userInfo: {},
@@ -91,7 +96,11 @@ export default {
         url: 'http://localhost:3000/login',
         data: this.userLoginInfo
       }).then(rs => {
-        window.location = "/"
+        // this.userSessionn = rs.data
+        console.log(rs.data)
+        console.log(this.$store.state.userSession)
+        // console.log(userSessionn)
+        // window.location = "/"
       }).catch(error => {
           this.$message({
             type: 'error',
