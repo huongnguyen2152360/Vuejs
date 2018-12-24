@@ -73,7 +73,9 @@ import axios from 'axios'
 export default {
   computed: {
     userSession() {
-      this.$store.state.userSession = userForSession
+      console.log(this.$store.store.state.userSession) 
+      // this.$store.store.state.userSession = userForSession
+      // console.log(userForSession)
       // this.$emit('userDangNhap', userForSession)
     }
   },
@@ -107,9 +109,9 @@ export default {
         data: this.userLoginInfo
       })
         .then(rs => {
-          const userForSession = rs.data
-          // console.log(userForSession)
-          window.location = '/'
+          this.$store.store.state.userSession = rs.data
+          // window.location = '/'
+
           
         })
         .catch(error => {

@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <router-view></router-view>
-    <!-- <ul>
+    <router-view ></router-view>
+    <ul>
       <li v-for="user in userSession" :key="user">
         <p>{{ user }}</p>
       </li>
-    </ul> -->
+    </ul>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     userSession() {
-      // return this.$store.state.userSession
+      return this.$store.store.state.userSession
     }
   },
 }
