@@ -55,6 +55,15 @@
           <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
         </el-col>
       </el-row>
+      <!-- <el-row>
+        <el-col :span="24">
+          <ul>
+            <li v-for="user in userSession" :key="user">
+              <p>{{ user }}</p>
+            </li>
+          </ul>
+        </el-col>
+      </el-row> -->
     </el-main>
   </div>
 </template>
@@ -64,7 +73,8 @@ import axios from 'axios'
 export default {
   computed: {
     userSession() {
-      return this.$store.state.userSession
+      this.$store.state.userSession = userForSession
+      // this.$emit('userDangNhap', userForSession)
     }
   },
   data() {
@@ -80,7 +90,7 @@ export default {
         method: 'post',
         url: 'http://localhost:3000/register',
         data: this.userInfo
-      }).then(() => {
+      }).then(rs => {
         window.location = '/'
       })
     },
@@ -95,18 +105,19 @@ export default {
         method: 'post',
         url: 'http://localhost:3000/login',
         data: this.userLoginInfo
-      }).then(rs => {
-        // this.userSessionn = rs.data
-        console.log(rs.data)
-        console.log(this.$store.state.userSession)
-        // console.log(userSessionn)
-        // window.location = "/"
-      }).catch(error => {
+      })
+        .then(rs => {
+          const userForSession = rs.data
+          // console.log(userForSession)
+          window.location = '/'
+          
+        })
+        .catch(error => {
           this.$message({
             type: 'error',
             message: 'Incorrect Password!'
           })
-      })
+        })
     }
   }
 }
