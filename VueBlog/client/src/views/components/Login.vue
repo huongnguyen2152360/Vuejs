@@ -55,15 +55,6 @@
           <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
         </el-col>
       </el-row>
-      <!-- <el-row>
-        <el-col :span="24">
-          <ul>
-            <li v-for="user in userSession" :key="user">
-              <p>{{ user }}</p>
-            </li>
-          </ul>
-        </el-col>
-      </el-row> -->
     </el-main>
   </div>
 </template>
@@ -73,10 +64,8 @@ import axios from 'axios'
 export default {
   computed: {
     userSession() {
-      console.log(this.$store.store.state.userSession) 
-      // this.$store.store.state.userSession = userForSession
-      // console.log(userForSession)
-      // this.$emit('userDangNhap', userForSession)
+      // console.log("userSESSION")
+      return this.$store.store.state.userSession
     }
   },
   data() {
@@ -110,9 +99,8 @@ export default {
       })
         .then(rs => {
           this.$store.store.state.userSession = rs.data
-          // window.location = '/'
-
-          
+          // console.log("rs.data " + rs.data)
+          window.location = '/'
         })
         .catch(error => {
           this.$message({

@@ -2,11 +2,6 @@
   <div id="app">
     <app-header></app-header>
     <router-view ></router-view>
-    <ul>
-      <li v-for="user in userSession" :key="user">
-        <p>{{ user }}</p>
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -16,12 +11,7 @@ import AppHeader from './Header'
 export default {
   components: {
     appHeader: AppHeader
-  },
-  computed: {
-    userSession() {
-      return this.$store.store.state.userSession
-    }
-  },
+  }
 }
 </script>
 

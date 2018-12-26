@@ -6,11 +6,15 @@
           <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
               <div class="logo">
-                <router-link to="/"><img src="https://cdn.worldvectorlogo.com/logos/stratis-strat-2.svg" alt="VueJs Blog" exact></router-link>
+                <router-link to="/">
+                  <img src="https://cdn.worldvectorlogo.com/logos/stratis-strat-2.svg" alt="VueJs Blog" exact>
+                </router-link>
               </div>
             </el-menu-item>
             <el-menu-item index="2">
-              <router-link to="/" exact><h2>VueJsBlog</h2></router-link>
+              <router-link to="/" exact>
+                <h2>VueJsBlog</h2>
+              </router-link>
             </el-menu-item>
             <el-menu-item index="3">
               <el-tooltip class="item" effect="dark" content="Categories" placement="bottom">
@@ -54,8 +58,9 @@
             </el-menu-item>
           </el-menu>
         </el-col>
+        <!-- Neu co userSession -->
         <el-col :span="6">
-          <!-- <el-menu class="el-menu-demo2" mode="horizontal" @select="handleSelect">
+          <el-menu class="el-menu-demo2" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
               <el-tooltip class="item" effect="dark" content="Notifications" placement="bottom">
                 <i class="el-icon-bell"></i>
@@ -66,12 +71,36 @@
                 <i class="el-icon-message"></i>
               </el-tooltip>
             </el-menu-item>
-            <el-menu-item index="3">
-              <div class="user-avatar">
-                <img src="https://i.imgur.com/gdWIxn2.jpg" alt="user-avatar">
-              </div>
-            </el-menu-item>
-          </el-menu>-->
+            <el-submenu index="3" class="menu__avatar">
+              <template slot="title">
+                <div class="user-avatar">
+                  <img src="https://i.imgur.com/gdWIxn2.jpg" alt="user-avatar">
+                </div>
+              </template>
+              <el-menu-item index="3-1" class="menu__user-name">
+                <v-icon name="regular/circle" class="status__user"></v-icon>User
+              </el-menu-item>
+              <el-menu-item index="3-2">
+                <v-icon name="regular/circle" class="status__online"></v-icon>Online
+              </el-menu-item>
+              <el-menu-item index="3-3">
+                <v-icon name="regular/circle" class="status__away"></v-icon>Away
+              </el-menu-item>
+              <el-menu-item index="3-4">
+                <v-icon name="regular/circle" class="status__disturb"></v-icon>Do not disturb
+              </el-menu-item>
+              <el-menu-item index="3-5">
+                <v-icon name="regular/circle" class="status__invisible"></v-icon>Invisible
+              </el-menu-item>
+              <el-menu-item index="3-6">
+                <v-icon name="regular/edit" class="user__edit"></v-icon>Edit Profile
+              </el-menu-item>
+              <el-menu-item index="3-7">
+                <v-icon name="sign-out-alt" class="user__signout"></v-icon>Sign out
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+          <!-- Khong co userSession -->
           <el-menu class="el-menu-demo2" mode="horizontal">
             <el-menu-item index="1">
               <router-link to="/login" style="margin:0" exact>Login</router-link>
@@ -85,9 +114,14 @@
 
 <script>
 export default {
-  data() {
-    return {
+  computed: {
+    userSession() {
+      // console.log('from Header: ' + this.$store.store.state.userSession)
+      return this.$store.store.state.userSession
     }
+  },
+  data() {
+    return {}
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -131,5 +165,32 @@ export default {
 }
 .newtopic-row {
   text-align: right;
+}
+.el-submenu__icon-arrow {
+  display: none;
+}
+.menu__user-name {
+  border-bottom: 1px solid #e9ecef;
+}
+.status__user,
+.status__online,
+.status__away,
+.status__disturb,
+.status__invisible,
+.user__edit,
+.user__signout {
+  padding-right: 10px;
+}
+.status__online {
+  color: #4caf50;
+}
+.status__away {
+  color: #ff6d00;
+}
+.status__disturb {
+  color: #f44336;
+}
+.status__invisible {
+  color: #555;
 }
 </style>

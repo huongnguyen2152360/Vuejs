@@ -46,11 +46,23 @@
         </el-col>
       </el-row>
     </el-main>
+    <div class="test">
+      <ul v-for="user in userSession" :key="user">
+        <li>{{user}}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    userSession() {
+      // console.log("from AppMain: " + this.$store.store.state.userSession)
+      return this.$store.store.state.userSession
+    }
+  }
+}
 </script>
 
 <style scope>
@@ -58,8 +70,8 @@ export default {}
   margin-bottom: 2rem;
 }
 .user-avatar {
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
 }
 .user-avatar img,
 .cmt-avatar img {
