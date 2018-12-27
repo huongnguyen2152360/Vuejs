@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <app-header :user="usr"></app-header>
     <el-main>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
@@ -61,10 +62,13 @@
 
 <script>
 import axios from 'axios'
+import Header from './Header'
 export default {
+  components: {
+    appHeader: Header
+  },
   computed: {
     userSession() {
-      // console.log("userSESSION")
       return this.$store.store.state.userSession
     }
   },
@@ -72,7 +76,8 @@ export default {
     return {
       userInfo: {},
       seen: true,
-      userLoginInfo: {}
+      userLoginInfo: {},
+      usr: {}
     }
   },
   methods: {
@@ -99,7 +104,7 @@ export default {
       })
         .then(rs => {
           this.$store.store.state.userSession = rs.data
-          // console.log("rs.data " + rs.data)
+          this.usr = rs.data
           window.location = '/'
         })
         .catch(error => {

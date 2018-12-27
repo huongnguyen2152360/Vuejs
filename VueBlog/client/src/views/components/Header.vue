@@ -60,7 +60,7 @@
         </el-col>
         <!-- Neu co userSession -->
         <el-col :span="6">
-          <el-menu class="el-menu-demo2" mode="horizontal" @select="handleSelect">
+          <el-menu v-if="user" class="el-menu-demo2" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
               <el-tooltip class="item" effect="dark" content="Notifications" placement="bottom">
                 <i class="el-icon-bell"></i>
@@ -78,7 +78,7 @@
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
-                <v-icon name="regular/circle" class="status__user"></v-icon>User
+                <v-icon name="regular/circle" class="status__user"></v-icon>{{user.displayname}}
               </el-menu-item>
               <el-menu-item index="3-2">
                 <v-icon name="regular/circle" class="status__online"></v-icon>Online
@@ -101,7 +101,7 @@
             </el-submenu>
           </el-menu>
           <!-- Khong co userSession -->
-          <el-menu class="el-menu-demo2" mode="horizontal">
+          <el-menu v-else class="el-menu-demo2" mode="horizontal">
             <el-menu-item index="1">
               <router-link to="/login" style="margin:0" exact>Login</router-link>
             </el-menu-item>
@@ -114,11 +114,12 @@
 
 <script>
 export default {
+  props: ['user'],
   computed: {
-    userSession() {
-      // console.log('from Header: ' + this.$store.store.state.userSession)
-      return this.$store.store.state.userSession
-    }
+    // userSession() {
+    //   // console.log('from Header: ' + this.$store.store.state.userSession)
+    //   return this.$store.store.state.userSession
+    // }
   },
   data() {
     return {}

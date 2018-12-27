@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <app-header></app-header>
     <router-view ></router-view>
   </div>
 </template>
 
 <script>
-import AppHeader from './Header'
-
 export default {
-  components: {
-    appHeader: AppHeader
-  }
+  computed: {
+    userSession() {
+      return this.$store.store.state.userSession
+    }
+  },
 }
 </script>
 

@@ -1,5 +1,6 @@
 <template>
   <div id="appmain">
+    <app-header></app-header>
     <el-main>
       <el-row>
         <el-col :span="24" class="newtopic-row">
@@ -46,16 +47,16 @@
         </el-col>
       </el-row>
     </el-main>
-    <div class="test">
-      <ul v-for="user in userSession" :key="user">
-        <li>{{user}}</li>
-      </ul>
-    </div>
+  
   </div>
 </template>
 
 <script>
+import Header from './Header'
 export default {
+  components: {
+    appHeader: Header
+  },
   computed: {
     userSession() {
       // console.log("from AppMain: " + this.$store.store.state.userSession)
