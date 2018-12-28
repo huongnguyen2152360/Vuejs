@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <app-header :user="usr"></app-header>
+    <app-header></app-header>
     <el-main>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
@@ -68,16 +68,15 @@ export default {
     appHeader: Header
   },
   computed: {
-    userSession() {
-      return this.$store.store.state.userSession
-    }
+    // userSession() {
+    //   return this.$store.store.state.userSession
+    // }
   },
   data() {
     return {
       userInfo: {},
       seen: true,
-      userLoginInfo: {},
-      usr: {}
+      userLoginInfo: {}
     }
   },
   methods: {
@@ -103,8 +102,7 @@ export default {
         data: this.userLoginInfo
       })
         .then(rs => {
-          this.$store.store.state.userSession = rs.data
-          this.usr = rs.data
+          this.$store.store.commit('userSessionInfo', rs.data)
           window.location = '/'
         })
         .catch(error => {

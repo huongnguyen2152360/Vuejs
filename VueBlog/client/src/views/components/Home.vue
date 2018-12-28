@@ -47,7 +47,7 @@
         </el-col>
       </el-row>
     </el-main>
-  
+  <p>{{ userSession.email }}</p>
   </div>
 </template>
 
@@ -59,7 +59,6 @@ export default {
   },
   computed: {
     userSession() {
-      // console.log("from AppMain: " + this.$store.store.state.userSession)
       return this.$store.store.state.userSession
     }
   }

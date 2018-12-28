@@ -60,7 +60,7 @@
         </el-col>
         <!-- Neu co userSession -->
         <el-col :span="6">
-          <el-menu v-if="user" class="el-menu-demo2" mode="horizontal" @select="handleSelect">
+          <el-menu v-if="userSession" class="el-menu-demo2" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
               <el-tooltip class="item" effect="dark" content="Notifications" placement="bottom">
                 <i class="el-icon-bell"></i>
@@ -78,7 +78,7 @@
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
-                <v-icon name="regular/circle" class="status__user"></v-icon>{{user.displayname}}
+                <v-icon name="regular/circle" class="status__user"></v-icon>{{userSession.displayname}}
               </el-menu-item>
               <el-menu-item index="3-2">
                 <v-icon name="regular/circle" class="status__online"></v-icon>Online
@@ -114,12 +114,11 @@
 
 <script>
 export default {
-  props: ['user'],
+  // props: ['user'],
   computed: {
-    // userSession() {
-    //   // console.log('from Header: ' + this.$store.store.state.userSession)
-    //   return this.$store.store.state.userSession
-    // }
+    userSession() {
+      return this.$store.store.state.userSession
+    }
   },
   data() {
     return {}
