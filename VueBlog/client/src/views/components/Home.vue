@@ -47,7 +47,6 @@
         </el-col>
       </el-row>
     </el-main>
-  <p>{{ userSession.email }}</p>
   </div>
 </template>
 

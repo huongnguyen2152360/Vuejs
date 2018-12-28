@@ -103,7 +103,7 @@ export default {
       })
         .then(rs => {
           this.$store.store.commit('userSessionInfo', rs.data)
-          window.location = '/'
+          this.$router.push('/')
         })
         .catch(error => {
           this.$message({
@@ -111,6 +111,7 @@ export default {
             message: 'Incorrect Password!'
           })
         })
+     
     }
   }
 }
