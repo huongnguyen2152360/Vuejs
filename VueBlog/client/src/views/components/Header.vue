@@ -60,7 +60,7 @@
         </el-col>
         <!-- Neu co userSession -->
         <el-col :span="6">
-          <el-menu v-if="userSession" class="el-menu-demo2" mode="horizontal" @select="handleSelect">
+          <el-menu v-if="userSession.displayname" class="el-menu-demo2" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
               <el-tooltip class="item" effect="dark" content="Notifications" placement="bottom">
                 <i class="el-icon-bell"></i>
@@ -93,9 +93,9 @@
                 <v-icon name="regular/circle" class="status__invisible"></v-icon>Invisible
               </el-menu-item>
               <el-menu-item index="3-6">
-                <v-icon name="regular/edit" class="user__edit"></v-icon>Edit Profile
+                <router-link to="/profile" style="margin:0" exact><v-icon name="regular/edit" class="user__edit"></v-icon>Edit Profile</router-link>
               </el-menu-item>
-              <el-menu-item index="3-7">
+              <el-menu-item index="3-7" @click="userSignOut">
                 <v-icon name="sign-out-alt" class="user__signout"></v-icon>Sign out
               </el-menu-item>
             </el-submenu>
@@ -126,6 +126,9 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath)
+    },
+    userSignOut: function() {
+      this.$store.store.state.userSession = {}
     }
   }
 }
