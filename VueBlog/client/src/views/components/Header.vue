@@ -74,7 +74,7 @@
             <el-submenu index="3" class="menu__avatar">
               <template slot="title">
                 <div class="user-avatar">
-                  <img src="https://i.imgur.com/gdWIxn2.jpg" alt="user-avatar">
+                  <img :src="userSession.avatar" alt="user-avatar">
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
@@ -195,5 +195,11 @@ export default {
 }
 .status__invisible {
   color: #555;
+}
+.el-menu-item a {
+  color: #909399;
+}
+.el-menu-item a:hover {
+  color: #303133;
 }
 </style>

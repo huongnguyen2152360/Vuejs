@@ -6,5 +6,7 @@ import * as bodyParser from 'koa-bodyparser'
 
 router.post('/register', bodyParser(), UserController.createUser)
 router.post('/login', bodyParser(), LoginController.loginUser)
+router.post('/editProfile', bodyParser(), UserController.editUser)
+router.post('/changePassword', bodyParser(), UserController.changePass)
 
 export = router

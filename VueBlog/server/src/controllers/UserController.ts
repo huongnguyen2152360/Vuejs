@@ -18,6 +18,22 @@ export default class User {
     const userData = ctx.request.body as IUserCreateInfo
     ctx.body = await UserModel.create(userData)
   }
+  // Edit Email and DisplayName
+  static async editUser(ctx: Context) {
+    // displayname và email mới được input
+    const inputData = ctx.request.body as IUserCreateInfo
+    await UserModel.updateOne({_id: inputData.id},{...inputData})
+    const updatedData = await UserModel.findOne({_id: inputData.id}).lean()
+    ctx.session.user = updatedData
+    ctx.body = updatedData
+  }
+  static async changePass(ctx:Context) {
+    // const inputPass = ctx.request.body as IUserCreateInfo
+    // const findUser = await UserModel.findOne({_id: inputPass.id}).lean()
+    // console.log(inputPass)
+    // console.log(findUser)
+    // ctx.body = await UserModel.updateOne({_id: inputPass.id}, {...inputPass})
+  }
 }
 
 // FACEBOOK LOGIN

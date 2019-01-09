@@ -1,58 +1,182 @@
 <template>
-  <div id="profile">
+  <div id="profile" v-if="userSession.displayname">
     <app-header></app-header>
     <el-main>
-      <el-row>
-        <el-col :span="4">
-          <div class="user-avatar">
-            <img src="https://i.imgur.com/gdWIxn2.jpg" alt="user-avatar">
+      <el-tabs :tab-position="tabPosition" class="tab-menu">
+        <el-tab-pane label="Profile">
+          <!-- YOUR PROFILE -->
+          <h3 class="profile-header">Your Profile</h3>
+          <div class="user-avatar__profile">
+            <img :src="userSession.avatar">
           </div>
-          <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-            <el-submenu index="1" style="padding-top:1.5rem">
-              <template slot="title">
-                <span>Profile</span>
-              </template>
-              <el-menu-item index="1-1">My Profile</el-menu-item>
-              <el-menu-item index="1-2">Edit Profile</el-menu-item>
-              <el-menu-item index="1-3">Change Password</el-menu-item>
-            </el-submenu>
-            <el-menu-item index="2">
-              <span>Posts</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col :span="20"></el-col>
-      </el-row>
+          <h5>Display Name</h5>
+          <p>{{userSession.displayname}}</p>
+          <h5>Email</h5>
+          <p>{{userSession.email}}</p>
+        </el-tab-pane>
+        <!-- EDIT PROFILE -->
+        <el-tab-pane label="Edit Profile">
+          <h3 class="profile-header">Edit Profile</h3>
+          <p style="display:none">{{userSession._id}}</p>
+          <el-form ref="form" :model="userEdit">
+            <el-form-item label="Display Name" class="profile_form-label">
+              <el-input v-model="userEdit.displayname"></el-input>
+            </el-form-item>
+            <el-form-item prop="email" label="Email" :rules="[
+      { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
+    ]" class="profile_form-label">
+              <el-input v-model.lazy="userEdit.email" placeholder="abc@example.com"></el-input>
+            </el-form-item>
+            <el-form-item :rules="[
+      { type: 'url', message: 'Please input correct URL to your image', trigger: ['blur', 'change'] }
+    ]" label="Avatar" class="profile_form-label">
+              <el-input v-model.lazy="userEdit.avatar" placeholder="https://example.com"></el-input>
+            </el-form-item>
+            <el-button class="profile-saveBtn" type="primary" plain @click="userEditProfile">Save</el-button>
+          </el-form>
+        </el-tab-pane>
+        <!-- CHANGE PASSWORD -->
+        <el-tab-pane label="Change Password">
+          <h3 class="profile-header">Change Password</h3>
+          <el-form :model="userEditPass" status-icon :rules="rulesPass" ref="userEditPass" class="demo-ruleForm">
+            <el-form-item label="New Password" prop="pass" class="profile_form-label">
+              <el-input type="password" v-model="userEditPass.pass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="Confirm Password" prop="checkPass" class="profile_form-label">
+              <el-input type="password" v-model="userEditPass.checkPass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-button class="profile-saveBtn" type="primary" plain @click="userEditPassBtn">Save</el-button>
+          </el-form>
+        </el-tab-pane>
+        <!-- POSTS -->
+        <el-tab-pane label="Posts">
+          <h3 class="profile-header">Your Posts</h3>
+        </el-tab-pane>
+      </el-tabs>
     </el-main>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import Header from './Header'
+import { clearTimeout } from 'timers';
 export default {
   components: {
     appHeader: Header
   },
+  data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password'))
+      } else {
+        if (this.userEditPass.checkPass !== '') {
+          this.$refs.userEditPass.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password again'))
+      } else if (value !== this.userEditPass.pass) {
+        callback(new Error("Two inputs don't match!"))
+      } else {
+        callback()
+      }
+    }
+    return {
+      tabPosition: 'left',
+      userEdit: {},
+      userEditPass: {
+        pass: '',
+        checkPass: ''
+      },
+      rulesPass: {
+        pass: [{ validator: validatePass, trigger: 'blur' }],
+        checkPass: [{ validator: validatePass2, trigger: 'blur' }]
+      }
+    }
+  },
+  computed: {
+    userSession() {
+      return this.$store.store.state.userSession
+    }
+  },
   methods: {
-    handleOpen(key, keyPath) {
-      //   console.log(key, keyPath)
+    userEditProfile: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/editProfile',
+        data: {
+          id: this.userSession._id,
+          ...this.userEdit
+        }
+      }).then(rs => {
+        console.log(rs.data)
+        this.$store.store.commit('userSessionInfo', rs.data)
+      })
     },
-    handleClose(key, keyPath) {
-      //   console.log(key, keyPath)
+    userEditPassBtn: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/changePassword',
+        data: {
+          id: this.userSession._id,
+          password: this.userEditPass.pass
+        }
+      }).then(rs => {
+        this.$store.store.commit('userSessionInfo', rs.data)
+      })
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .el-main {
   padding: 2rem 8rem;
 }
-.el-submenu__icon-arrow {
-  display: block !important;
+.user-avatar__profile {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 1rem;
 }
-.user-avatar {
-  width: 60px;
-  height: 60px;
+.user-avatar__profile img {
+  width: 100%;
+  /* border-radius: 50%; */
+}
+.el-tabs__item {
+  padding: 0px 50px;
+  font-weight: normal;
+  font-size: 1rem;
+}
+.el-tabs__content {
+  padding-left: 3rem;
+}
+.profile-header {
+  margin-top: 0;
+  padding-bottom: 1rem;
+}
+.tab-menu {
+  padding-top: 2rem;
+}
+.tab-menu h5 {
+  color: #909399;
+  margin-bottom: 0;
+}
+.tab-menu p {
+  padding-top: 0.5rem;
+}
+.profile_form-label .el-form-item__label {
+  color: #909399;
+  font-weight: bold;
+}
+.el-form-item__error {
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+}
+.profile-saveBtn {
+  margin-top: 1rem;
 }
 </style>

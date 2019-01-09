@@ -68,9 +68,9 @@ export default {
     appHeader: Header
   },
   computed: {
-    // userSession() {
-    //   return this.$store.store.state.userSession
-    // }
+    userSession() {
+      return this.$store.store.state.userSession
+    }
   },
   data() {
     return {
@@ -86,7 +86,8 @@ export default {
         url: 'http://localhost:3000/register',
         data: this.userInfo
       }).then(rs => {
-        window.location = '/'
+        this.$store.store.commit('userSessionInfo', rs.data)
+        this.$router.push('/')
       })
     },
     loginShow: function() {
@@ -111,7 +112,6 @@ export default {
             message: 'Incorrect Password!'
           })
         })
-     
     }
   }
 }
