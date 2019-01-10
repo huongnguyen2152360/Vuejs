@@ -60,7 +60,7 @@
 <script>
 import axios from 'axios'
 import Header from './Header'
-import { clearTimeout } from 'timers';
+import { clearTimeout } from 'timers'
 export default {
   components: {
     appHeader: Header
@@ -113,7 +113,6 @@ export default {
           ...this.userEdit
         }
       }).then(rs => {
-        console.log(rs.data)
         this.$store.store.commit('userSessionInfo', rs.data)
       })
     },
@@ -125,9 +124,22 @@ export default {
           id: this.userSession._id,
           password: this.userEditPass.pass
         }
-      }).then(rs => {
-        this.$store.store.commit('userSessionInfo', rs.data)
       })
+        .then(rs => {
+          this.$message({
+            type: 'success',
+            message: 'Password changed successfully'
+          })
+          this.$store.store.commit('userSessionInfo', rs.data)
+          this.$refs.userEditPass.resetFields()
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'New password must be different'
+          })
+          this.$refs.userEditPass.resetFields()
+        })
     }
   }
 }

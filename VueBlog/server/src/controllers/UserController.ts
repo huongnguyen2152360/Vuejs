@@ -28,11 +28,17 @@ export default class User {
     ctx.body = updatedData
   }
   static async changePass(ctx:Context) {
-    // const inputPass = ctx.request.body as IUserCreateInfo
-    // const findUser = await UserModel.findOne({_id: inputPass.id}).lean()
-    // console.log(inputPass)
-    // console.log(findUser)
-    // ctx.body = await UserModel.updateOne({_id: inputPass.id}, {...inputPass})
+    const inputPass = ctx.request.body as IUserCreateInfo
+    const userPass = await UserModel.findOne({_id: inputPass.id}).lean()
+    if (inputPass.password == userPass.password) {
+      ctx.throw(400,'New password must be different')
+    } else {
+      await UserModel.updateOne({_id: inputPass.id}, {...inputPass})
+      const updatedPass = await UserModel.findOne({_id: inputPass.id}).lean()
+      ctx.session.user = updatedPass
+      ctx.body = updatedPass
+    }
+    
   }
 }
 
