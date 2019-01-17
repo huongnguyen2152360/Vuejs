@@ -74,7 +74,8 @@
             <el-submenu index="3" class="menu__avatar">
               <template slot="title">
                 <div class="user-avatar">
-                  <img :src="userSession.avatar" alt="user-avatar">
+                  <img :src="userSession.avatar" alt="user-avatar" v-if="userSession.avatar">
+                  <img src="https://data.whicdn.com/images/50330982/large.jpg" alt="user-avatar" v-else>
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">

@@ -10,10 +10,11 @@
         <el-col :span="12" class="login-left">
           <el-form ref="form" :model="userInfo" label-width="120px" v-if="seen">
             <el-form-item label="Display Name">
-              <el-input v-model="userInfo.displayname"></el-input>
+              <el-input v-model="userInfo.displayname" placeholder="Huong Nguyen"></el-input>
             </el-form-item>
-            <el-form-item label="Email">
-              <el-input type="email" v-model="userInfo.email"></el-input>
+            <el-form-item prop="email" label="Email" :rules="[
+      { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }]">
+              <el-input type="email" v-model="userInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
             <el-form-item label="Password">
               <el-input type="password" v-model="userInfo.password"></el-input>
@@ -22,7 +23,7 @@
               <el-input type="password" v-model="userInfo.repassword"></el-input>
             </el-form-item>
             <el-form-item label="Avatar" class="needtohide">
-              <el-input v-model="userInfo.avatar"></el-input>
+              <el-input v-model="userInfo.avatar" placeholder="https://example.com"></el-input>
             </el-form-item>
             <el-form-item label="ID" class="needtohide">
               <el-input v-model="userInfo.id"></el-input>
@@ -34,8 +35,9 @@
             </el-form-item>
           </el-form>
           <el-form ref="form" :model="userLoginInfo" label-width="120px" v-else>
-            <el-form-item label="Email">
-              <el-input type="email" v-model="userLoginInfo.email"></el-input>
+            <el-form-item prop="email" label="Email" :rules="[
+      { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }]">
+              <el-input type="email" v-model="userLoginInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
             <el-form-item label="Password">
               <el-input type="password" v-model="userLoginInfo.password"></el-input>
