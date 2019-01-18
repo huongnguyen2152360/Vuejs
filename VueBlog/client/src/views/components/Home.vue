@@ -4,7 +4,7 @@
     <el-main>
       <el-row>
         <el-col :span="24" class="newtopic-row">
-          <el-button type="primary" class="newtopic-btn">New Topic</el-button>
+          <el-button type="primary" class="newtopic-btn" @click="open=!open">New Topic</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -46,20 +46,42 @@
           <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
         </el-col>
       </el-row>
+      <el-form :model="postForm" v-show="open">
+        <el-form-item label="Title">
+          <el-input v-model="postForm.title"></el-input>
+        </el-form-item>
+     <editor v-model="postForm.content" class="editorText" ></editor>
+      <el-button type="success"></el-button>
+
+      </el-form>
     </el-main>
   </div>
 </template>
 
 <script>
+import 'tui-editor/dist/tui-editor.css';
+import 'tui-editor/dist/tui-editor-contents.css';
+import 'codemirror/lib/codemirror.css';
+import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
 export default {
   components: {
-    appHeader: Header
+    appHeader: Header,
+    'editor': Editor
+  },
+  data() {
+    return {
+      open: true,
+      postForm: {}
+    }
   },
   computed: {
     userSession() {
       return this.$store.store.state.userSession
     }
+  },
+  methods: {
+    
   }
 }
 </script>
@@ -107,5 +129,9 @@ p {
 }
 .cmt-line1 {
   display: flex;
+}
+.editorText {
+  padding-top: 1rem;
+  height: 350px !important;
 }
 </style>

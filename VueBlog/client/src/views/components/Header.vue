@@ -130,6 +130,7 @@ export default {
     },
     userSignOut: function() {
       this.$store.store.state.userSession = {}
+      this.$router.push('/')
     }
   }
 }
