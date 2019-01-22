@@ -46,28 +46,37 @@
           <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
         </el-col>
       </el-row>
-      <el-form :model="postForm" v-show="open">
+      <el-form :model="postForm" v-show="open" class="postForm">
         <el-form-item label="Title">
-          <el-input v-model="postForm.title"></el-input>
+          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
         </el-form-item>
-     <editor v-model="postForm.content" class="editorText" ></editor>
-      <el-button type="success"></el-button>
-
+        <el-form-item label="Tags">
+          <el-select v-model="postForm.tags" placeholder="Select one tag">
+            <el-option label="General" value="General"></el-option>
+            <el-option label="Support" value="Support"></el-option>
+            <el-option label="Language" value="Language"></el-option>
+          </el-select>
+        </el-form-item>
+        <editor v-model="postForm.content" class="editorText"></editor>
+        <div class="postForm-buttons">
+          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
+          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
+        </div>
       </el-form>
     </el-main>
   </div>
 </template>
 
 <script>
-import 'tui-editor/dist/tui-editor.css';
-import 'tui-editor/dist/tui-editor-contents.css';
-import 'codemirror/lib/codemirror.css';
+import 'tui-editor/dist/tui-editor.css'
+import 'tui-editor/dist/tui-editor-contents.css'
+import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
 export default {
   components: {
     appHeader: Header,
-    'editor': Editor
+    editor: Editor
   },
   data() {
     return {
@@ -81,7 +90,12 @@ export default {
     }
   },
   methods: {
-    
+    postCancel: function() {
+      console.log('Cancel button')
+    },
+    postConfirm: function() {
+      console.log('Post confirm button')
+    }
   }
 }
 </script>
@@ -133,5 +147,30 @@ p {
 .editorText {
   padding-top: 1rem;
   height: 350px !important;
+}
+.postForm-title-input {
+  width: 90% !important;
+}
+.postForm {
+  background-color: #419efb1a;
+  border-radius: 5px;
+  padding: 2rem 2rem 1rem 2rem;
+  margin-top: 3rem;
+}
+.postForm .el-form-item__label {
+  font-size: 0.9rem;
+}
+.postForm-buttons {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+.postForm-buttons-post {
+  padding: 0 4rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+.postForm-buttons-cancel {
+  font-size: 0.8rem;
 }
 </style>
