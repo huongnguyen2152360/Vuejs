@@ -4,10 +4,11 @@
     <el-main>
       <el-row>
         <el-col :span="24" class="newtopic-row">
-          <el-button type="primary" class="newtopic-btn" @click="open=!open">New Topic</el-button>
+          <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
         </el-col>
       </el-row>
       <el-row>
+<!-- Show Posts Info -->
         <el-col :span="18">
           <el-row>
             <el-col :span="2">
@@ -32,6 +33,7 @@
             </el-col>
           </el-row>
         </el-col>
+        <!-- Show Posts Comments -->
         <el-col :span="5" :offset="1" class="main-cmts">
           <el-row class="cmt-line1">
             <el-col :span="5">
@@ -46,7 +48,8 @@
           <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
         </el-col>
       </el-row>
-      <el-form :model="postForm" v-show="open" class="postForm">
+      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
+        <p class="postForm-intro">What's on your mind?</p>
         <el-form-item label="Title">
           <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
         </el-form-item>
@@ -57,6 +60,13 @@
             <el-option label="Language" value="Language"></el-option>
           </el-select>
         </el-form-item>
+        <div class="postForm-hidden">
+          <el-input v-model="postForm.author">{{userSession.displayname}}</el-input>
+          <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input>
+          <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
+          <el-input v-model="postForm.date">{{ date() }}</el-input>
+        </div>
+
         <editor v-model="postForm.content" class="editorText"></editor>
         <div class="postForm-buttons">
           <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
@@ -73,6 +83,8 @@ import 'tui-editor/dist/tui-editor-contents.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
+import moment from 'moment'
+import axios from 'axios'
 export default {
   components: {
     appHeader: Header,
@@ -80,8 +92,12 @@ export default {
   },
   data() {
     return {
-      open: true,
-      postForm: {}
+      open: false,
+      postForm: {
+        author: this.$store.store.state.userSession.displayname,
+        avatar: this.$store.store.state.userSession.avatar,
+        date: ''
+      }
     }
   },
   computed: {
@@ -90,11 +106,31 @@ export default {
     }
   },
   methods: {
+    newTopicBtn: function() {
+      if (this.userSession.displayname) {
+        this.open = !this.open
+      } else {
+        this.$router.push('/login')
+      }
+    },
+    moment: function(date) {
+      return moment(date)
+    },
+    date: function(date) {
+      this.postForm.date = moment(date).format('ll')
+    },
     postCancel: function() {
-      console.log('Cancel button')
+      this.open = false;
     },
     postConfirm: function() {
-      console.log('Post confirm button')
+      // console.log(this.postForm)
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/postContent',
+        data: this.postForm
+      }).then(() => {
+        console.log('post submiteddddd')
+      })
     }
   }
 }
@@ -148,17 +184,25 @@ p {
   padding-top: 1rem;
   height: 350px !important;
 }
+.postForm-intro {
+  color: white;
+  font-style: italic;
+  padding-bottom: 2rem;
+}
 .postForm-title-input {
   width: 90% !important;
 }
 .postForm {
-  background-color: #419efb1a;
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
   margin-top: 3rem;
 }
 .postForm .el-form-item__label {
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  padding: 0 30px 0 0;
 }
 .postForm-buttons {
   margin: 1rem 0;
@@ -172,5 +216,8 @@ p {
 }
 .postForm-buttons-cancel {
   font-size: 0.8rem;
+}
+.postForm-hidden {
+  display: none;
 }
 </style>
