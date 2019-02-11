@@ -129,7 +129,10 @@ export default {
         url: 'http://localhost:3000/postContent',
         data: this.postForm
       }).then(() => {
-        console.log('post submiteddddd')
+        this.$message({
+          type: 'success',
+          message: 'Posted successfully'
+        })
       })
     }
   }
