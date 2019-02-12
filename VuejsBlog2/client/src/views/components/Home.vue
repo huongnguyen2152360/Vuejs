@@ -69,7 +69,7 @@
         </el-form-item>
         <div class="postForm-hidden">
           <el-input v-model="postForm.author">{{userSession.displayname}}</el-input>
-          <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input>
+          <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
           <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
         </div>
@@ -164,9 +164,11 @@ export default {
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
         this.allPosts = rs.data
+        
       })
     },
     getUserInfo: function() {
+      console.log(this.allPosts)
       // console.log(this.allPosts)
       // axios({
       //   method:'post',

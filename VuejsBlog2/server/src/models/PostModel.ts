@@ -1,12 +1,12 @@
 import {Schema, model} from 'mongoose'
-// import userModel from '@/models/UserModel'
+import UserModel from '@/models/UserModel'
 
 const postSchema = new Schema({
     title: {type: String, default: ''},
     content: {type: String, default: ''},
     date: {type: String, default: ''},
     author: {type: String, default: ''},
-    avatar: {type: String, default: ''},
+    avatar:[{ type: Schema.Types.ObjectId, ref: 'userModel' }],
     tags: {type: String, default: ''}
 })
 

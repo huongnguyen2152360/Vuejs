@@ -7,7 +7,6 @@ interface IPost {
   content: String | ''
   date: String | ''
   author: String | ''
-  avatar: String | ''
   tags: String | ''
 }
 
@@ -29,9 +28,24 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.find({})
+    const allPostData = await PostModel.findOne().populate('avatar')
+    console.log(allPostData)
+    
+    // const allAuthors = []
+    // for (let i =0; i <= allPostData.length; i++) {
+    //   allAuthors.push(allPostData[i].author)
+    //   // console.log(allAuthors)
+    // }
+    // console.log(allAuthors[1])
+    // console.log(UserModel.findOne({displayname: allAuthors[1]}))
+    // for (let i =0; i <= allAuthors.length; i++) {
+    //   console.log(UserModel.find({displayname: allAuthors[i]}))
+    //   console.log(authorInfo)
+    // }
+    // console.log(UserModel.find({displayname: allPostData.author}))
+    // allPostData.avatar = UserModel.find({displayname: allPostData.author})
     // console.log(allPostData)
-    ctx.body = allPostData
+    // ctx.body = allPostData
   }
   static async getPostsProfile(ctx: Context) {
     const userDisplayname = ctx.request.body
