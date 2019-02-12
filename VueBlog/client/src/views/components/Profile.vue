@@ -169,8 +169,7 @@ export default {
       url: 'http://localhost:3000/getPostsProfile',
       data: this.userSession.displayname
     }).then(rs => {
-      console.log(this.userSession.displayname)
-      console.log(rs.data)
+      this.tableData = rs.data
     })
     }
   }

@@ -37,8 +37,8 @@ export default class Post {
     const userDisplayname = ctx.request.body
     const stringDisplayname = JSON.stringify(userDisplayname)
     const finalDisplayname = stringDisplayname.replace(/:|"|{|}/g, '')
-    console.log(finalDisplayname)
+    // console.log(finalDisplayname)
     const findAuthor = await PostModel.find({ author: finalDisplayname })
-    console.log(findAuthor)
+    ctx.body = findAuthor
   }
 }

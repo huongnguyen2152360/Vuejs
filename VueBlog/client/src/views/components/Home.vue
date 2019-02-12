@@ -8,48 +8,52 @@
         </el-col>
       </el-row>
       <ul v-for="post in allPosts" :key="post._id">
-      <li style="list-style-type: none"><el-row>
-        <!-- Show Posts Info -->
-        <el-col :span="18">
-          <el-row class="allPosts_row"> 
-            <el-col :span="2">
-              <div class="user-avatar">
-                <img :src="post.avatar" alt="user-avatar">
-              </div>
-            </el-col>
+        <li style="list-style-type: none">
+          <el-row>
+            <!-- Show Posts Info -->
             <el-col :span="18">
-              <h2>{{post.title}}</h2>
-              <p class="main-tags">
-                {{post.tags}} • 
-                <span>{{currentDate(post.date)}}</span>
-              </p>
+              <el-row class="allPosts_row">
+                <el-col :span="2">
+                  <div class="user-avatar" v-if="post.avatar">
+                    <img :src="post.avatar" alt="user-avatar">
+                  </div>
+                  <div class="user-avatar" v-else>
+                    <img src="http://purrworld.com/wp-content/uploads/2017/10/big-eyes-cute-cute-cat-cute-kitty-Favim.com-3467623.jpg" alt="user-avatar">
+                  </div>
+                </el-col>
+                <el-col :span="18">
+                  <h2>{{post.title}}</h2>
+                  <p class="main-tags">
+                    {{post.tags}} •
+                    <span>{{currentDate(post.date)}}</span>
+                  </p>
+                </el-col>
+                <el-col :span="2" style="text-align:center">
+                  <h2 class="main-count">1</h2>
+                  <p class="main-tags">POSTS</p>
+                </el-col>
+                <el-col :span="2" style="text-align:center">
+                  <h2 class="main-count">3</h2>
+                  <p class="main-tags">VIEWS</p>
+                </el-col>
+              </el-row>
             </el-col>
-            <el-col :span="2" style="text-align:center">
-              <h2 class="main-count">1</h2>
-              <p class="main-tags">POSTS</p>
-            </el-col>
-            <el-col :span="2" style="text-align:center">
-              <h2 class="main-count">3</h2>
-              <p class="main-tags">VIEWS</p>
+            <!-- Show Posts Comments -->
+            <el-col :span="5" :offset="1" class="main-cmts">
+              <el-row class="cmt-line1">
+                <el-col :span="5">
+                  <div class="cmt-avatar">
+                    <img src="https://i.pinimg.com/originals/ba/03/23/ba03237a6d6499f0e2633314826e1526.jpg" alt="cmt-avatar">
+                  </div>
+                </el-col>
+                <el-col :span="17" class="cmt-avatar-p">
+                  <p style="font-size: 0.9em">3 days ago</p>
+                </el-col>
+              </el-row>
+              <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
             </el-col>
           </el-row>
-        </el-col>
-        <!-- Show Posts Comments -->
-        <el-col :span="5" :offset="1" class="main-cmts">
-          <el-row class="cmt-line1">
-            <el-col :span="5">
-              <div class="cmt-avatar">
-                <img src="https://i.pinimg.com/originals/ba/03/23/ba03237a6d6499f0e2633314826e1526.jpg" alt="cmt-avatar">
-              </div>
-            </el-col>
-            <el-col :span="17" class="cmt-avatar-p">
-              <p style="font-size: 0.9em">3 days ago</p>
-            </el-col>
-          </el-row>
-          <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
-        </el-col>
-      </el-row>
-      </li>
+        </li>
       </ul>
       <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
         <p class="postForm-intro">What's on your mind?</p>
@@ -77,7 +81,6 @@
       </el-form>
     </el-main>
   </div>
-  
 </template>
 
 <script>
@@ -88,7 +91,7 @@ import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
 import moment from 'moment'
 import axios from 'axios'
-import { clearTimeout } from 'timers';
+import { clearTimeout } from 'timers'
 export default {
   components: {
     appHeader: Header,
@@ -106,7 +109,8 @@ export default {
     }
   },
   created() {
-    this.getallPosts()
+    this.getallPosts(),
+    this.getUserInfo()
   },
   computed: {
     userSession() {
@@ -128,7 +132,7 @@ export default {
       this.postForm.date = moment(date).format('YYYYMMDD')
     },
     currentDate: function(date) {
-      return moment(date,'YYYYMMDD').fromNow()
+      return moment(date, 'YYYYMMDD').fromNow()
     },
     postCancel: function() {
       this.open = false
@@ -161,6 +165,14 @@ export default {
       }).then(rs => {
         this.allPosts = rs.data
       })
+    },
+    getUserInfo: function() {
+      // console.log(this.allPosts)
+      // axios({
+      //   method:'post',
+      //   url: 'http://localhost:3000/getUserInfo',
+      //   data: this.allPosts.author
+      // })
     }
   }
 }
