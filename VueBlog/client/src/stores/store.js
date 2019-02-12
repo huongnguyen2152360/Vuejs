@@ -5,15 +5,11 @@ Vue.use(VueX)
 
 export const store = new VueX.Store({
   state: {
-    userSession: {},
-    allPosts: {}
+    userSession: {}
   },
   mutations: {
     userSessionInfo(state, rs) {
       state.userSession = rs
-    },
-    getAllPosts(state, rs) {
-      state.allPosts = rs
     }
   }
 })

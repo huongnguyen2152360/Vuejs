@@ -1,4 +1,5 @@
 import {Schema, model} from 'mongoose'
+// import userModel from '@/models/UserModel'
 
 const postSchema = new Schema({
     title: {type: String, default: ''},

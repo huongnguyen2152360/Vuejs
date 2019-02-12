@@ -101,7 +101,8 @@ export default {
         author: this.$store.store.state.userSession.displayname,
         avatar: this.$store.store.state.userSession.avatar,
         date: ''
-      }
+      },
+      allPosts: {}
     }
   },
   created() {
@@ -110,9 +111,6 @@ export default {
   computed: {
     userSession() {
       return this.$store.store.state.userSession
-    },
-    allPosts() {
-      return this.$store.store.state.allPosts
     }
   },
   methods: {
@@ -161,7 +159,7 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        this.$store.store.commit('getAllPosts', rs.data)
+        this.allPosts = rs.data
       })
     }
   }
