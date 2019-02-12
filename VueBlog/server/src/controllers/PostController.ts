@@ -12,7 +12,24 @@ interface IPost {
 
 export default class Post {
   static async createPost(ctx: Context) {
-      const postData = ctx.request.body as IPost
+    const postData = ctx.request.body as IPost
+    if (postData.content && postData.title && postData.tags) {
       ctx.body = await PostModel.create(postData)
+    } else {
+      if (!postData.content) {
+        ctx.throw(400, 'Please input your content')
+      }
+      if (!postData.title) {
+        ctx.throw(400, 'Please input your title')
+      }
+      if (!postData.tags) {
+        ctx.throw(400, 'Please select your tags')
+      }
+    }
+  }
+  static async getAllPosts(ctx:Context) {
+    const allPostData = await PostModel.find({})
+    // console.log(allPostData)
+    ctx.body = allPostData
   }
 }

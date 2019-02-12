@@ -51,8 +51,31 @@
         <!-- POSTS -->
         <el-tab-pane label="Posts">
           <h3 class="profile-header">Your Posts</h3>
+          <!-- :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" -->
+          <el-table style="width: 100%" :data="tableData">
+            <el-table-column label="Title" prop="title"></el-table-column>
+            <el-table-column label="Content" prop="content"></el-table-column>
+            <el-table-column label="Tags" prop="tags"></el-table-column>
+            <el-table-column label="Date" prop="date"></el-table-column>
+            <el-table-column align="right">
+              <template slot="header">
+                <!-- slot-scope="scope" -->
+                <el-input v-model="search" size="mini" placeholder="Type to search"/>
+              </template>
+              <template slot-scope="scope">
+                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
+      <ul v-for="post in allPosts" :key="post._id">
+        <li v-if="post.author == userSession.displayname">
+          <p>{{post.title}}</p>
+          <p>{{post.content}}</p>
+        </li>
+      </ul>
     </el-main>
   </div>
 </template>
@@ -95,12 +118,20 @@ export default {
       rulesPass: {
         pass: [{ validator: validatePass, trigger: 'blur' }],
         checkPass: [{ validator: validatePass2, trigger: 'blur' }]
-      }
+      },
+      search: '',
+      tableData: []
     }
+  },
+  created() {
+    this.getTableData()
   },
   computed: {
     userSession() {
       return this.$store.store.state.userSession
+    },
+    allPosts() {
+      return this.$store.store.state.allPosts
     }
   },
   methods: {
@@ -140,6 +171,17 @@ export default {
           })
           this.$refs.userEditPass.resetFields()
         })
+    },
+    getTableData: function() {
+      for (let i = 0; i <= this.allPosts.length; i++) {
+        if (this.allPosts[i].author == this.userSession.displayname) {
+          // console.log(this.allPosts[i].author)
+          this.tableData.push(this.allPosts[i])
+          console.log(this.tableData)
+        } else {
+          return
+        }
+      }
     }
   }
 }

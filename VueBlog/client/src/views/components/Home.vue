@@ -7,20 +7,21 @@
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
         </el-col>
       </el-row>
-      <el-row>
-<!-- Show Posts Info -->
+      <ul v-for="post in allPosts" :key="post._id">
+      <li style="list-style-type: none"><el-row>
+        <!-- Show Posts Info -->
         <el-col :span="18">
-          <el-row>
+          <el-row class="allPosts_row"> 
             <el-col :span="2">
               <div class="user-avatar">
-                <img src="https://i.imgur.com/gdWIxn2.jpg" alt="user-avatar">
+                <img :src="post.avatar" alt="user-avatar">
               </div>
             </el-col>
             <el-col :span="18">
-              <h2>Blog Title</h2>
+              <h2>{{post.title}}</h2>
               <p class="main-tags">
-                Tags •
-                <span>2 days ago</span>
+                {{post.tags}} • 
+                <span>{{currentDate(post.date)}}</span>
               </p>
             </el-col>
             <el-col :span="2" style="text-align:center">
@@ -48,6 +49,8 @@
           <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
         </el-col>
       </el-row>
+      </li>
+      </ul>
       <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
         <p class="postForm-intro">What's on your mind?</p>
         <el-form-item label="Title">
@@ -66,7 +69,6 @@
           <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
         </div>
-
         <editor v-model="postForm.content" class="editorText"></editor>
         <div class="postForm-buttons">
           <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
@@ -75,6 +77,7 @@
       </el-form>
     </el-main>
   </div>
+  
 </template>
 
 <script>
@@ -85,6 +88,7 @@ import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
 import moment from 'moment'
 import axios from 'axios'
+import { clearTimeout } from 'timers';
 export default {
   components: {
     appHeader: Header,
@@ -100,9 +104,15 @@ export default {
       }
     }
   },
+  created() {
+    this.getallPosts()
+  },
   computed: {
     userSession() {
       return this.$store.store.state.userSession
+    },
+    allPosts() {
+      return this.$store.store.state.allPosts
     }
   },
   methods: {
@@ -117,10 +127,13 @@ export default {
       return moment(date)
     },
     date: function(date) {
-      this.postForm.date = moment(date).format('ll')
+      this.postForm.date = moment(date).format('YYYYMMDD')
+    },
+    currentDate: function(date) {
+      return moment(date,'YYYYMMDD').fromNow()
     },
     postCancel: function() {
-      this.open = false;
+      this.open = false
     },
     postConfirm: function() {
       // console.log(this.postForm)
@@ -128,11 +141,27 @@ export default {
         method: 'post',
         url: 'http://localhost:3000/postContent',
         data: this.postForm
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: 'Posted successfully'
+      })
+        .then(() => {
+          this.open = false
+          this.$message({
+            type: 'success',
+            message: 'Posted successfully'
+          })
         })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'Please input your Title, Tags and Content'
+          })
+        })
+    },
+    getallPosts: function() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:3000/getAllPosts'
+      }).then(rs => {
+        this.$store.store.commit('getAllPosts', rs.data)
       })
     }
   }
@@ -140,6 +169,9 @@ export default {
 </script>
 
 <style scope>
+.allPosts_row {
+  padding-bottom: 0.7rem;
+}
 .newtopic-btn {
   margin-bottom: 2rem;
 }

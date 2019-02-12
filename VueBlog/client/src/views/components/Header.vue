@@ -79,7 +79,7 @@
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
-                <v-icon name="regular/circle" class="status__user"></v-icon>{{userSession.displayname}}
+                <router-link to="/profile"><v-icon name="regular/circle" class="status__user"></v-icon>{{userSession.displayname}}</router-link>
               </el-menu-item>
               <el-menu-item index="3-2">
                 <v-icon name="regular/circle" class="status__online"></v-icon>Online
