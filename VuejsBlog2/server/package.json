@@ -1,0 +1,35 @@
+{
+  "name": "vuejsblog",
+  "version": "1.0.0",
+  "description": "Blog with VueJs and MongoDB, Typescript, KoaJs",
+  "main": "index.js",
+  "author": "huongnguyen2152360",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "node dist/index.js",
+    "build": "ttsc"
+  },
+  "dependencies": {
+    "@koa/cors": "2",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.10.1",
+    "mongoose": "^5.4.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.47",
+    "@types/koa-bodyparser": "^4.2.1",
+    "@types/koa-router": "^7.0.35",
+    "@types/mongoose": "^5.3.5",
+    "@types/node": "^10.12.15",
+    "axios": "^0.18.0",
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.7.0",
+    "typescript": "^3.2.2"
+  }
+}
