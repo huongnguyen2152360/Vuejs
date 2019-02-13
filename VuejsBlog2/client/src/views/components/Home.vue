@@ -17,6 +17,7 @@
                   <div class="user-avatar">
                     <img :src="post.avatar" alt="user-avatar">
                   </div>
+                  <!-- Can fix -->
                   <!-- <div class="user-avatar" v-else>
                     <img src="http://purrworld.com/wp-content/uploads/2017/10/big-eyes-cute-cute-cat-cute-kitty-Favim.com-3467623.jpg" alt="user-avatar">
                   </div> -->
