@@ -1,18 +1,20 @@
 import PostModel from '@/models/PostModel'
 import { Context } from 'koa'
 import UserModel from '@/models/UserModel'
+import { ObjectId } from 'bson';
 
 interface IPost {
   title: String | ''
   content: String | ''
   date: String | ''
-  author: String | ''
+  authorId: ObjectId | ''
   tags: String | ''
 }
 
 export default class Post {
   static async createPost(ctx: Context) {
     const postData = ctx.request.body as IPost
+    console.log(postData);
     if (postData.content && postData.title && postData.tags) {
       ctx.body = await PostModel.create(postData)
     } else {
@@ -27,26 +29,19 @@ export default class Post {
       }
     }
   }
+  
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.findOne().populate('avatar')
-    console.log(allPostData)
-    
-    // const allAuthors = []
-    // for (let i =0; i <= allPostData.length; i++) {
-    //   allAuthors.push(allPostData[i].author)
-    //   // console.log(allAuthors)
+    const allPostsData = await PostModel.find({}).populate('userinfo').lean()
+    // for (let i = 0; i <= allPostsData.length; i++) {
+    //   // allPostsData[i].avatar = allPostsData[i].userinfo.avatar
+    //   console.log(allPostsData[i].userinfo);
     // }
-    // console.log(allAuthors[1])
-    // console.log(UserModel.findOne({displayname: allAuthors[1]}))
-    // for (let i =0; i <= allAuthors.length; i++) {
-    //   console.log(UserModel.find({displayname: allAuthors[i]}))
-    //   console.log(authorInfo)
-    // }
-    // console.log(UserModel.find({displayname: allPostData.author}))
-    // allPostData.avatar = UserModel.find({displayname: allPostData.author})
-    // console.log(allPostData)
-    // ctx.body = allPostData
+    // console.log(allPostsData[1].userinfo);
+// console.log(allPostsData.title);
+    ctx.body = allPostsData
+    // console.log(await UserModel.findById('5c177a1d62d1b54094903182').lean())
   }
+
   static async getPostsProfile(ctx: Context) {
     const userDisplayname = ctx.request.body
     const stringDisplayname = JSON.stringify(userDisplayname)

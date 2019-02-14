@@ -69,7 +69,7 @@
           </el-select>
         </el-form-item>
         <div class="postForm-hidden">
-          <el-input v-model="postForm.author">{{userSession.displayname}}</el-input>
+          <!-- <el-input v-model="postForm.author">{{userSession._id}}</el-input> -->
           <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
           <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
@@ -102,8 +102,6 @@ export default {
     return {
       open: false,
       postForm: {
-        author: this.$store.store.state.userSession.displayname,
-        avatar: this.$store.store.state.userSession.avatar,
         date: ''
       },
       allPosts: {}
@@ -139,11 +137,12 @@ export default {
       this.open = false
     },
     postConfirm: function() {
-      // console.log(this.postForm)
+      const postInfo = this.postForm
+      postInfo.authorId = this.userSession._id
       axios({
         method: 'post',
         url: 'http://localhost:3000/postContent',
-        data: this.postForm
+        data: postInfo
       })
         .then(() => {
           this.open = false
@@ -164,12 +163,11 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        this.allPosts = rs.data
-        
+        console.log(rs.data);
       })
     },
     getUserInfo: function() {
-      console.log(this.allPosts)
+      // console.log(this.allPosts)
       // console.log(this.allPosts)
       // axios({
       //   method:'post',
