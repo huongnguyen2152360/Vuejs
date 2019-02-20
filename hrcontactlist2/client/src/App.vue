@@ -38,7 +38,7 @@
           <el-table-column label="Phone" prop="phone"></el-table-column>
           <el-table-column label="Address" prop="address"></el-table-column>
           <el-table-column width="200" align="left">
-            <template slot="header" slot-scope="scope">
+            <template slot="header" slot-scope="scope" @click="slotBtn(scope.$index, scope.row)">
               <el-input v-model="search" size="mini" placeholder="Type to search name" class="contact-search"/>
             </template>
             <template slot-scope="scope">
@@ -148,6 +148,9 @@ export default {
       // Hiển thị info trong form
       this.editUser = contact
       this.editUser.index = index
+    },
+    slotBtn: function(index,row) {
+      return
     },
     cfEdit: function() {
       axios({
