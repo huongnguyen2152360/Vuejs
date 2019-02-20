@@ -14,13 +14,12 @@
             <el-col :span="18">
               <el-row class="allPosts_row">
                 <el-col :span="2">
-                  <div class="user-avatar">
-                    <img :src="post.avatar" alt="user-avatar">
+                  <div class="user-avatar" v-if="post.userinfo.avatar">
+                    <img :src="post.userinfo.avatar" alt="user-avatar">
                   </div>
-                  <!-- Can fix -->
-                  <!-- <div class="user-avatar" v-else>
+                  <div class="user-avatar" v-else>
                     <img src="http://purrworld.com/wp-content/uploads/2017/10/big-eyes-cute-cute-cat-cute-kitty-Favim.com-3467623.jpg" alt="user-avatar">
-                  </div> -->
+                  </div>
                 </el-col>
                 <el-col :span="18">
                   <h2>{{post.title}}</h2>
@@ -69,9 +68,6 @@
           </el-select>
         </el-form-item>
         <div class="postForm-hidden">
-          <!-- <el-input v-model="postForm.author">{{userSession._id}}</el-input> -->
-          <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
-          <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
         </div>
         <editor v-model="postForm.content" class="editorText"></editor>
@@ -108,8 +104,7 @@ export default {
     }
   },
   created() {
-    this.getallPosts(),
-    this.getUserInfo()
+    this.getallPosts()
   },
   computed: {
     userSession() {
@@ -128,7 +123,7 @@ export default {
       return moment(date)
     },
     date: function(date) {
-      this.postForm.date = moment(date).format('YYYYMMDD')
+      this.postForm.date = moment(date).format()
     },
     currentDate: function(date) {
       return moment(date, 'YYYYMMDD').fromNow()
@@ -144,12 +139,13 @@ export default {
         url: 'http://localhost:3000/postContent',
         data: postInfo
       })
-        .then(() => {
+        .then(rs => {
           this.open = false
           this.$message({
             type: 'success',
             message: 'Posted successfully'
           })
+          this.allPosts = rs.data
         })
         .catch(error => {
           this.$message({
@@ -163,17 +159,9 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        console.log(rs.data);
+        // array
+        this.allPosts = rs.data
       })
-    },
-    getUserInfo: function() {
-      // console.log(this.allPosts)
-      // console.log(this.allPosts)
-      // axios({
-      //   method:'post',
-      //   url: 'http://localhost:3000/getUserInfo',
-      //   data: this.allPosts.author
-      // })
     }
   }
 }

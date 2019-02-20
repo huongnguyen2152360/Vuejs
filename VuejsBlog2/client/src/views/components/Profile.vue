@@ -51,15 +51,14 @@
         <!-- POSTS -->
         <el-tab-pane label="Posts">
           <h3 class="profile-header">Your Posts</h3>
-          <!-- :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" -->
-          <el-table style="width: 100%" :data="tableData">
+          <!-- :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))" -->
+          <el-table style="width: 100%" :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))">
             <el-table-column label="Title" prop="title"></el-table-column>
             <el-table-column label="Content" prop="content"></el-table-column>
             <el-table-column label="Tags" prop="tags"></el-table-column>
             <el-table-column label="Date" prop="date"></el-table-column>
             <el-table-column align="right">
-              <template slot="header">
-                <!-- slot-scope="scope" -->
+              <template slot="header" slot-scope="scope" @click="something(scope.$index, scope.row)">
                 <el-input v-model="search" size="mini" placeholder="Type to search"/>
               </template>
               <template slot-scope="scope">
@@ -164,13 +163,22 @@ export default {
         })
     },
     getTableData: function() {
-    axios({
-      method: 'post',
-      url: 'http://localhost:3000/getPostsProfile',
-      data: this.userSession.displayname
-    }).then(rs => {
-      this.tableData = rs.data
-    })
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/getPostsProfile',
+        data: this.userSession._id
+      }).then(rs => {
+        this.tableData = rs.data
+      })
+    },
+    handleEdit(index, row) {
+      console.log(index, row)
+    },
+    handleDelete(index, row) {
+      console.log(index, row)
+    },
+    something(index,row) {
+      return
     }
   }
 }

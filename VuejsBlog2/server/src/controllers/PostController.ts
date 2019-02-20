@@ -1,7 +1,7 @@
 import PostModel from '@/models/PostModel'
 import { Context } from 'koa'
 import UserModel from '@/models/UserModel'
-import { ObjectId } from 'bson';
+import { ObjectId } from 'bson'
 
 interface IPost {
   title: String | ''
@@ -14,9 +14,13 @@ interface IPost {
 export default class Post {
   static async createPost(ctx: Context) {
     const postData = ctx.request.body as IPost
-    console.log(postData);
     if (postData.content && postData.title && postData.tags) {
-      ctx.body = await PostModel.create(postData)
+      await PostModel.create(postData)
+      const allPostsData = await PostModel.find({})
+        .sort([['date', -1]])
+        .populate('userinfo')
+        .lean()
+      ctx.body = allPostsData
     } else {
       if (!postData.content) {
         ctx.throw(400, 'Please input your content')
@@ -29,25 +33,18 @@ export default class Post {
       }
     }
   }
-  
+
   static async getAllPosts(ctx: Context) {
-    const allPostsData = await PostModel.find({}).populate('userinfo').lean()
-    // for (let i = 0; i <= allPostsData.length; i++) {
-    //   // allPostsData[i].avatar = allPostsData[i].userinfo.avatar
-    //   console.log(allPostsData[i].userinfo);
-    // }
-    // console.log(allPostsData[1].userinfo);
-// console.log(allPostsData.title);
+    const allPostsData = await PostModel.find({})
+      .sort([['date', -1]])
+      .populate('userinfo')
+      .lean()
     ctx.body = allPostsData
-    // console.log(await UserModel.findById('5c177a1d62d1b54094903182').lean())
   }
 
   static async getPostsProfile(ctx: Context) {
-    const userDisplayname = ctx.request.body
-    const stringDisplayname = JSON.stringify(userDisplayname)
-    const finalDisplayname = stringDisplayname.replace(/:|"|{|}/g, '')
-    // console.log(finalDisplayname)
-    const findAuthor = await PostModel.find({ author: finalDisplayname })
-    ctx.body = findAuthor
+    const userId = ctx.request.body
+    const userIdString = JSON.stringify(userId).replace(/"|{|}|:/g, '')
+    ctx.body = await PostModel.find({ authorId: userIdString }).sort([['date', -1]])
   }
 }
