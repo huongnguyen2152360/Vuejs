@@ -16,6 +16,7 @@ router.post('/postContent', bodyParser(),PostController.createPost)
 router.get('/getAllPosts',PostController.getAllPosts)
 router.post('/getPostsProfile',bodyParser(), PostController.getPostsProfile)
 router.post('/editPost',bodyParser(), PostController.editPost)
+router.post('/deletePost',bodyParser(), PostController.deletePost)
 
 
 export = router

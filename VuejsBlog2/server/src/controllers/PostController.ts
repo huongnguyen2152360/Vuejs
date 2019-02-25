@@ -53,4 +53,10 @@ export default class Post {
     // console.log(editPostData);
     ctx.body = await PostModel.updateOne({ _id: editPostData._id }, { ...editPostData })
   }
+
+  static async deletePost(ctx: Context) {
+    const deleteId = ctx.request.body
+    const deleteIdString = JSON.stringify(deleteId).replace(/"|{|}|:/g, '')
+    ctx.body = await PostModel.deleteOne({_id: deleteIdString})
+  }
 }

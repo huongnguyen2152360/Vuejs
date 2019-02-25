@@ -241,8 +241,32 @@ export default {
         })
       })
     },
-    handleDelete(index, row) {
-      console.log(index, row)
+    handleDelete(index, postinfo) {
+      // console.log(index, row)
+      this.$confirm('This will permanently delete the post . Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
+        .then(() => {
+          axios({
+            method: 'post',
+            url: 'http://localhost:3000/deletePost',
+            data: postinfo._id
+          }).then(() => {
+            this.tableData.splice(index,1)
+            this.$message({
+              type: 'success',
+              message: 'Delete completed'
+            })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        })
     },
     something(index, row) {
       return
