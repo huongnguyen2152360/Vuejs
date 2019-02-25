@@ -2,6 +2,28 @@
   <div id="appmain">
     <app-header></app-header>
     <el-main>
+       <!-- Form to post things -->
+      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
+        <p class="postForm-intro">What's on your mind?</p>
+        <el-form-item label="Title">
+          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Tags">
+          <el-select v-model="postForm.tags" placeholder="Select one tag">
+            <el-option label="General" value="General"></el-option>
+            <el-option label="Support" value="Support"></el-option>
+            <el-option label="Language" value="Language"></el-option>
+          </el-select>
+        </el-form-item>
+        <div class="postForm-hidden">
+          <el-input v-model="postForm.date">{{ date() }}</el-input>
+        </div>
+        <editor v-model="postForm.content" class="editorText"></editor>
+        <div class="postForm-buttons">
+          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
+          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
+        </div>
+      </el-form>
       <el-row>
         <el-col :span="24" class="newtopic-row">
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
@@ -55,27 +77,7 @@
           </el-row>
         </li>
       </ul>
-      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
-        <p class="postForm-intro">What's on your mind?</p>
-        <el-form-item label="Title">
-          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
-        </el-form-item>
-        <el-form-item label="Tags">
-          <el-select v-model="postForm.tags" placeholder="Select one tag">
-            <el-option label="General" value="General"></el-option>
-            <el-option label="Support" value="Support"></el-option>
-            <el-option label="Language" value="Language"></el-option>
-          </el-select>
-        </el-form-item>
-        <div class="postForm-hidden">
-          <el-input v-model="postForm.date">{{ date() }}</el-input>
-        </div>
-        <editor v-model="postForm.content" class="editorText"></editor>
-        <div class="postForm-buttons">
-          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
-          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
-        </div>
-      </el-form>
+     
     </el-main>
   </div>
 </template>
@@ -230,7 +232,9 @@ p {
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
-  margin-top: 3rem;
+  position: fixed;
+  right: 10%;
+  z-index: 10;
 }
 .postForm .el-form-item__label {
   font-size: 1rem;
