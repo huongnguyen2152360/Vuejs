@@ -15,6 +15,7 @@ router.post('/changePassword', bodyParser(), UserController.changePass)
 router.post('/postContent', bodyParser(),PostController.createPost)
 router.get('/getAllPosts',PostController.getAllPosts)
 router.post('/getPostsProfile',bodyParser(), PostController.getPostsProfile)
+router.post('/editPost',bodyParser(), PostController.editPost)
 
 
 export = router

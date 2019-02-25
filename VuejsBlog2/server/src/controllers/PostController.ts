@@ -47,4 +47,10 @@ export default class Post {
     const userIdString = JSON.stringify(userId).replace(/"|{|}|:/g, '')
     ctx.body = await PostModel.find({ authorId: userIdString }).sort([['date', -1]])
   }
+
+  static async editPost(ctx: Context) {
+    const editPostData = ctx.request.body
+    // console.log(editPostData);
+    ctx.body = await PostModel.updateOne({ _id: editPostData._id }, { ...editPostData })
+  }
 }

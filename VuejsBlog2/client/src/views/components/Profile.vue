@@ -71,31 +71,31 @@
       </el-tabs>
       <!-- MESSAGE BOX FORM -->
       <el-dialog title="Edit Form" :visible.sync="dialogFormVisible">
-          <el-form :data="tableData">
-            <el-form-item label="Title">
-              <el-input autocomplete="off" v-model="editPost.title"></el-input>
-            </el-form-item>
-            <el-form-item label="Tags">
-          <el-select v-model="tableData.tags" placeholder="Select one tag">
-            <el-option label="General" value="General"></el-option>
-            <el-option label="Support" value="Support"></el-option>
-            <el-option label="Language" value="Language"></el-option>
-          </el-select>
-        </el-form-item>
-            <el-form-item label="Content">
-              <editor v-model="tableData.content" class="editorText"></editor>
-            </el-form-item>
-            <div class="editForm-hidden">
-              <!-- new date -->
-              <el-input v-model="tableData.date">{{tableData.date}}</el-input>
-              <el-input v-model="tableData.authorId">{{tableData.authorId}}</el-input>
-            </div>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="cfEditBtn(),dialogFormVisible = false">Confirm</el-button>
-          </span>
-        </el-dialog>
+        <el-form :data="editPost">
+          <el-form-item label="Title" label-width="40px">
+            <el-input autocomplete="off" v-model="editPost.title"></el-input>
+          </el-form-item>
+          <el-form-item label="Tags" label-width="40px">
+            <el-select v-model="editPost.tags" placeholder="Select one tag">
+              <el-option label="General" value="General"></el-option>
+              <el-option label="Support" value="Support"></el-option>
+              <el-option label="Language" value="Language"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <editor v-model="editPost.content" class="editorText"></editor>
+          </el-form-item>
+          <div class="editForm-hidden">
+            <!-- new date -->
+            <el-input v-model="editPost.date"></el-input>
+            <el-input v-model="editPost.authorId"></el-input>
+          </div>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="cfEditBtn(),dialogFormVisible = false">Confirm</el-button>
+        </span>
+      </el-dialog>
     </el-main>
   </div>
 </template>
@@ -206,7 +206,7 @@ export default {
         this.tableData = rs.data
         this.tableData.forEach(data => {
           if (data.content.length > 100) {
-            data.content = data.content.substring(0,80) + ' ...'
+            data.content = data.content.substring(0, 80) + ' ...'
           } else {
             return
           }
@@ -214,11 +214,32 @@ export default {
         // console.log(this.tableData[0].content.substring(0,100));
       })
     },
+    moment: function(date) {
+      return moment(date)
+    },
+    date: function(date) {
+      return moment(date).format()
+    },
     handleEdit(index, row) {
-     const editData = row
+      this.editPost = row
+      this.editPost.date = this.date(this.tableData.date)
     },
     cfEditBtn: function() {
-      console.log('cf Edit Btn');
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/editPost',
+        data: this.editPost
+      }).then(() => {
+        if (this.editPost.content.length > 100) {
+          this.editPost.content = this.editPost.content.substring(0, 80) + ' ...'
+        } else {
+          return
+        }
+        this.$message({
+          type: 'success',
+          message: 'Post edited successfully'
+        })
+      })
     },
     handleDelete(index, row) {
       console.log(index, row)
