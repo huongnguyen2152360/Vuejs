@@ -44,7 +44,7 @@
                   </div>
                 </el-col>
                 <el-col :span="18">
-                  <h2>{{post.title}}</h2>
+                  <router-link :to="`/post/${post._id}`"><h2>{{post.title}}</h2></router-link>
                   <p class="main-tags">
                     {{post.tags}} •
                     <span>{{currentDate(post.date)}}</span>
@@ -88,13 +88,15 @@ import 'tui-editor/dist/tui-editor-contents.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
+import PostDetails from './PostDetails'
 import moment from 'moment'
 import axios from 'axios'
 import { clearTimeout } from 'timers'
 export default {
   components: {
     appHeader: Header,
-    editor: Editor
+    editor: Editor,
+    appPost: PostDetails
   },
   data() {
     return {
@@ -231,7 +233,7 @@ p {
 .postForm {
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 2rem 2rem 0 2rem;
   position: fixed;
   right: 10%;
   z-index: 10;

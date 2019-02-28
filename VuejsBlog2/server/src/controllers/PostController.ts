@@ -59,4 +59,10 @@ export default class Post {
     const deleteIdString = JSON.stringify(deleteId).replace(/"|{|}|:/g, '')
     ctx.body = await PostModel.deleteOne({_id: deleteIdString})
   }
+
+  static async getPostDetails(ctx: Context) {
+    const contentId = ctx.request.body
+    const contentIdString = JSON.stringify(contentId).replace(/"|{|}|:/g, '')
+    ctx.body = await PostModel.findOne({_id: contentIdString})
+  }
 }
