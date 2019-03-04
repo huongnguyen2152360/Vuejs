@@ -1,5 +1,5 @@
 import {Schema, model} from 'mongoose'
-import UserModel from '@/models/UserModel'
+// import UserModel from '@/models/UserModel'
 
 const postSchema = new Schema({
     title: {type: String, default: ''},
@@ -14,7 +14,7 @@ postSchema.virtual('userinfo', {
     ref: 'userModel', //tên model user
     localField: 'authorId', //tên trường thông tin mà UserPosts lưu
     justOne: true, //nhiều post nhưng chỉ 1 User
-    foreignField: '_id' // tên trường thông tin ứng vs userId (_id bên userModel)
+    foreignField: '_id' // tên trường thông tin ứng vs authorId (_id bên userModel)
 })
 
 export default model('postModel', postSchema,'postmodels')

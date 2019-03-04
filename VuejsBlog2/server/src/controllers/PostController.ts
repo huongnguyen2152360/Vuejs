@@ -63,6 +63,10 @@ export default class Post {
   static async getPostDetails(ctx: Context) {
     const contentId = ctx.request.body
     const contentIdString = JSON.stringify(contentId).replace(/"|{|}|:/g, '')
-    ctx.body = await PostModel.findOne({_id: contentIdString})
+    const postById = await PostModel.findOne({_id: contentIdString}).lean()
+    const authorByPostId = await UserModel.find({_id: postById.authorId}).lean()
+    postById.avatar = authorByPostId[0].avatar
+    postById.displayname = authorByPostId[0].displayname
+    ctx.body = postById
   }
 }
