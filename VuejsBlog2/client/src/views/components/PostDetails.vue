@@ -16,17 +16,37 @@
         Tags: {{this.postDetails.tags}}
       </p>
       <p>{{this.postDetails.content}}</p>
+      <!-- COMMENTS -->
       <h4 class="cmt">Comments</h4>
+      <!-- COMMENTS - Show cmts -->
+      <ul v-for="cmt in allCmts" :key="cmt._id">
+        <li style="list-style-type: none">
+          <el-row>
+            <el-col :span="2">
+              <img :src="cmt.usercmtinfo.avatar" :alt="cmt.usercmtinfo.displayname" class="cmt-user-avatar">
+            </el-col>
+            <el-col :span="22">
+              <p><span class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</span> {{cmt.content}}</p>
+        <p>{{dateFrNow(cmt.date)}}</p>
+            </el-col>
+          </el-row>
+        </li>
+      </ul>
+
+      <!-- COMMENTS - Create cmts -->
       <el-form :model="cmtForm" v-if="userSession.displayname">
         <el-form-item>
           <editor v-model="cmtForm.content" class="cmt-editor"></editor>
         </el-form-item>
-        <el-form-item class="cmt-hidden">
+        <div class="cmt-hidden">
           <el-input v-model="cmtForm.date">{{ currentDate() }}</el-input>
-        </el-form-item>
-        <el-button type="primary">Send</el-button>
+          <el-input v-model="cmtForm.cmtUser">{{ userSession._id }}</el-input>
+        </div>
+        <el-button type="primary" @click="cmtSubmitBtn">Send</el-button>
       </el-form>
-      <p v-else style="font-style:italic">You have to log in/register to comment. <router-link to="/login">Login/Register here.</router-link></p>
+      <p v-else style="font-style:italic">You have to log in/register to comment.
+        <router-link to="/login">Login/Register here.</router-link>
+      </p>
     </el-main>
   </div>
 </template>
@@ -36,6 +56,7 @@ import Header from './Header'
 import axios from 'axios'
 import moment from 'moment'
 import { Editor } from '@toast-ui/vue-editor'
+import { error } from 'util'
 export default {
   components: {
     appHeader: Header,
@@ -44,11 +65,15 @@ export default {
   data() {
     return {
       postDetails: {},
-      cmtForm: {}
+      cmtForm: {
+        date: '',
+        cmtUser: ''
+      },
+      allCmts: {}
     }
   },
   created() {
-    this.getPostDetails()
+    this.getPostDetails(), this.getPostCmts()
   },
   computed: {
     userSession() {
@@ -68,6 +93,40 @@ export default {
     },
     currentDate: function(date) {
       return moment(date).format()
+    },
+    dateFrNow: function(date) {
+      return moment(date).calendar()
+    },
+    cmtSubmitBtn: function() {
+      this.cmtForm.date = this.currentDate()
+      this.cmtForm.cmtUser = this.userSession._id
+      this.cmtForm.postId = this.$route.params.id
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/createCmt',
+        data: this.cmtForm
+      })
+        .then(rs => {
+          this.$message({
+            type: 'success',
+            message: 'Posted successfully'
+          })
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'Oops! Please finish your comment!'
+          })
+        })
+    },
+    getPostCmts: function() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/getPostCmt',
+        data: this.$route.params.id
+      }).then(rs => {
+        this.allCmts = rs.data
+      })
     }
   }
 }
@@ -104,5 +163,9 @@ export default {
 }
 .cmt-hidden {
   display: none;
+}
+.cmt-user-avatar {
+  width: 50px;
+  height: 50px;
 }
 </style>
