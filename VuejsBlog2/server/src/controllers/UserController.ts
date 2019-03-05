@@ -1,5 +1,6 @@
 import UserModel from '@/models/UserModel'
 import { Context } from 'koa'
+import PostModel from '@/models/PostModel';
 // const passport = require('passport')
 // const FacebookStrategy = require('passport-facebook').Strategy
 // import keyPassport from '@/configs/keyPassport'
@@ -38,7 +39,14 @@ export default class User {
       ctx.session.user = updatedPass
       ctx.body = updatedPass
     }
-    
+  }
+  static async getUserPostCmt(ctx:Context) {
+    const userId = ctx.request.body
+    const userIdString = JSON.stringify(userId).replace(/"|{|}|:/g, '')
+    const userPosts = await PostModel.find({authorId: userIdString}).exec(function (err, results) {
+      return results.length  
+    });
+    console.log(userPosts);
   }
 }
 

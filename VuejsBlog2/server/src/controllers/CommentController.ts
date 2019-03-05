@@ -1,5 +1,6 @@
 import { Context } from 'koa'
 import CommentModel from '@/models/CommentModel'
+import UserModel from '@/models/UserModel';
 
 interface IComment {
   content: String | ''
@@ -25,5 +26,11 @@ export default class Comment {
       .sort([['date', -1]])
       .populate('usercmtinfo')
       .lean()
+  }
+
+  static async getUserProfile(ctx:Context) {
+      const userIdData = ctx.request.body
+      const userIdString = JSON.stringify(userIdData).replace(/"|{|}|:/g, '')
+      ctx.body = await UserModel.findOne({_id: userIdString})
   }
 }

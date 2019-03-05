@@ -26,7 +26,7 @@
               <img :src="cmt.usercmtinfo.avatar" :alt="cmt.usercmtinfo.displayname" class="cmt-user-avatar">
             </el-col>
             <el-col :span="22">
-              <p><span class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</span> {{cmt.content}}</p>
+              <p><router-link :to="`/user/${cmt.cmtUser}`" class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</router-link> {{cmt.content}}</p>
         <p>{{dateFrNow(cmt.date)}}</p>
             </el-col>
           </el-row>
@@ -167,5 +167,6 @@ export default {
 .cmt-user-avatar {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 }
 </style>

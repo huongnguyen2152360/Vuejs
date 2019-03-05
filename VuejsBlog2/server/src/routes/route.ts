@@ -10,7 +10,8 @@ import * as bodyParser from 'koa-bodyparser'
 router.post('/register', bodyParser(), UserController.createUser)
 router.post('/login', bodyParser(), LoginController.loginUser)
 router.post('/editProfile', bodyParser(), UserController.editUser)
-router.post('/changePassword', bodyParser(), UserController.changePass)
+router.post('/changePass', bodyParser(), UserController.changePass)
+router.post('/getUserPostCmt', bodyParser(), UserController.getUserPostCmt)
 
 //POST
 router.post('/postContent', bodyParser(),PostController.createPost)
@@ -23,6 +24,7 @@ router.post('/getpostdetails', bodyParser(), PostController.getPostDetails)
 //COMMENT
 router.post('/createCmt', bodyParser(), CommentController.createCmt)
 router.post('/getPostCmt', bodyParser(), CommentController.getPostCmt)
+router.post('/getUserProfile', bodyParser(), CommentController.getUserProfile)
 
 
 export = router
