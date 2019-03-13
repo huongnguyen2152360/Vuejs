@@ -11,7 +11,7 @@ router.post('/register', bodyParser(), UserController.createUser)
 router.post('/login', bodyParser(), LoginController.loginUser)
 router.post('/editProfile', bodyParser(), UserController.editUser)
 router.post('/changePass', bodyParser(), UserController.changePass)
-router.post('/getUserPostCmt', bodyParser(), UserController.getUserPostCmt)
+router.post('/userAllPosts', bodyParser(), UserController.userAllPosts)
 
 //POST
 router.post('/postContent', bodyParser(),PostController.createPost)

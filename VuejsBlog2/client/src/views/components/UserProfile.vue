@@ -12,14 +12,24 @@
           </el-col>
         </div>
       </el-row>
-      <el-row>
+      <div class="user-moreinfo">
+      <el-row style="padding-bottom: 1rem">
          <el-col :span="7" >
-           
+           <p>Displayname:</p>
           </el-col>
           <el-col :span="17" >
-            
+            <p>{{userInfo.displayname}}</p>
           </el-col>
       </el-row>
+      <el-row>
+         <el-col :span="7" >
+           <p>Posts:</p>
+          </el-col>
+          <el-col :span="17" >
+            <p>{{userInfo.postsnumber}}</p>
+          </el-col>
+      </el-row>
+      </div>
     </el-main>
   </div>
 </template>
@@ -38,7 +48,7 @@ export default {
   },
   created() {
     this.getUserProfile(),
-    this.getUserPostCmt()
+    this.userAllPosts()
   },
   methods: {
     getUserProfile: function() {
@@ -50,13 +60,13 @@ export default {
         this.userInfo = rs.data
       })
     },
-    getUserPostCmt: function() {
+    userAllPosts: function() {
         axios({
             method:'post',
-            url: 'http://localhost:3000/getUserPostCmt',
+            url: 'http://localhost:3000/userAllPosts',
             data: this.$route.params.id
         }).then(rs => {
-            console.log(rs.data);
+            this.userInfo.postsnumber = rs.data
         })
     }
   }
@@ -84,6 +94,9 @@ export default {
 .user-displayname {
   padding-left: 5rem;
   color: #ffffffd9;
+}
+.user-moreinfo {
+    margin-top: 7rem;
 }
 </style>
 

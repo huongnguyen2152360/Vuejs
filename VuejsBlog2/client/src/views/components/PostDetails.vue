@@ -15,7 +15,8 @@
         <v-icon name="tag" scale="1"/>
         Tags: {{this.postDetails.tags}}
       </p>
-      <p>{{this.postDetails.content}}</p>
+      <!-- <div id="viewerSection">{{this.postDetails.content}}</div> -->
+      <viewer :value="this.postDetails.content"></viewer>
       <!-- COMMENTS -->
       <h4 class="cmt">Comments</h4>
       <!-- COMMENTS - Show cmts -->
@@ -26,8 +27,11 @@
               <img :src="cmt.usercmtinfo.avatar" :alt="cmt.usercmtinfo.displayname" class="cmt-user-avatar">
             </el-col>
             <el-col :span="22">
-              <p><router-link :to="`/user/${cmt.cmtUser}`" class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</router-link> {{cmt.content}}</p>
-        <p>{{dateFrNow(cmt.date)}}</p>
+              <p>
+                <router-link :to="`/user/${cmt.cmtUser}`" class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</router-link>
+                <viewer :value="cmt.content"></viewer>
+              </p>
+              <p class="cmt-date">{{dateFrNow(cmt.date)}}</p>
             </el-col>
           </el-row>
         </li>
@@ -36,7 +40,7 @@
       <!-- COMMENTS - Create cmts -->
       <el-form :model="cmtForm" v-if="userSession.displayname">
         <el-form-item>
-          <editor v-model="cmtForm.content" class="cmt-editor"></editor>
+          <editor ref="tuiEditor" v-model="cmtForm.content" class="cmt-editor"></editor>
         </el-form-item>
         <div class="cmt-hidden">
           <el-input v-model="cmtForm.date">{{ currentDate() }}</el-input>
@@ -57,10 +61,13 @@ import axios from 'axios'
 import moment from 'moment'
 import { Editor } from '@toast-ui/vue-editor'
 import { error } from 'util'
+import { Viewer } from '@toast-ui/vue-editor'
+// const contentedited = editor.getValue()
 export default {
   components: {
     appHeader: Header,
-    editor: Editor
+    editor: Editor,
+    viewer: Viewer
   },
   data() {
     return {
@@ -132,7 +139,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .post-title {
   display: block;
   font-size: 1.5em;
@@ -149,8 +156,7 @@ export default {
 }
 .post-tags {
   font-size: 0.9em;
-  /* font-style: italic; */
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 .post-avatar {
   border-radius: 50%;
@@ -168,5 +174,14 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+.cmt-date {
+  font-size: 0.8rem;
+}
+.tui-editor-contents {
+  font-size: 1rem !important;
+}
+.tui-editor-contents img {
+  max-width: 50% !important;
 }
 </style>
