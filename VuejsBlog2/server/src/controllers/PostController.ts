@@ -1,13 +1,13 @@
 import PostModel from '@/models/PostModel'
 import { Context } from 'koa'
 import UserModel from '@/models/UserModel'
-import { ObjectId } from 'bson'
 
 interface IPost {
   title: String | ''
   content: String | ''
   date: String | ''
-  authorId: ObjectId | ''
+  author: String | ''
+  avatar: String | ''
   tags: String | ''
 }
 
@@ -15,12 +15,7 @@ export default class Post {
   static async createPost(ctx: Context) {
     const postData = ctx.request.body as IPost
     if (postData.content && postData.title && postData.tags) {
-      await PostModel.create(postData)
-      const allPostsData = await PostModel.find({})
-        .sort([['date', -1]])
-        .populate('userinfo')
-        .lean()
-      ctx.body = allPostsData
+      ctx.body = await PostModel.create(postData)
     } else {
       if (!postData.content) {
         ctx.throw(400, 'Please input your content')
@@ -33,40 +28,17 @@ export default class Post {
       }
     }
   }
-
   static async getAllPosts(ctx: Context) {
-    const allPostsData = await PostModel.find({})
-      .sort([['date', -1]])
-      .populate('userinfo')
-      .lean()
-    ctx.body = allPostsData
+    const allPostData = await PostModel.find({})
+    // console.log(allPostData)
+    ctx.body = allPostData
   }
-
   static async getPostsProfile(ctx: Context) {
-    const userId = ctx.request.body
-    const userIdString = JSON.stringify(userId).replace(/"|{|}|:/g, '')
-    ctx.body = await PostModel.find({ authorId: userIdString }).sort([['date', -1]])
-  }
-
-  static async editPost(ctx: Context) {
-    const editPostData = ctx.request.body
-    // console.log(editPostData);
-    ctx.body = await PostModel.updateOne({ _id: editPostData._id }, { ...editPostData })
-  }
-
-  static async deletePost(ctx: Context) {
-    const deleteId = ctx.request.body
-    const deleteIdString = JSON.stringify(deleteId).replace(/"|{|}|:/g, '')
-    ctx.body = await PostModel.deleteOne({_id: deleteIdString})
-  }
-
-  static async getPostDetails(ctx: Context) {
-    const contentId = ctx.request.body
-    const contentIdString = JSON.stringify(contentId).replace(/"|{|}|:/g, '')
-    const postById = await PostModel.findOne({_id: contentIdString}).lean()
-    const authorByPostId = await UserModel.find({_id: postById.authorId}).lean()
-    postById.avatar = authorByPostId[0].avatar
-    postById.displayname = authorByPostId[0].displayname
-    ctx.body = postById
+    const userDisplayname = ctx.request.body
+    const stringDisplayname = JSON.stringify(userDisplayname)
+    const finalDisplayname = stringDisplayname.replace(/:|"|{|}/g, '')
+    // console.log(finalDisplayname)
+    const findAuthor = await PostModel.find({ author: finalDisplayname })
+    ctx.body = findAuthor
   }
 }

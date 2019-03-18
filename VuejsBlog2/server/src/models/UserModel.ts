@@ -7,11 +7,4 @@ const userSchema = new Schema({
   avatar: { type: String, default: '' }
 })
 
-// userSchema.virtual('uposts', {
-//   ref: 'postModel',
-//   localField: '_id',
-//   foreignField: 'authorId'
-// })
-
-
-export default model('userModel', userSchema,'usermodels')
+export default model('userModel', userSchema)

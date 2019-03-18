@@ -2,28 +2,6 @@
   <div id="appmain">
     <app-header></app-header>
     <el-main>
-       <!-- Form to post things -->
-      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
-        <p class="postForm-intro">What's on your mind?</p>
-        <el-form-item label="Title">
-          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
-        </el-form-item>
-        <el-form-item label="Tags">
-          <el-select v-model="postForm.tags" placeholder="Select one tag">
-            <el-option label="General" value="General"></el-option>
-            <el-option label="Support" value="Support"></el-option>
-            <el-option label="Language" value="Language"></el-option>
-          </el-select>
-        </el-form-item>
-        <div class="postForm-hidden">
-          <el-input v-model="postForm.date">{{ date() }}</el-input>
-        </div>
-        <editor v-model="postForm.content" class="editorText"></editor>
-        <div class="postForm-buttons">
-          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
-          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
-        </div>
-      </el-form>
       <el-row>
         <el-col :span="24" class="newtopic-row">
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
@@ -36,15 +14,15 @@
             <el-col :span="18">
               <el-row class="allPosts_row">
                 <el-col :span="2">
-                  <div class="user-avatar" v-if="post.userinfo.avatar">
-                    <img :src="post.userinfo.avatar" alt="user-avatar">
+                  <div class="user-avatar">
+                    <img :src="post.avatar" alt="user-avatar">
                   </div>
-                  <div class="user-avatar" v-else>
+                  <!-- <div class="user-avatar" v-else>
                     <img src="http://purrworld.com/wp-content/uploads/2017/10/big-eyes-cute-cute-cat-cute-kitty-Favim.com-3467623.jpg" alt="user-avatar">
-                  </div>
+                  </div> -->
                 </el-col>
                 <el-col :span="18">
-                  <router-link :to="`/post/${post._id}`"><h2>{{post.title}}</h2></router-link>
+                  <h2>{{post.title}}</h2>
                   <p class="main-tags">
                     {{post.tags}} •
                     <span>{{currentDate(post.date)}}</span>
@@ -77,7 +55,30 @@
           </el-row>
         </li>
       </ul>
-     
+      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
+        <p class="postForm-intro">What's on your mind?</p>
+        <el-form-item label="Title">
+          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Tags">
+          <el-select v-model="postForm.tags" placeholder="Select one tag">
+            <el-option label="General" value="General"></el-option>
+            <el-option label="Support" value="Support"></el-option>
+            <el-option label="Language" value="Language"></el-option>
+          </el-select>
+        </el-form-item>
+        <div class="postForm-hidden">
+          <el-input v-model="postForm.author">{{userSession.displayname}}</el-input>
+          <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input>
+          <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
+          <el-input v-model="postForm.date">{{ date() }}</el-input>
+        </div>
+        <editor v-model="postForm.content" class="editorText"></editor>
+        <div class="postForm-buttons">
+          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
+          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
+        </div>
+      </el-form>
     </el-main>
   </div>
 </template>
@@ -88,27 +89,28 @@ import 'tui-editor/dist/tui-editor-contents.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
 import Header from './Header'
-import PostDetails from './PostDetails'
 import moment from 'moment'
 import axios from 'axios'
 import { clearTimeout } from 'timers'
 export default {
   components: {
     appHeader: Header,
-    editor: Editor,
-    appPost: PostDetails
+    editor: Editor
   },
   data() {
     return {
       open: false,
       postForm: {
+        author: this.$store.store.state.userSession.displayname,
+        avatar: this.$store.store.state.userSession.avatar,
         date: ''
       },
       allPosts: {}
     }
   },
   created() {
-    this.getallPosts()
+    this.getallPosts(),
+    this.getUserInfo()
   },
   computed: {
     userSession() {
@@ -127,7 +129,7 @@ export default {
       return moment(date)
     },
     date: function(date) {
-      this.postForm.date = moment(date).format()
+      this.postForm.date = moment(date).format('YYYYMMDD')
     },
     currentDate: function(date) {
       return moment(date, 'YYYYMMDD').fromNow()
@@ -136,20 +138,18 @@ export default {
       this.open = false
     },
     postConfirm: function() {
-      const postInfo = this.postForm
-      postInfo.authorId = this.userSession._id
+      // console.log(this.postForm)
       axios({
         method: 'post',
         url: 'http://localhost:3000/postContent',
-        data: postInfo
+        data: this.postForm
       })
-        .then(rs => {
+        .then(() => {
           this.open = false
           this.$message({
             type: 'success',
             message: 'Posted successfully'
           })
-          this.allPosts = rs.data
         })
         .catch(error => {
           this.$message({
@@ -163,9 +163,16 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        // array
         this.allPosts = rs.data
       })
+    },
+    getUserInfo: function() {
+      // console.log(this.allPosts)
+      // axios({
+      //   method:'post',
+      //   url: 'http://localhost:3000/getUserInfo',
+      //   data: this.allPosts.author
+      // })
     }
   }
 }
@@ -233,10 +240,8 @@ p {
 .postForm {
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
-  padding: 2rem 2rem 0 2rem;
-  position: fixed;
-  right: 10%;
-  z-index: 10;
+  padding: 2rem 2rem 1rem 2rem;
+  margin-top: 3rem;
 }
 .postForm .el-form-item__label {
   font-size: 1rem;

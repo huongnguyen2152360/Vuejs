@@ -51,68 +51,36 @@
         <!-- POSTS -->
         <el-tab-pane label="Posts">
           <h3 class="profile-header">Your Posts</h3>
-          <!-- :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))" -->
-          <el-table style="width: 100%" :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))">
+          <!-- :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" -->
+          <el-table style="width: 100%" :data="tableData">
             <el-table-column label="Title" prop="title"></el-table-column>
             <el-table-column label="Content" prop="content"></el-table-column>
             <el-table-column label="Tags" prop="tags"></el-table-column>
             <el-table-column label="Date" prop="date"></el-table-column>
             <el-table-column align="right">
-              <template slot="header" slot-scope="scope" @click="something(scope.$index, scope.row)">
+              <template slot="header">
+                <!-- slot-scope="scope" -->
                 <el-input v-model="search" size="mini" placeholder="Type to search"/>
               </template>
               <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row), dialogFormVisible=true">Edit</el-button>
+                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                 <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
-      <!-- MESSAGE BOX FORM -->
-      <el-dialog title="Edit Form" :visible.sync="dialogFormVisible">
-        <el-form :data="editPost">
-          <el-form-item label="Title" label-width="40px">
-            <el-input autocomplete="off" v-model="editPost.title"></el-input>
-          </el-form-item>
-          <el-form-item label="Tags" label-width="40px">
-            <el-select v-model="editPost.tags" placeholder="Select one tag">
-              <el-option label="General" value="General"></el-option>
-              <el-option label="Support" value="Support"></el-option>
-              <el-option label="Language" value="Language"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <editor v-model="editPost.content" class="editorText"></editor>
-          </el-form-item>
-          <div class="editForm-hidden">
-            <!-- new date -->
-            <el-input v-model="editPost.date"></el-input>
-            <el-input v-model="editPost.authorId"></el-input>
-          </div>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="cfEditBtn(),dialogFormVisible = false">Confirm</el-button>
-        </span>
-      </el-dialog>
     </el-main>
   </div>
 </template>
 
 <script>
-import 'tui-editor/dist/tui-editor.css'
-import 'tui-editor/dist/tui-editor-contents.css'
-import 'codemirror/lib/codemirror.css'
-import { Editor } from '@toast-ui/vue-editor'
 import axios from 'axios'
 import Header from './Header'
-import moment from 'moment'
-import { clearTimeout, clearInterval, clearImmediate } from 'timers'
+import { clearTimeout } from 'timers'
 export default {
   components: {
-    appHeader: Header,
-    editor: Editor
+    appHeader: Header
   },
   data() {
     const validatePass = (rule, value, callback) => {
@@ -146,9 +114,7 @@ export default {
         checkPass: [{ validator: validatePass2, trigger: 'blur' }]
       },
       search: '',
-      tableData: [],
-      dialogFormVisible: false,
-      editPost: {}
+      tableData: []
     }
   },
   created() {
@@ -198,78 +164,13 @@ export default {
         })
     },
     getTableData: function() {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/getPostsProfile',
-        data: this.userSession._id
-      }).then(rs => {
-        this.tableData = rs.data
-        this.tableData.forEach(data => {
-          if (data.content.length > 100) {
-            data.content = data.content.substring(0, 80) + ' ...'
-          } else {
-            return
-          }
-        })
-        // console.log(this.tableData[0].content.substring(0,100));
-      })
-    },
-    moment: function(date) {
-      return moment(date)
-    },
-    date: function(date) {
-      return moment(date).format()
-    },
-    handleEdit(index, row) {
-      this.editPost = row
-      this.editPost.date = this.date(this.tableData.date)
-    },
-    cfEditBtn: function() {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/editPost',
-        data: this.editPost
-      }).then(() => {
-        if (this.editPost.content.length > 100) {
-          this.editPost.content = this.editPost.content.substring(0, 80) + ' ...'
-        } else {
-          return
-        }
-        this.$message({
-          type: 'success',
-          message: 'Post edited successfully'
-        })
-      })
-    },
-    handleDelete(index, postinfo) {
-      // console.log(index, row)
-      this.$confirm('This will permanently delete the post . Continue?', 'Warning', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      })
-        .then(() => {
-          axios({
-            method: 'post',
-            url: 'http://localhost:3000/deletePost',
-            data: postinfo._id
-          }).then(() => {
-            this.tableData.splice(index,1)
-            this.$message({
-              type: 'success',
-              message: 'Delete completed'
-            })
-          })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: 'Delete canceled'
-          })
-        })
-    },
-    something(index, row) {
-      return
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/getPostsProfile',
+      data: this.userSession.displayname
+    }).then(rs => {
+      this.tableData = rs.data
+    })
     }
   }
 }
@@ -320,8 +221,5 @@ export default {
 }
 .profile-saveBtn {
   margin-top: 1rem;
-}
-.editForm-hidden {
-  display: none;
 }
 </style>
