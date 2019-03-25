@@ -38,7 +38,7 @@
           <el-table-column label="Phone" prop="phone"></el-table-column>
           <el-table-column label="Address" prop="address"></el-table-column>
           <el-table-column width="200" align="left">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <el-input v-model="search" size="mini" placeholder="Type to search name" class="contact-search"/>
             </template>
             <template slot-scope="scope">
@@ -160,6 +160,9 @@ export default {
         this.tableData[this.editUser.index] = this.editUser
         // this.tableData[this.editUser.index].number = this.editUser.number
       })
+    },
+    handleScope: function() {
+      return
     }
   }
 }
