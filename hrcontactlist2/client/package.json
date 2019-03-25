@@ -10,10 +10,11 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "@vue/cli": "^3.5.1",
     "axios": "^0.18.0",
     "element-ui": "^2.4.10",
-    "vue": "^2.5.11",
-    "@koa/cors": "^2.2.2"
+    "vue": "^2.5.11"
   },
   "browserslist": [
     "> 1%",
