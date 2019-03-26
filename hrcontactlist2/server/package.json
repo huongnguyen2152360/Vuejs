@@ -7,12 +7,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
-    "start": "node dist/index.js",
+    "start": "node ts-node -r tsconfig-paths/register src/index.ts",
     "build": "ttsc"
   },
   "dependencies": {
     "@koa/cors": "2",
     "axios": "^0.18.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
@@ -23,9 +25,12 @@
     "@types/koa-router": "^7.0.35",
     "@types/mongoose": "^5.3.3",
     "@types/node": "^10.12.12",
+    "@zerollup/ts-transform-paths": "^1.7.0",
+    "i": "^0.3.6",
     "nodemon": "^1.18.7",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.7.0",
+    "ttypescript": "^1.5.6",
     "typescript": "^3.2.1"
   }
 }

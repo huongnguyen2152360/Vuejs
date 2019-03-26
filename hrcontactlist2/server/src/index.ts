@@ -15,8 +15,9 @@ app.use(cors());
 app.use(router.routes()).use(router.allowedMethods())
 
 app.use(async ctx => {
-  ctx.body = 'Hello World'
+  ctx.body = 'Hello'
 })
 
-app.listen(3000)
-console.log('Port 3000 connected successfully')
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Running in port 3000");
+});
