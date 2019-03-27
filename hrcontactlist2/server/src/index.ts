@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose'
 import * as router from '@/routes/route'
 
 mongoose.connect(
-  'mongodb://localhost:27017/hrcontactlist2',
+  'mongodb://huong:huongxinhgai1@ds131932.mlab.com:31932/heroku_xncl9mdz',
   { useNewUrlParser: true }
 )
 

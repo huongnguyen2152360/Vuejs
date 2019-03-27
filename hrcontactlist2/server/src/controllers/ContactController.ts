@@ -25,4 +25,7 @@ export default class ContactList {
     const editData = ctx.request.body as IContactInfo
     ctx.body = await ContactModel.updateOne({ _id: editData._id }, {...editData})
   }
+  static async test(ctx:Context) {
+    ctx.body =  'test successsssss'
+  }
 }

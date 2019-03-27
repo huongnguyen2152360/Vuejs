@@ -93,7 +93,7 @@ export default {
     getUserData: function() {
       axios({
         method: 'get',
-        url: "http://localhost:3000/getContacts"
+        url: "https://contactlisthr.herokuapp.com/getContacts"
       }).then(rs => {
         let number = 1
         rs.data.forEach(data => {
@@ -106,7 +106,7 @@ export default {
       const vm = this
       axios({
         method: 'post',
-        url: 'http://localhost:3000/addContact',
+        url: 'https://contactlisthr.herokuapp.com/addContact',
         data: {
           ...this.newUser
         }
@@ -124,7 +124,7 @@ export default {
         .then(() => {
           axios({
             method: 'post',
-            url: 'http://localhost:3000/deleteContact',
+            url: 'https://contactlisthr.herokuapp.com/deleteContact',
             data: {
               id: contact._id
             }
@@ -155,7 +155,7 @@ export default {
     cfEdit: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/editContact',
+        url: 'https://contactlisthr.herokuapp.com/editContact',
         data: {
           ...this.editUser
         }
