@@ -91,7 +91,7 @@ export default {
     getPostDetails: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getpostdetails',
+        url: 'https://vuejsblog-server.herokuapp.com/getpostdetails',
         data: this.$route.params.id
       }).then(rs => {
         this.postDetails = rs.data
@@ -110,7 +110,7 @@ export default {
       this.cmtForm.postId = this.$route.params.id
       axios({
         method: 'post',
-        url: 'http://localhost:3000/createCmt',
+        url: 'https://vuejsblog-server.herokuapp.com/createCmt',
         data: this.cmtForm
       })
         .then(rs => {
@@ -129,7 +129,7 @@ export default {
     getPostCmts: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getPostCmt',
+        url: 'https://vuejsblog-server.herokuapp.com/getPostCmt',
         data: this.$route.params.id
       }).then(rs => {
         this.allCmts = rs.data

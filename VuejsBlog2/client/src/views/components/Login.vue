@@ -85,7 +85,7 @@ export default {
     userRegister: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/register',
+        url: 'https://vuejsblog-server.herokuapp.com/register',
         data: this.userInfo
       }).then(rs => {
         this.$store.store.commit('userSessionInfo', rs.data)
@@ -101,7 +101,7 @@ export default {
     userLogin: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/login',
+        url: 'https://vuejsblog-server.herokuapp.com/login',
         data: this.userLoginInfo
       })
         .then(rs => {

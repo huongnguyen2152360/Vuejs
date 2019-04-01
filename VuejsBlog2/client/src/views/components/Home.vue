@@ -141,7 +141,7 @@ export default {
       // console.log(this.postForm)
       axios({
         method: 'post',
-        url: 'http://localhost:3000/postContent',
+        url: 'https://vuejsblog-server.herokuapp.com/postContent',
         data: this.postForm
       })
         .then(() => {
@@ -161,7 +161,7 @@ export default {
     getallPosts: function() {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/getAllPosts'
+        url: 'https://vuejsblog-server.herokuapp.com/getAllPosts'
       }).then(rs => {
         this.allPosts = rs.data
       })
@@ -170,7 +170,7 @@ export default {
       // console.log(this.allPosts)
       // axios({
       //   method:'post',
-      //   url: 'http://localhost:3000/getUserInfo',
+      //   url: 'https://vuejsblog-server.herokuapp.com/getUserInfo',
       //   data: this.allPosts.author
       // })
     }

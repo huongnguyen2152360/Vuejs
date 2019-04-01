@@ -1,6 +1,6 @@
-# vuejsblog
+# clienttest
 
-> VueJs Blog with VueJs and MongoDB
+> test deploy client
 
 ## Build Setup
 

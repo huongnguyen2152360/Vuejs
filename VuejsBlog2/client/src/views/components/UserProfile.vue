@@ -54,7 +54,7 @@ export default {
     getUserProfile: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getUserProfile',
+        url: 'https://vuejsblog-server.herokuapp.com/getUserProfile',
         data: this.$route.params.id
       }).then(rs => {
         this.userInfo = rs.data
@@ -63,7 +63,7 @@ export default {
     userAllPosts: function() {
         axios({
             method:'post',
-            url: 'http://localhost:3000/userAllPosts',
+            url: 'https://vuejsblog-server.herokuapp.com/userAllPosts',
             data: this.$route.params.id
         }).then(rs => {
             this.userInfo.postsnumber = rs.data
