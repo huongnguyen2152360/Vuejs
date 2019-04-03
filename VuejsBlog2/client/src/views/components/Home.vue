@@ -52,6 +52,7 @@
           </el-row>
         </li>
       </ul>
+      <!-- New Post Form -->
       <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
         <p class="postForm-intro">What's on your mind?</p>
         <el-form-item label="Title">

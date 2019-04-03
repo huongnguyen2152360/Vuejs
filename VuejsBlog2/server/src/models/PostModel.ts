@@ -8,7 +8,7 @@ const postSchema = new Schema({
     authorId: Schema.Types.ObjectId,
     avatar: {type: String, default: ''},
     tags: {type: String, default: ''}
-})
+}, {toObject: {virtuals: true}})
 
 postSchema.virtual('userinfo', {
     ref: 'userModel', // tên model user

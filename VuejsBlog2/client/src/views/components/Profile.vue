@@ -63,13 +63,38 @@
                 <el-input v-model="search" size="mini" placeholder="Type to search"/>
               </template>
               <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                <el-button size="mini" @click="editPostBtn(scope.$index, scope.row)">Edit</el-button>
+                <el-button size="mini" type="danger" @click="delPostBtn(scope.$index, scope.row)">Delete</el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
+      <div class="editPostForm-wrapper" v-show="open">
+        <el-form :model="editPostForm" class="editPostForm">
+          <p>Edit Post</p>
+          <el-form-item label="Title">
+            <el-input v-model="editPostForm.title" :placeholder="editPostForm.title"></el-input>
+          </el-form-item>
+          <el-form-item label="Tags">
+            <el-select v-model="editPostForm.tags" placeholder="Select one tag">
+              <el-option label="General" value="General"></el-option>
+              <el-option label="Support" value="Support"></el-option>
+              <el-option label="Language" value="Language"></el-option>
+            </el-select>
+          </el-form-item>
+          <div class="editPostForm-hidden">
+            <!-- <el-input v-model="editPostForm.authorId">{{userSession._id}}</el-input> -->
+            <!-- <el-input v-model="editPostForm.avatar">{{userSession.avatar}}</el-input> -->
+            <el-input v-model="editPostForm.date">{{ date() }}</el-input>
+          </div>
+          <editor v-model="editPostForm.content"></editor>
+          <div class="editPostForm-buttons">
+            <el-button type="success" class="editPostForm-buttons-post" @click="editpostConfirm">POST</el-button>
+            <el-button type="info" class="editPostForm-buttons-cancel" @click="editpostCancel">CANCEL</el-button>
+          </div>
+        </el-form>
+      </div>
     </el-main>
   </div>
 </template>
@@ -78,9 +103,15 @@
 import axios from 'axios'
 import Header from './Header'
 import { clearTimeout } from 'timers'
+import moment from 'moment'
+import 'tui-editor/dist/tui-editor.css'
+import 'tui-editor/dist/tui-editor-contents.css'
+import 'codemirror/lib/codemirror.css'
+import { Editor } from '@toast-ui/vue-editor'
 export default {
   components: {
-    appHeader: Header
+    appHeader: Header,
+    editor: Editor
   },
   data() {
     const validatePass = (rule, value, callback) => {
@@ -114,7 +145,12 @@ export default {
         checkPass: [{ validator: validatePass2, trigger: 'blur' }]
       },
       search: '',
-      tableData: []
+      tableData: [],
+      allUserPosts: [],
+      editPostForm: {
+        date: ''
+      },
+      open: false
     }
   },
   created() {
@@ -137,9 +173,9 @@ export default {
       }).then(rs => {
         this.$store.store.commit('userSessionInfo', rs.data)
         this.$message({
-            type: 'success',
-            message: 'Profile updated successfully'
-          })
+          type: 'success',
+          message: 'Profile updated successfully'
+        })
       })
     },
     userEditPassBtn: function() {
@@ -168,13 +204,46 @@ export default {
         })
     },
     getTableData: function() {
-    axios({
-      method: 'post',
-      url: 'http://localhost:3000/getPostsProfile',
-      data: this.userSession.displayname
-    }).then(rs => {
-      this.tableData = rs.data
-    })
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/getPostsProfile',
+        data: this.userSession._id
+      }).then(rs => {
+        this.allUserPosts = rs.data
+        console.log(rs.data);
+        this.tableData = rs.data
+        this.tableData.forEach(post => {
+          if (post.content.length >= 50) {
+            post.content = post.content.substring(0, 50) + ' ...'
+          }
+          if (post.title.length >= 30) {
+            post.title = post.title.substring(0, 30) + ' ...'
+          } else {
+            return
+          }
+        })
+      })
+    },
+    moment: function(date) {
+      return moment(date)
+    },
+    date: function(date) {
+      this.editPostForm.date = moment(date).format('YYYYMMDD')
+    },
+    editPostBtn: function(index, row) {
+      // console.log(this.tableData)
+      // console.log(this.tableData[index].content)
+      console.log(this.allUserPosts);
+      this.open = true
+    },
+    delPostBtn: function() {
+      console.log('del post')
+    },
+    editpostConfirm: function() {
+      return
+    },
+    editpostCancel: function() {
+      this.open = false
     }
   }
 }
@@ -225,5 +294,26 @@ export default {
 }
 .profile-saveBtn {
   margin-top: 1rem;
+}
+.editPostForm-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.editPostForm {
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+  border-radius: 5px;
+  padding: 2rem 2rem 1rem 2rem;
+  width: 40%;
+  margin: 10rem auto 0 auto;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+.editPostForm-hidden {
+  display: none;
 }
 </style>

@@ -29,15 +29,14 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.find({}).populate('userinfo').lean()
+    const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
     ctx.body = allPostData
   }
   static async getPostsProfile(ctx: Context) {
-    const userDisplayname = ctx.request.body
-    const stringDisplayname = JSON.stringify(userDisplayname)
-    const finalDisplayname = stringDisplayname.replace(/:|"|{|}/g, '')
-    // console.log(finalDisplayname)
-    const findAuthor = await PostModel.find({ author: finalDisplayname })
-    ctx.body = findAuthor
+    const userId = ctx.request.body
+    const stringUserId = JSON.stringify(userId)
+    const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
+    const userInfo = await PostModel.find({authorId: finalUserId})
+    ctx.body = userInfo
   }
 }
