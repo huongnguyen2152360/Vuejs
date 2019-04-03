@@ -15,8 +15,6 @@ export default class UserLogin {
       ctx.session.user = userData
       ctx.body = userData
     } else {
-      //   const error = "Incorrect Password!"
-      //   ctx.body = error
       ctx.throw(400, 'Incorrect Password!')
     }
   }

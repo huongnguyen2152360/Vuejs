@@ -74,8 +74,7 @@
             <el-submenu index="3" class="menu__avatar">
               <template slot="title">
                 <div class="user-avatar">
-                  <img :src="userSession.avatar" alt="user-avatar" v-if="userSession.avatar">
-                  <img src="https://data.whicdn.com/images/50330982/large.jpg" alt="user-avatar" v-else>
+                  <img :src="userSession.avatar" alt="user-avatar">
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
@@ -118,6 +117,7 @@ export default {
   // props: ['user'],
   computed: {
     userSession() {
+      // console.log(this.$store.store.state.userSession);
       return this.$store.store.state.userSession
     }
   },

@@ -6,7 +6,7 @@ interface IPost {
   title: String | ''
   content: String | ''
   date: String | ''
-  author: String | ''
+  authorId: String | ''
   avatar: String | ''
   tags: String | ''
 }
@@ -29,8 +29,7 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.find({})
-    // console.log(allPostData)
+    const allPostData = await PostModel.find({}).populate('userinfo').lean()
     ctx.body = allPostData
   }
   static async getPostsProfile(ctx: Context) {

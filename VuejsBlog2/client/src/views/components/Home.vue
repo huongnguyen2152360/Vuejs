@@ -15,11 +15,8 @@
               <el-row class="allPosts_row">
                 <el-col :span="2">
                   <div class="user-avatar">
-                    <img :src="post.avatar" alt="user-avatar">
+                    <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
                   </div>
-                  <!-- <div class="user-avatar" v-else>
-                    <img src="http://purrworld.com/wp-content/uploads/2017/10/big-eyes-cute-cute-cat-cute-kitty-Favim.com-3467623.jpg" alt="user-avatar">
-                  </div> -->
                 </el-col>
                 <el-col :span="18">
                   <h2>{{post.title}}</h2>
@@ -68,9 +65,8 @@
           </el-select>
         </el-form-item>
         <div class="postForm-hidden">
-          <el-input v-model="postForm.author">{{userSession.displayname}}</el-input>
-          <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input>
-          <!-- <img v-bind="postForm.avatar" :src="userSession.avatar" alt="User Avatar" class="user-avatar"> -->
+          <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
+          <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
         </div>
         <editor v-model="postForm.content" class="editorText"></editor>
@@ -101,7 +97,7 @@ export default {
     return {
       open: false,
       postForm: {
-        author: this.$store.store.state.userSession.displayname,
+        authorId: this.$store.store.state.userSession._id,
         avatar: this.$store.store.state.userSession.avatar,
         date: ''
       },
@@ -138,10 +134,10 @@ export default {
       this.open = false
     },
     postConfirm: function() {
-      // console.log(this.postForm)
+      // let ava = this.postForm.avatar 
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/postContent',
+        url: 'http://localhost:3000/postContent',
         data: this.postForm
       })
         .then(() => {
@@ -161,16 +157,17 @@ export default {
     getallPosts: function() {
       axios({
         method: 'get',
-        url: 'https://vuejsblog-server.herokuapp.com/getAllPosts'
+        url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
         this.allPosts = rs.data
+        // console.log(this.allPosts);
       })
     },
     getUserInfo: function() {
       // console.log(this.allPosts)
       // axios({
       //   method:'post',
-      //   url: 'https://vuejsblog-server.herokuapp.com/getUserInfo',
+      //   url: 'http://localhost:3000/getUserInfo',
       //   data: this.allPosts.author
       // })
     }

@@ -16,6 +16,7 @@ interface IUserCreateInfo {
 export default class User {
   static async createUser(ctx: Context) {
     const userData = ctx.request.body as IUserCreateInfo
+    userData.avatar = "https://data.whicdn.com/images/50330982/large.jpg"
     ctx.body = await UserModel.create(userData)
   }
   // Edit Email and DisplayName

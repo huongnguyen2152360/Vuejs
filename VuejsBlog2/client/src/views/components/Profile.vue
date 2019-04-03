@@ -129,19 +129,23 @@ export default {
     userEditProfile: function() {
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/editProfile',
+        url: 'http://localhost:3000/editProfile',
         data: {
           id: this.userSession._id,
           ...this.userEdit
         }
       }).then(rs => {
         this.$store.store.commit('userSessionInfo', rs.data)
+        this.$message({
+            type: 'success',
+            message: 'Profile updated successfully'
+          })
       })
     },
     userEditPassBtn: function() {
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/changePassword',
+        url: 'http://localhost:3000/changePassword',
         data: {
           id: this.userSession._id,
           password: this.userEditPass.pass
@@ -166,7 +170,7 @@ export default {
     getTableData: function() {
     axios({
       method: 'post',
-      url: 'https://vuejsblog-server.herokuapp.com/getPostsProfile',
+      url: 'http://localhost:3000/getPostsProfile',
       data: this.userSession.displayname
     }).then(rs => {
       this.tableData = rs.data

@@ -7,4 +7,4 @@ const userSchema = new Schema({
   avatar: { type: String, default: '' }
 })
 
-export default model('userModel', userSchema)
+export default model('userModel', userSchema, 'usermodels')
