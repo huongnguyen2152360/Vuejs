@@ -126,7 +126,7 @@ export default {
       return moment(date)
     },
     date: function(date) {
-      this.postForm.date = moment(date).format('YYYYMMDD')
+      this.postForm.date = moment(date).format()
     },
     currentDate: function(date) {
       return moment(date, 'YYYYMMDD').fromNow()

@@ -70,6 +70,7 @@
           </el-table>
         </el-tab-pane>
       </el-tabs>
+      <!-- EDIT/DELETE POST -->
       <div class="editPostForm-wrapper" v-show="open">
         <el-form :model="editPostForm" class="editPostForm">
           <p>Edit Post</p>
@@ -88,7 +89,7 @@
             <!-- <el-input v-model="editPostForm.avatar">{{userSession.avatar}}</el-input> -->
             <el-input v-model="editPostForm.date">{{ date() }}</el-input>
           </div>
-          <editor v-model="editPostForm.content"></editor>
+          <editor v-model="editPostForm.content" class="editPostForm-editor"></editor>
           <div class="editPostForm-buttons">
             <el-button type="success" class="editPostForm-buttons-post" @click="editpostConfirm">POST</el-button>
             <el-button type="info" class="editPostForm-buttons-cancel" @click="editpostCancel">CANCEL</el-button>
@@ -146,7 +147,6 @@ export default {
       },
       search: '',
       tableData: [],
-      allUserPosts: [],
       editPostForm: {
         date: ''
       },
@@ -209,8 +209,6 @@ export default {
         url: 'http://localhost:3000/getPostsProfile',
         data: this.userSession._id
       }).then(rs => {
-        this.allUserPosts = rs.data
-        console.log(rs.data);
         this.tableData = rs.data
         this.tableData.forEach(post => {
           if (post.content.length >= 50) {
@@ -218,8 +216,6 @@ export default {
           }
           if (post.title.length >= 30) {
             post.title = post.title.substring(0, 30) + ' ...'
-          } else {
-            return
           }
         })
       })
@@ -228,12 +224,16 @@ export default {
       return moment(date)
     },
     date: function(date) {
-      this.editPostForm.date = moment(date).format('YYYYMMDD')
+      this.editPostForm.date = moment(date).format()
     },
     editPostBtn: function(index, row) {
-      // console.log(this.tableData)
-      // console.log(this.tableData[index].content)
-      console.log(this.allUserPosts);
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/getPostsProfile',
+        data: this.userSession._id
+      }).then(rs => {
+        this.editPostForm = rs.data[index]
+      })
       this.open = true
     },
     delPostBtn: function() {
@@ -308,12 +308,18 @@ export default {
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
   width: 40%;
-  margin: 10rem auto 0 auto;
+  margin: 7rem auto 0 auto;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   backface-visibility: hidden;
 }
 .editPostForm-hidden {
   display: none;
+}
+.editPostForm-editor {
+  height: 400px !important;
+}
+.editPostForm-buttons {
+  margin-top: 0.5rem;
 }
 </style>
