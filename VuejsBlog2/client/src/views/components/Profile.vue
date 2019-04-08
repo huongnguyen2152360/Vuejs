@@ -233,14 +233,54 @@ export default {
         data: this.userSession._id
       }).then(rs => {
         this.editPostForm = rs.data[index]
+        this.editPostForm.index = index
       })
       this.open = true
     },
-    delPostBtn: function() {
-      console.log('del post')
+    delPostBtn: function(index, row) {
+      this.$confirm('This will permanently delete the post. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
+        .then(() => {
+          axios({
+            method: 'post',
+            url: 'http://localhost:3000/deletePostProfile',
+            data: row._id
+          }).then(() => {
+            this.tableData.splice(index,1)
+            this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          });
+          })
+          
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        })
     },
     editpostConfirm: function() {
-      return
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/editPostProfile',
+        data: this.editPostForm
+      }).then(rs => {
+        this.tableData[this.editPostForm.index] = rs.data
+        this.tableData.forEach(post => {
+          if (post.content.length >= 50) {
+            post.content = post.content.substring(0, 50) + ' ...'
+          }
+          if (post.title.length >= 30) {
+            post.title = post.title.substring(0, 30) + ' ...'
+          }
+        })
+        this.open = false
+      })
     },
     editpostCancel: function() {
       this.open = false

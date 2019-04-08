@@ -6,46 +6,40 @@
         <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
         <el-breadcrumb-item>Login</el-breadcrumb-item>
       </el-breadcrumb>
+      <!-- USER REGISTER -->
       <el-row>
         <el-col :span="12" class="login-left">
-          <el-form ref="form" :model="userInfo" label-width="120px" v-if="seen">
-            <el-form-item label="Display Name">
-              <el-input v-model="userInfo.displayname" placeholder="Huong Nguyen"></el-input>
+          <el-form ref="form" :model="userInfo" label-width="120px" v-if="seen" :rules="userInfoRules" :validate-on-rule-change="false">
+            <el-form-item prop="displayname" label="Display Name">
+              <el-input @keyup.enter.native="userRegister" v-model="userInfo.displayname" placeholder="Huong Nguyen"></el-input>
             </el-form-item>
-            <el-form-item prop="email" label="Email" :rules="[
-      { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }]">
-              <el-input type="email" v-model="userInfo.email" placeholder="abc@example.com"></el-input>
+            <el-form-item prop="email" label="Email">
+              <el-input @keyup.enter.native="userRegister" type="email" v-model="userInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
-            <el-form-item label="Password">
-              <el-input type="password" v-model="userInfo.password"></el-input>
+            <el-form-item prop="password" label="Password">
+              <el-input @keyup.enter.native="userRegister" type="password" v-model="userInfo.password"></el-input>
             </el-form-item>
-            <el-form-item label="Confirm">
-              <el-input type="password" v-model="userInfo.repassword"></el-input>
-            </el-form-item>
-            <el-form-item label="Avatar" class="needtohide">
-              <el-input v-model="userInfo.avatar" placeholder="https://example.com"></el-input>
-            </el-form-item>
-            <el-form-item label="ID" class="needtohide">
-              <el-input v-model="userInfo.id"></el-input>
+            <el-form-item prop="repassword" label="Confirm">
+              <el-input @keyup.enter.native="userRegister" type="password" v-model="userInfo.repassword"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="userRegister">REGISTER</el-button>
-              <p @click="loginShow" class="memberCf">Already a member?</p>
+              <p @click="loginShow" class="memberCf">Already a member? LOGIN here</p>
               <!-- <p>Forgot password?</p> -->
             </el-form-item>
           </el-form>
-          <el-form ref="form" :model="userLoginInfo" label-width="120px" v-else>
-            <el-form-item prop="email" label="Email" :rules="[
-      { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }]">
-              <el-input type="email" v-model="userLoginInfo.email" placeholder="abc@example.com"></el-input>
+          <!-- USER LOGIN -->
+          <el-form ref="form" :model="userLoginInfo" label-width="120px" v-else :rules="userLoginInfoRules" :validate-on-rule-change="false">
+            <el-form-item prop="email" label="Email">
+              <el-input @keyup.enter.native="userLogin" type="email" v-model="userLoginInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
-            <el-form-item label="Password">
-              <el-input type="password" v-model="userLoginInfo.password"></el-input>
+            <el-form-item prop="password" label="Password">
+              <el-input @keyup.enter.native="userLogin" type="password" v-model="userLoginInfo.password"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="userLogin">LOGIN</el-button>
-              <p @click="registerShow" class="memberCf">Not a member?</p>
-              <!-- <p>Forgot password?</p> -->
+              <p @click="registerShow" class="memberCf">Not a member? JOIN US here</p>
+              <p @click="forgotPass" class="memberCf">Forgot password?</p>
             </el-form-item>
           </el-form>
         </el-col>
@@ -75,10 +69,50 @@ export default {
     }
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password'))
+      }
+      if (value.length < 3) {
+        callback(new Error('Password must have at least 3 characters'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password again'))
+      }
+      if (value !== this.userInfo.password) {
+        callback(new Error("Two inputs don't match!"))
+      } else {
+        callback()
+      }
+    }
     return {
-      userInfo: {},
+      userInfo: {
+        displayname: '',
+        email: '',
+        password: '',
+        repassword: '',
+        avatar: '',
+        id: ''
+      },
+      userInfoRules: {
+        displayname: [{ required: true, trigger: 'change' }],
+        email: [{ type: 'email', required: true, message: 'Please input correct email address', trigger: 'change' }],
+        password: [{ required: true, validator: validatePass, trigger: 'change' }],
+        repassword: [{ required: true, validator: validatePass2, trigger: 'change' }]
+      },
       seen: true,
-      userLoginInfo: {}
+      userLoginInfo: {
+        email: '',
+        password: ''
+      },
+      userLoginInfoRules: {
+        email: [{ type: 'email', required: true, message: 'Please input correct email address', trigger: 'change' }],
+        password: [{ required: true, message: 'Please input your password', trigger: 'change' }]
+      }
     }
   },
   methods: {
@@ -86,12 +120,18 @@ export default {
       axios({
         method: 'post',
         url: 'http://localhost:3000/register',
-        data: this.userInfo
+        data: { ...this.userInfo }
       })
-      .then(rs => {
-        this.$store.store.commit('userSessionInfo', rs.data)
-        this.$router.push('/')
-      })
+        .then(rs => {
+          this.$store.store.commit('userSessionInfo', rs.data)
+          this.$router.push('/')
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'User existed. Please join us with a different email!'
+          })
+        })
     },
     loginShow: function() {
       this.seen = false
@@ -112,9 +152,12 @@ export default {
         .catch(error => {
           this.$message({
             type: 'error',
-            message: 'Incorrect Password!'
+            message: 'Incorrect Email or Password!'
           })
         })
+    },
+    forgotPass: function() {
+      this.$router.push('/forgotpass')
     }
   }
 }
@@ -153,8 +196,6 @@ export default {
 }
 .el-button--primary {
   width: 100%;
-}
-.needtohide {
-  display: none;
+  margin-top: 1rem;
 }
 </style>
