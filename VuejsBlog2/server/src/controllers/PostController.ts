@@ -39,4 +39,15 @@ export default class Post {
     const userInfo = await PostModel.find({authorId: finalUserId})
     ctx.body = userInfo
   }
+  static async editPostProfile(ctx:Context) {
+    const editData = ctx.request.body
+    await PostModel.updateOne({_id: editData._id},{...editData})
+    ctx.body = await PostModel.findById(editData._id).lean()
+  }
+  static async deletePostProfile(ctx: Context) {
+    const postId = ctx.request.body
+    const stringPostId = JSON.stringify(postId)
+    const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
+    ctx.body = await PostModel.deleteOne({_id: finalPostId})
+  }
 }

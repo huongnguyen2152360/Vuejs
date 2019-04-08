@@ -16,30 +16,35 @@ interface IUserCreateInfo {
 export default class User {
   static async createUser(ctx: Context) {
     const userData = ctx.request.body as IUserCreateInfo
-    userData.avatar = "https://data.whicdn.com/images/50330982/large.jpg"
-    ctx.body = await UserModel.create(userData)
+    userData.avatar = 'https://data.whicdn.com/images/50330982/large.jpg'
+    const findSameUser = await UserModel.find({ email: userData.email }).lean()
+    if (userData.email == findSameUser[0].email) {
+      ctx.throw(400, 'Existed user')
+    } else {
+      ctx.body = await UserModel.create(userData)
+    }
+
   }
   // Edit Email and DisplayName
   static async editUser(ctx: Context) {
     // displayname và email mới được input
     const inputData = ctx.request.body as IUserCreateInfo
-    await UserModel.updateOne({_id: inputData.id},{...inputData})
-    const updatedData = await UserModel.findOne({_id: inputData.id}).lean()
+    await UserModel.updateOne({ _id: inputData.id }, { ...inputData })
+    const updatedData = await UserModel.findOne({ _id: inputData.id }).lean()
     ctx.session.user = updatedData
     ctx.body = updatedData
   }
-  static async changePass(ctx:Context) {
+  static async changePass(ctx: Context) {
     const inputPass = ctx.request.body as IUserCreateInfo
-    const userPass = await UserModel.findOne({_id: inputPass.id}).lean()
+    const userPass = await UserModel.findOne({ _id: inputPass.id }).lean()
     if (inputPass.password == userPass.password) {
-      ctx.throw(400,'New password must be different')
+      ctx.throw(400, 'New password must be different')
     } else {
-      await UserModel.updateOne({_id: inputPass.id}, {...inputPass})
-      const updatedPass = await UserModel.findOne({_id: inputPass.id}).lean()
+      await UserModel.updateOne({ _id: inputPass.id }, { ...inputPass })
+      const updatedPass = await UserModel.findOne({ _id: inputPass.id }).lean()
       ctx.session.user = updatedPass
       ctx.body = updatedPass
     }
-    
   }
 }
 
