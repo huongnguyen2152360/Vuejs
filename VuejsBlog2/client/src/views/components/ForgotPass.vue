@@ -16,7 +16,7 @@
               <p class="forgot-text">You can reset your password here.</p>
             </el-form-item>
             <el-form-item prop="email" :rules="[{type: 'email', required: true, message: 'Please input correct email address', trigger: 'change'}]">
-              <el-input v-model="userForgotPassInfo.email" placeholder="abc@example.com"></el-input>
+              <el-input @keyup.enter.native="forgotBtn" v-model="userForgotPassInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="forgot-btn" @click="forgotBtn">Reset my Password</el-button>

@@ -25,7 +25,6 @@
             <el-form-item>
               <el-button type="primary" @click="userRegister">REGISTER</el-button>
               <p @click="loginShow" class="memberCf">Already a member? LOGIN here</p>
-              <!-- <p>Forgot password?</p> -->
             </el-form-item>
           </el-form>
           <!-- USER LOGIN -->

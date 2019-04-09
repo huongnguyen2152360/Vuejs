@@ -17,10 +17,10 @@ export default class User {
   static async createUser(ctx: Context) {
     const userData = ctx.request.body as IUserCreateInfo
     userData.avatar = 'https://data.whicdn.com/images/50330982/large.jpg'
-    const findSameUser = await UserModel.find({ email: userData.email }).lean()
-    if (userData.email == findSameUser[0].email) {
+    const findSameUser = await UserModel.findOne({ email: userData.email }).lean()
+    if (findSameUser != null) { //nếu findSameUser khác null => tìm thấy user => đã có user đó
       ctx.throw(400, 'Existed user')
-    } else {
+    } else { //nếu k tìm đc user email => chưa có user đó
       ctx.body = await UserModel.create(userData)
     }
 

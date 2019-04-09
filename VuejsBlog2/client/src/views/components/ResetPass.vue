@@ -11,15 +11,18 @@
         <el-col :span="15" class="reset-form">
           <el-form :ref="form" :model="userResetPassInfo">
             <el-form-item>
-              <v-icon name="lock" scale="4" class="reset-lock"/>
-              <h2 class="reset-title">reset Password?</h2>
+              <v-icon name="unlock" scale="4" class="reset-unlock"/>
+              <h2 class="reset-title">Reset Password</h2>
               <p class="reset-text">You can reset your password here.</p>
             </el-form-item>
-            <el-form-item prop="email" :rules="[{type: 'email', required: true, message: 'Please input correct email address', trigger: 'change'}]">
-              <el-input v-model="userForgotPassInfo.email" placeholder="abc@example.com"></el-input>
+            <el-form-item prop="password" label="New Password" :rules="[{ required: true, validator: validatePass, trigger: 'change' }]">
+              <el-input @keyup.enter.native="resetBtn" type="password" v-model="userResetPassInfo.password"></el-input>
+            </el-form-item>
+            <el-form-item prop="repassword" label="Confirm" :rules="[{ required: true, validator: validatePass2, trigger: 'change' }]">
+              <el-input @keyup.enter.native="resetBtn" type="password" v-model="userResetPassInfo.repassword"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" class="forgot-btn" @click="forgotBtn">Reset my Password</el-button>
+              <el-button class="reset-cf" type="primary" @click="resetBtn">Change my Password</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -37,16 +40,34 @@ export default {
     appHeader: Header
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password'))
+      }
+      if (value.length < 3) {
+        callback(new Error('Password must have at least 3 characters'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please input the password again'))
+      }
+      if (value !== this.userResetPassInfo.password) {
+        callback(new Error("Two inputs don't match!"))
+      } else {
+        callback()
+      }
+    }
     return {
       userResetPassInfo: {
-        email: ''
+        password: '',
+        repassword: ''
       }
     }
   },
-  methods: {
-      forgotBtn: function() {
-      }
-  }
+  methods: {}
 }
 </script>
 
@@ -57,29 +78,31 @@ export default {
 .el-row {
   margin: 3rem 0;
 }
-.forgot-form {
+.reset-form {
   background-color: #ebeef5;
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
 }
-.forgot-lock {
+.reset-unlock {
   width: 100%;
 }
-.forgot-title {
+.reset-title {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 0rem !important;
 }
-.forgot-text {
+.reset-text {
   text-align: center;
   font-size: 1rem;
 }
-.forgot-btn {
-    margin-top: 0.5rem;
-    font-size: 1rem;
-    width: 100%;
+.reset-cf {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 .el-form-item__content {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 </style>
