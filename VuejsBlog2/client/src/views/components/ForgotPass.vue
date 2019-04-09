@@ -49,7 +49,7 @@ export default {
           method: 'post',
           url: 'http://localhost:3000/resetPassword',
           data: this.userForgotPassInfo
-        }).then(() {
+        }).then(() => {
           this.$message({
             type: 'success',
             message: 'Email sent! Please check your email for reset link.'

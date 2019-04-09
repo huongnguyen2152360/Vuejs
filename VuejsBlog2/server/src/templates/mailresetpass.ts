@@ -1,6 +1,5 @@
 // import { Context } from 'koa'
-export default class mailResetPass {
-    static async resetPassMail(email) {
+export function mailresetpass(email) {
         return `
 <head>
     <meta charset="UTF-8">
@@ -205,4 +204,3 @@ export default class mailResetPass {
 </body>
     `
     }
-}
