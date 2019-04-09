@@ -3,6 +3,7 @@ const router = new Router()
 import UserController from '@/controllers/UserController'
 import PostController from '@/controllers/PostController'
 import LoginController from '@/controllers/LoginController'
+import nodemailer from '@/configs/nodemailer'
 import * as bodyParser from 'koa-bodyparser'
 
 // USER
@@ -10,6 +11,7 @@ router.post('/register', bodyParser(), UserController.createUser)
 router.post('/login', bodyParser(), LoginController.loginUser)
 router.post('/editProfile', bodyParser(), UserController.editUser)
 router.post('/changePassword', bodyParser(), UserController.changePass)
+router.post('/resetPassword', bodyParser(), nodemailer.resetPass)
 
 //POST
 router.post('/postContent', bodyParser(),PostController.createPost)

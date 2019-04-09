@@ -1,19 +1,19 @@
 <template>
-  <div id="forgotpass">
+  <div id="resetpass">
     <app-header></app-header>
     <el-main>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
-        <el-breadcrumb-item>Forgot Password</el-breadcrumb-item>
+        <el-breadcrumb-item>Reset Password</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- USER FORGOT PASS -->
       <el-row>
-        <el-col :span="15" class="forgot-form">
-          <el-form :ref="form" :model="userForgotPassInfo">
+        <el-col :span="15" class="reset-form">
+          <el-form :ref="form" :model="userResetPassInfo">
             <el-form-item>
-              <v-icon name="lock" scale="4" class="forgot-lock"/>
-              <h2 class="forgot-title">Forgot Password?</h2>
-              <p class="forgot-text">You can reset your password here.</p>
+              <v-icon name="lock" scale="4" class="reset-lock"/>
+              <h2 class="reset-title">reset Password?</h2>
+              <p class="reset-text">You can reset your password here.</p>
             </el-form-item>
             <el-form-item prop="email" :rules="[{type: 'email', required: true, message: 'Please input correct email address', trigger: 'change'}]">
               <el-input v-model="userForgotPassInfo.email" placeholder="abc@example.com"></el-input>
@@ -38,23 +38,13 @@ export default {
   },
   data() {
     return {
-      userForgotPassInfo: {
+      userResetPassInfo: {
         email: ''
       }
     }
   },
   methods: {
       forgotBtn: function() {
-        axios({
-          method: 'post',
-          url: 'http://localhost:3000/resetPassword',
-          data: this.userForgotPassInfo
-        }).then(() {
-          this.$message({
-            type: 'success',
-            message: 'Email sent! Please check your email for reset link.'
-          })
-        })
       }
   }
 }

@@ -4,7 +4,6 @@ import * as router from '@/routes/route'
 import * as session from 'koa-session';
 // import loginPassport from '@/routes/loginPassport'
 const mongoose = require('mongoose')
-// import UserController from '@/controllers/UserController'
 
 const app = new Koa()
 
