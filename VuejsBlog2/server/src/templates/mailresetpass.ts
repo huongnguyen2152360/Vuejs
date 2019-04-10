@@ -46,11 +46,7 @@ export function mailresetpass(email) {
                                                                     <td class="esd-container-frame" width="290" align="left">
                                                                         <table width="100%" cellspacing="0" cellpadding="0">
                                                                             <tbody>
-                                                                                <tr>
-                                                                                    <td class="es-infoblock esd-block-text es-m-txt-c" align="left">
-                                                                                        <p style="font-family: arial, helvetica\ neue, helvetica, sans-serif;">Put your preheader text here<br></p>
-                                                                                    </td>
-                                                                                </tr>
+                                                                            
                                                                             </tbody>
                                                                         </table>
                                                                     </td>
@@ -59,17 +55,6 @@ export function mailresetpass(email) {
                                                         </table>
                                                         <!--[if mso]></td><td width="20"></td><td width="290" valign="top"><![endif]-->
                                                         <table class="es-right" cellspacing="0" cellpadding="0" align="right">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="esd-container-frame" width="290" align="left">
-                                                                        <table width="100%" cellspacing="0" cellpadding="0">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="es-infoblock esd-block-text es-m-txt-c" align="right">
-                                                                                        <p><a href="http://#" target="_blank" style="font-family: 'arial', 'helvetica neue', 'helvetica', 'sans-serif';">View in browser</a><br></p>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
                                                                         </table>
                                                                     </td>
                                                                 </tr>
@@ -99,11 +84,6 @@ export function mailresetpass(email) {
                                                                         <table width="100%" cellspacing="0" cellpadding="0">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td class="esd-block-image es-p10t es-p10b" align="center">
-                                                                                        <a href="http://localhost:8080/" target="_blank"><img src="https://cdn.worldvectorlogo.com/logos/stratis-strat-2.svg" style="display: block;" alt="Logo" title="Logo" width="85"></a>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
                                                                                     <td align="center" class="esd-block-text es-p20b">
                                                                                         <h1 style="color: #ffffff; font-size: 30px;">Huong VuejsBlog</h1>
                                                                                     </td>
@@ -131,12 +111,12 @@ export function mailresetpass(email) {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td esdev-links-color="#b7bdc9" class="esd-block-text es-p15t es-p20b" align="center">
-                                                                                        <p style="color: #b7bdc9; font-family: 'open sans', 'helvetica neue', helvetica, arial, sans-serif;">Hey there ${email}!</p>
-                                                                                        <p style="color: #b7bdc9; font-family: 'open sans', 'helvetica neue', helvetica, arial, sans-serif;">It seems like you have forgotten your password on our website. To reset your password, please click on the link below: <a href="http://localhost:8080/resetpass/:email"></a> or:</p>
+                                                                                        <p style="color: #b7bdc9; font-family: 'open sans', 'helvetica neue', helvetica, arial, sans-serif;">Hey there <span style="color: #b7bdc9 !important;"> ${email} </span>!</p>
+                                                                                        <p style="color: #b7bdc9; font-family: 'open sans', 'helvetica neue', helvetica, arial, sans-serif;">It seems like you have forgotten your password on our website. To reset your password, please click on the link below: </p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="esd-block-button es-p5t es-p40b" align="center"> <span class="es-button-border"> <a href="http://localhost:8080/resetpass/:email" class="es-button" target="_blank" style="color: rgb(255, 255, 255);">Reset password now →</a> </span> </td>
+                                                                                    <td class="esd-block-button es-p5t es-p40b" align="center"> <span class="es-button-border" style="margin-bottom: 1rem;"> <a href="http://localhost:8080/#/resetpass/${email}" class="es-button" target="_blank" style="color: rgb(255, 255, 255);">Reset password now →</a> </span> </td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -168,18 +148,13 @@ export function mailresetpass(email) {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td class="esd-block-image es-p5b" align="center">
-                                                                                        <a target="_blank"> <img src="https://cdn.worldvectorlogo.com/logos/stratis-strat-2.svg" alt="Logo" style="display: block;" title="Logo" width="35"> </a>
+                                                                                        <a href="http://localhost:8080/#/"> <img src="https://cdn.worldvectorlogo.com/logos/stratis-strat-2.svg" alt="Logo" style="display: block;" title="Logo" width="35"> </a>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="esd-block-text es-p15t es-p15b" align="center">
                                                                                         <p>675 Massachusetts Avenue</p>
                                                                                         <p>Cambridge, MA 02139</p>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="esd-block-text" align="center">
-                                                                                        <p><u><a target="_blank" href="https://viewstripo.email/">View Online</a></u>&nbsp;&nbsp; • &nbsp;&nbsp;<u><a target="_blank" href="https://viewstripo.email/">Unsubscribe</a></u></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

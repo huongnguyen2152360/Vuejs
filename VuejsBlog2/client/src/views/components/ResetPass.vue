@@ -9,16 +9,16 @@
       <!-- USER FORGOT PASS -->
       <el-row>
         <el-col :span="15" class="reset-form">
-          <el-form :ref="form" :model="userResetPassInfo">
+          <el-form ref="form" :model="userResetPassInfo" :rules="userResetPassRules">
             <el-form-item>
               <v-icon name="unlock" scale="4" class="reset-unlock"/>
               <h2 class="reset-title">Reset Password</h2>
               <p class="reset-text">You can reset your password here.</p>
             </el-form-item>
-            <el-form-item prop="password" label="New Password" :rules="[{ required: true, validator: validatePass, trigger: 'change' }]">
+            <el-form-item prop="password" label="New Password">
               <el-input @keyup.enter.native="resetBtn" type="password" v-model="userResetPassInfo.password"></el-input>
             </el-form-item>
-            <el-form-item prop="repassword" label="Confirm" :rules="[{ required: true, validator: validatePass2, trigger: 'change' }]">
+            <el-form-item prop="repassword" label="Confirm">
               <el-input @keyup.enter.native="resetBtn" type="password" v-model="userResetPassInfo.repassword"></el-input>
             </el-form-item>
             <el-form-item>
@@ -38,6 +38,11 @@ import Header from './Header'
 export default {
   components: {
     appHeader: Header
+  },
+  computed: {
+    userSession() {
+      return this.$store.store.state.userSession
+    }
   },
   data() {
     const validatePass = (rule, value, callback) => {
@@ -64,10 +69,36 @@ export default {
       userResetPassInfo: {
         password: '',
         repassword: ''
+      },
+      userResetPassRules: {
+        password: [{ required: true, validator: validatePass, trigger: 'change' }],
+        repassword: [{ required: true, validator: validatePass2, trigger: 'change' }]
       }
     }
   },
-  methods: {}
+  methods: {
+    resetBtn: function() {
+      let usrEmail = this.$route.params.email
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/resetChangePass',
+        data: {
+          ...this.userResetPassInfo,
+          usrEmail
+        }
+      })
+        .then(rs => {
+          this.$store.store.commit('userSessionInfo', rs.data)
+          this.$router.push('/')
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'New Password must be different!'
+          })
+        })
+    }
+  }
 }
 </script>
 

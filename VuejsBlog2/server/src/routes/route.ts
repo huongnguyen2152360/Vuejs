@@ -12,6 +12,7 @@ router.post('/login', bodyParser(), LoginController.loginUser)
 router.post('/editProfile', bodyParser(), UserController.editUser)
 router.post('/changePassword', bodyParser(), UserController.changePass)
 router.post('/resetPassword', bodyParser(), nodemailer.resetPass)
+router.post('/resetChangePass', bodyParser(), UserController.resetChangePass)
 
 //POST
 router.post('/postContent', bodyParser(),PostController.createPost)

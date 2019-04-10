@@ -46,6 +46,18 @@ export default class User {
       ctx.body = updatedPass
     }
   }
+  static async resetChangePass(ctx: Context) {
+    const userResetInfo = ctx.request.body 
+    const findUser = await UserModel.findOne({email: userResetInfo.usrEmail}).lean()
+    if (userResetInfo.password == findUser.password) {
+      ctx.throw(400,'New password must be different')
+    } else if (userResetInfo.password != findUser.password) {
+      await UserModel.updateOne({email: userResetInfo.usrEmail}, {...userResetInfo})
+      const findUpdatedUsr = await UserModel.findOne({email: userResetInfo.usrEmail}).lean()
+      ctx.session.user = findUpdatedUsr
+      ctx.body = findUpdatedUsr
+    }
+  }
 }
 
 // FACEBOOK LOGIN

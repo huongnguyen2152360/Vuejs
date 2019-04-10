@@ -42,6 +42,7 @@ export default class NodeMailer {
                     console.log('Email sent: ' + info.response);
                 }
             });
+            ctx.body = userEmail.email
         }
 
     }

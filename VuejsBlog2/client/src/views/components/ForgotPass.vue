@@ -9,7 +9,7 @@
       <!-- USER FORGOT PASS -->
       <el-row>
         <el-col :span="15" class="forgot-form">
-          <el-form :ref="form" :model="userForgotPassInfo">
+          <el-form :model="userForgotPassInfo">
             <el-form-item>
               <v-icon name="lock" scale="4" class="forgot-lock"/>
               <h2 class="forgot-title">Forgot Password?</h2>
@@ -49,10 +49,15 @@ export default {
           method: 'post',
           url: 'http://localhost:3000/resetPassword',
           data: this.userForgotPassInfo
-        }).then(() => {
+        }).then(rs => {
           this.$message({
             type: 'success',
-            message: 'Email sent! Please check your email for reset link.'
+            message: `Email sent to ${rs.data}! Please check your email for reset link.`
+          })
+        }).catch(error => {
+          this.$message({
+            type: 'error',
+            message: 'User email not existed!'
           })
         })
       }

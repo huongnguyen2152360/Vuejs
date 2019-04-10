@@ -9,7 +9,7 @@ export default [
     {path: "/login", component: Login, props: true},
     {path: "/profile", component: Profile, props: true},
     {path: "/forgotpass", component: ForgotPass, props: true},
-    {path: "/resetpass", component: ResetPass, props: true}
+    {path: "/resetpass/:email", component: ResetPass, props: true}
 
 
 ]
