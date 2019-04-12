@@ -160,7 +160,6 @@ export default {
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
         this.allPosts = rs.data
-        // console.log(this.allPosts);
       })
     }
   }

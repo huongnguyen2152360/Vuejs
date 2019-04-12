@@ -17,6 +17,7 @@ router.post('/resetChangePass', bodyParser(), UserController.resetChangePass)
 
 // UserProfile
 router.post('/getUserProfile', bodyParser(), UserController.getUserProfile)
+router.post('/userAllPosts', bodyParser(), UserController.userAllPosts)
 
 //POST
 router.post('/postContent', bodyParser(),PostController.createPost)

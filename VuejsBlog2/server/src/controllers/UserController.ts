@@ -1,5 +1,7 @@
 import UserModel from '@/models/UserModel'
 import { Context } from 'koa'
+import PostModel from '@/models/PostModel';
+import CommentModel from '@/models/CommentModel';
 // const passport = require('passport')
 // const FacebookStrategy = require('passport-facebook').Strategy
 // import keyPassport from '@/configs/keyPassport'
@@ -63,9 +65,18 @@ export default class User {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)
     const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
-    const findUserById = await UserModel.findOne({_id: finalUserId}).lean()
-    console.log(findUserById);
+    ctx.body = await UserModel.findOne({_id: finalUserId}).lean()
   }
+
+  static async userAllPosts(ctx:Context) {
+    const userId = ctx.request.body
+    const stringUserId = JSON.stringify(userId)
+    const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
+    const postCount = await PostModel.countDocuments({authorId: finalUserId}).lean()
+    const cmtCount = await CommentModel.countDocuments({cmtUser: finalUserId}).lean()
+    ctx.body = {postCount, cmtCount}
+  }
+
 }
 
 // FACEBOOK LOGIN

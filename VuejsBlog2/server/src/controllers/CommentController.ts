@@ -13,7 +13,11 @@ export default class Comment {
   static async createCmt(ctx: Context) {
     const cmtContent = ctx.request.body as IComment
     if (cmtContent.content && cmtContent.date && cmtContent.cmtUser) {
-      ctx.body = await CommentModel.create(cmtContent)
+      await CommentModel.create(cmtContent)
+      ctx.body = await CommentModel.find({ postId: cmtContent.postId })
+      .sort([['date', -1]])
+      .populate('usercmtinfo')
+      .lean()
     } else {
       ctx.throw(400, 'Please input your content')
     }

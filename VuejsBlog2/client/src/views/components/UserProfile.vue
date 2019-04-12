@@ -13,22 +13,38 @@
         </div>
       </el-row>
       <div class="user-moreinfo">
-      <el-row style="padding-bottom: 1rem">
-         <el-col :span="7" >
-           <p>Displayname:</p>
+        <el-row style="padding-bottom: 1rem">
+          <el-col :span="7">
+            <p>Displayname:</p>
           </el-col>
-          <el-col :span="17" >
+          <el-col :span="17">
             <p>{{userInfo.displayname}}</p>
           </el-col>
-      </el-row>
-      <el-row>
-         <el-col :span="7" >
-           <p>Posts:</p>
+        </el-row>
+        <el-row style="padding-bottom: 1rem">
+          <el-col :span="7">
+            <p>Posts:</p>
           </el-col>
-          <el-col :span="17" >
-            <p>{{userInfo.postsnumber}}</p>
+          <el-col :span="17">
+            <p>{{userCmtPost.post}}</p>
           </el-col>
-      </el-row>
+        </el-row>
+        <el-row style="padding-bottom: 1rem">
+          <el-col :span="7">
+            <p>Comments:</p>
+          </el-col>
+          <el-col :span="17">
+            <p>{{userCmtPost.cmt}}</p>
+          </el-col>
+        </el-row>
+        <el-row style="padding-bottom: 1rem">
+          <el-col :span="7">
+            <p>Member:</p>
+          </el-col>
+          <el-col :span="17">
+            <p>{{userTitle}}</p>
+          </el-col>
+        </el-row>
       </div>
     </el-main>
   </div>
@@ -43,12 +59,16 @@ export default {
   },
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      userCmtPost: {
+        post: '',
+        cmt: ''
+      },
+      userTitle: ''
     }
   },
   created() {
-    this.getUserProfile(),
-    this.userAllPosts()
+    this.getUserProfile(), this.userAllPosts()
   },
   methods: {
     getUserProfile: function() {
@@ -61,13 +81,19 @@ export default {
       })
     },
     userAllPosts: function() {
-        axios({
-            method:'post',
-            url: 'http://localhost:3000/userAllPosts',
-            data: this.$route.params.id
-        }).then(rs => {
-            this.userInfo.postsnumber = rs.data
-        })
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/userAllPosts',
+        data: this.$route.params.id
+      }).then(rs => {
+        this.userCmtPost.post = rs.data.postCount
+        this.userCmtPost.cmt = rs.data.cmtCount
+        if (this.userCmtPost.post > 2) {
+          this.userTitle = 'Active ✓'
+        } else {
+          this.userTitle = 'Just joined'
+        }
+      })
     }
   }
 }
@@ -80,15 +106,14 @@ export default {
   position: relative;
 }
 .user-avaname {
-    position: absolute;
-    top: 40%;
+  position: absolute;
+  top: 40%;
 }
 .user-avatarr {
   padding-left: 5rem;
 }
 .user-avatarr img {
   width: 100%;
-  height: 50vh;
   border-radius: 50%;
 }
 .user-displayname {
@@ -96,7 +121,7 @@ export default {
   color: #ffffffd9;
 }
 .user-moreinfo {
-    margin-top: 7rem;
+  margin-top: 7rem;
 }
 </style>
 
