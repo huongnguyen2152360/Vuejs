@@ -58,6 +58,14 @@ export default class User {
       ctx.body = findUpdatedUsr
     }
   }
+
+  static async getUserProfile(ctx: Context) {
+    const userId = ctx.request.body
+    const stringUserId = JSON.stringify(userId)
+    const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
+    const findUserById = await UserModel.findOne({_id: finalUserId}).lean()
+    console.log(findUserById);
+  }
 }
 
 // FACEBOOK LOGIN

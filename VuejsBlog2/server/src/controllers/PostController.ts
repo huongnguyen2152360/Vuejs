@@ -15,7 +15,9 @@ export default class Post {
   static async createPost(ctx: Context) {
     const postData = ctx.request.body as IPost
     if (postData.content && postData.title && postData.tags) {
-      ctx.body = await PostModel.create(postData)
+      await PostModel.create(postData)
+      const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
+      ctx.body = allPostData
     } else {
       if (!postData.content) {
         ctx.throw(400, 'Please input your content')
@@ -36,18 +38,26 @@ export default class Post {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)
     const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
-    const userInfo = await PostModel.find({authorId: finalUserId})
+    const userInfo = await PostModel.find({ authorId: finalUserId })
     ctx.body = userInfo
   }
-  static async editPostProfile(ctx:Context) {
+  static async editPostProfile(ctx: Context) {
     const editData = ctx.request.body
-    await PostModel.updateOne({_id: editData._id},{...editData})
+    await PostModel.updateOne({ _id: editData._id }, { ...editData })
     ctx.body = await PostModel.findById(editData._id).lean()
   }
   static async deletePostProfile(ctx: Context) {
     const postId = ctx.request.body
     const stringPostId = JSON.stringify(postId)
     const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
-    ctx.body = await PostModel.deleteOne({_id: finalPostId})
+    ctx.body = await PostModel.deleteOne({ _id: finalPostId })
+  }
+
+  //POST DETAILS
+  static async getpostdetails(ctx:Context) {
+    const postId = ctx.request.body
+    const stringPostId = JSON.stringify(postId)
+    const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
+    ctx.body = await PostModel.findById(finalPostId).populate('userinfo').lean()
   }
 }

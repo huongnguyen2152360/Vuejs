@@ -27,10 +27,4 @@ export default class Comment {
       .populate('usercmtinfo')
       .lean()
   }
-
-  static async getUserProfile(ctx:Context) {
-      const userIdData = ctx.request.body
-      const userIdString = JSON.stringify(userIdData).replace(/"|{|}|:/g, '')
-      ctx.body = await UserModel.findOne({_id: userIdString})
-  }
 }

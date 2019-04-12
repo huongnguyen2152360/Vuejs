@@ -6,17 +6,20 @@
         <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
         <el-breadcrumb-item>{{postDetails.title}}</el-breadcrumb-item>
       </el-breadcrumb>
+
+      <!-- SHOW POST DETAILS -->
       <h2 class="post-title">
-        <img :src="postDetails.avatar" :title="postDetails.displayname" class="post-avatar">
+        <img :src="postDetails.usravatar" :title="postDetails.usrname" class="post-avatar">
         {{postDetails.title}}
       </h2>
-      <p class="post-date">{{this.postDetails.date}}</p>
+      <p class="post-author">By: {{postDetails.usrname}}</p>
+      <p class="post-date">{{postDetails.date}}</p>
       <p class="post-tags">
         <v-icon name="tag" scale="1"/>
-        Tags: {{this.postDetails.tags}}
+        Tags: {{postDetails.tags}}
       </p>
-      <!-- <div id="viewerSection">{{this.postDetails.content}}</div> -->
-      <viewer :value="this.postDetails.content"></viewer>
+      <viewer :value="postDetails.content"></viewer>
+
       <!-- COMMENTS -->
       <h4 class="cmt">Comments</h4>
       <!-- COMMENTS - Show cmts -->
@@ -24,11 +27,11 @@
         <li style="list-style-type: none">
           <el-row>
             <el-col :span="2">
-              <img :src="cmt.usercmtinfo.avatar" :alt="cmt.usercmtinfo.displayname" class="cmt-user-avatar">
+              <img :src="cmt.usravatar" :alt="cmt.usrname" class="cmt-user-avatar">
             </el-col>
             <el-col :span="22">
               <p>
-                <router-link :to="`/user/${cmt.cmtUser}`" class="cmt-user-displayname">{{cmt.usercmtinfo.displayname}}</router-link>
+                <router-link :to="`/user/${cmt.cmtUser}`" class="cmt-user-displayname">{{cmt.usrname}}</router-link>
                 <viewer :value="cmt.content"></viewer>
               </p>
               <p class="cmt-date">{{dateFrNow(cmt.date)}}</p>
@@ -48,7 +51,8 @@
         </div>
         <el-button type="primary" @click="cmtSubmitBtn">Send</el-button>
       </el-form>
-      <p v-else style="font-style:italic">You have to log in/register to comment.
+      <p v-else style="font-style:italic">
+        You have to log in/register to comment.
         <router-link to="/login">Login/Register here.</router-link>
       </p>
     </el-main>
@@ -91,11 +95,13 @@ export default {
     getPostDetails: function() {
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/getpostdetails',
+        url: 'http://localhost:3000/getpostdetails',
         data: this.$route.params.id
       }).then(rs => {
         this.postDetails = rs.data
         this.postDetails.date = moment(this.postDetails.date).calendar()
+        this.postDetails.usravatar = rs.data.userinfo.avatar
+        this.postDetails.usrname = rs.data.userinfo.displayname
       })
     },
     currentDate: function(date) {
@@ -110,7 +116,7 @@ export default {
       this.cmtForm.postId = this.$route.params.id
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/createCmt',
+        url: 'http://localhost:3000/createCmt',
         data: this.cmtForm
       })
         .then(rs => {
@@ -129,10 +135,14 @@ export default {
     getPostCmts: function() {
       axios({
         method: 'post',
-        url: 'https://vuejsblog-server.herokuapp.com/getPostCmt',
+        url: 'http://localhost:3000/getPostCmt',
         data: this.$route.params.id
       }).then(rs => {
         this.allCmts = rs.data
+        for (let i = 0; i < rs.data.length; i++) {
+          this.allCmts[i].usravatar = rs.data[i].usercmtinfo.avatar
+          this.allCmts[i].usrname = rs.data[i].usercmtinfo.displayname
+        }
       })
     }
   }
@@ -149,10 +159,11 @@ export default {
   margin-inline-end: 0px;
   font-weight: bold;
 }
-.post-date {
+.post-date,
+.post-author {
   font-size: 0.9em;
   font-style: italic;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
 }
 .post-tags {
   font-size: 0.9em;

@@ -19,10 +19,12 @@
                   </div>
                 </el-col>
                 <el-col :span="18">
+                  <router-link :to="`/post/${post._id}`" class="allPosts_title">
                   <h2>{{post.title}}</h2>
+                  </router-link>
                   <p class="main-tags">
                     {{post.tags}} •
-                    <span>{{currentDate(post.date)}}</span>
+                    <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
                   </p>
                 </el-col>
                 <el-col :span="2" style="text-align:center">
@@ -65,7 +67,7 @@
             <el-option label="Language" value="Language"></el-option>
           </el-select>
         </el-form-item>
-        <div class="postForm-hidden">
+        <div class="postForm-hidden" >
           <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
           <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
@@ -76,6 +78,7 @@
           <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
         </div>
       </el-form>
+     
     </el-main>
   </div>
 </template>
@@ -106,8 +109,7 @@ export default {
     }
   },
   created() {
-    this.getallPosts(),
-    this.getUserInfo()
+    this.getallPosts()
   },
   computed: {
     userSession() {
@@ -128,21 +130,18 @@ export default {
     date: function(date) {
       this.postForm.date = moment(date).format()
     },
-    currentDate: function(date) {
-      return moment(date, 'YYYYMMDD').fromNow()
-    },
     postCancel: function() {
       this.open = false
     },
     postConfirm: function() {
-      // let ava = this.postForm.avatar 
       axios({
         method: 'post',
         url: 'http://localhost:3000/postContent',
         data: this.postForm
       })
-        .then(() => {
+        .then(rs => {
           this.open = false
+          this.allPosts = rs.data
           this.$message({
             type: 'success',
             message: 'Posted successfully'
@@ -163,14 +162,6 @@ export default {
         this.allPosts = rs.data
         // console.log(this.allPosts);
       })
-    },
-    getUserInfo: function() {
-      // console.log(this.allPosts)
-      // axios({
-      //   method:'post',
-      //   url: 'http://localhost:3000/getUserInfo',
-      //   data: this.allPosts.author
-      // })
     }
   }
 }
@@ -262,5 +253,11 @@ p {
 }
 .postForm-hidden {
   display: none;
+}
+.allPosts_title {
+color: #2c3e50 !important;
+}
+.allPosts_title h2:hover {
+  color: #42b983;
 }
 </style>
