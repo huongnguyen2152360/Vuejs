@@ -146,6 +146,7 @@ export default {
       })
         .then(rs => {
           this.allCmts = rs.data
+          this.open = false
           for (let i = 0; i < rs.data.length; i++) {
             this.allCmts[i].usravatar = rs.data[i].usercmtinfo.avatar
             this.allCmts[i].usrname = rs.data[i].usercmtinfo.displayname
@@ -235,7 +236,7 @@ export default {
   font-size: 1rem !important;
 }
 .tui-editor-contents img {
-  max-width: 50% !important;
+  max-width: 40% !important;
 }
 .cmt-user-displayname {
   font-size: 0.9rem;
