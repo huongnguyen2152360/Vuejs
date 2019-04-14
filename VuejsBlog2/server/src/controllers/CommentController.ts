@@ -31,4 +31,9 @@ export default class Comment {
       .populate('usercmtinfo')
       .lean()
   }
+
+  static async editCmt(ctx: Context) {
+    const editData = ctx.request.body
+    console.log(editData);
+  }
 }

@@ -35,4 +35,5 @@ router.post('/getpostdetails', bodyParser(), PostController.getpostdetails)
 //post details - comments
 router.post('/createCmt', bodyParser(), CommentController.createCmt)
 router.post('/getPostCmt', bodyParser(), CommentController.getPostCmt)
+router.post('/editCmt', bodyParser(), CommentController.editCmt)
 export = router

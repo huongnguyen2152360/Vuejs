@@ -49,8 +49,8 @@
                 </el-col>
                 <el-col :span="12">
                   <div class="cmt-editBtns" v-if="cmt.id == userSession._id">
-                  <el-button class="cmt-editBtn">Edit</el-button>
-                  <el-button class="cmt-delBtn" type="danger">Delete</el-button>
+                  <el-button @click="cmtEditBtn(cmt)" class="cmt-editBtn">Edit</el-button>
+                  <el-button @click="cmtDelBtn" class="cmt-delBtn" type="danger">Delete</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -58,6 +58,22 @@
           </el-row>
         </li>
       </ul>
+
+      <!-- COMMENTS - Edit cmt -->
+       <div class="editor-wrap" v-show="open2">
+        <el-form :model="cmtEditForm" class="cmt-Form">
+          <el-form-item>
+            <editor ref="tuiEditor" v-model="cmtEditForm.content" class="cmt-editor"></editor>
+          </el-form-item>
+          <div class="cmt-hidden">
+            <el-input v-model="cmtEditForm.cmtUser">{{ userSession._id }}</el-input>
+          </div>
+          <div class="cmt-editBtn">
+            <el-button type="primary" @click="cmtEditSend">Send</el-button>
+            <el-button type="info" @click="cmtEditCancel">Cancel</el-button>
+          </div>
+        </el-form>
+      </div>
 
       <!-- COMMENTS - Create cmts -->
       <div class="editor-wrap" v-show="open">
@@ -105,7 +121,11 @@ export default {
         cmtUser: ''
       },
       allCmts: {},
-      open: false
+      open: false,
+      open2: false,
+      cmtEditForm: {
+        date: ''
+      }
     }
   },
   created() {
@@ -187,6 +207,27 @@ export default {
       } else {
         this.$router.push('/login')
       }
+    },
+    cmtEditBtn: function(comment) {
+      this.open2 = !this.open2
+      this.cmtEditForm = comment
+      this.cmtEditForm.date = comment.date
+      axios({
+        method:'post',
+        url: 'http://localhost:3000/editCmt',
+        data: this.cmtEditForm
+      }).then(rs => {
+        console.log(rs.data);
+      })
+    },
+    cmtDelBtn: function() {
+      console.log('cmtdelbtn');
+    },
+    cmtEditSend: function() {
+      console.log('something');
+    },
+    cmtEditCancel: function() {
+      console.log('something1');
     }
   }
 }
