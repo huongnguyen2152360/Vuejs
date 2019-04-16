@@ -103,13 +103,15 @@ export default {
       postForm: {
         authorId: this.$store.store.state.userSession._id,
         avatar: this.$store.store.state.userSession.avatar,
-        date: ''
+        date: '',
+        // cmtId: ''
       },
       allPosts: {}
     }
   },
   created() {
     this.getallPosts()
+    // this.getPostCmts()
   },
   computed: {
     userSession() {
@@ -159,10 +161,26 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        this.allPosts = rs.data
+        // this.allPosts = rs.data
+        console.log(rs.data);
       })
-    }
   }
+  // getPostCmts: function() {
+  //   for (let i = 0; i < this.allPosts.length; i ++) {
+  //     console.log(this.allPosts[i]._id);
+  //     console.log('something');
+  //   }
+  //   console.log(this.allPosts[0]);
+  //   console.log(this.allPosts._id);
+  //   axios({
+  //     method: 'post',
+  //     url: 'http://localhost:3000/getHomeCmts',
+  //     data: {...this.allPosts._id}
+  //   }).then(rs => {
+  //     console.log(rs.data);
+  //   })
+  // }
+}
 }
 </script>
 

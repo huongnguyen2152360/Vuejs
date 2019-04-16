@@ -31,9 +31,9 @@
       </el-row>
 
       <!-- COMMENTS - Show cmts -->
-      <ul v-for="cmt in allCmts" :key="cmt._id">
+      <ul v-for="(cmt,index) in allCmts" :key="index">
         <li style="list-style-type: none">
-          <el-row>
+          <el-row> 
             <el-col :span="2">
               <img :src="cmt.usravatar" :alt="cmt.usrname" class="cmt-user-avatar">
             </el-col>
@@ -47,12 +47,12 @@
                   <p class="cmt-date">{{dateFrNow(cmt.date)}}</p>
                   <p class="cmt-hidden">{{cmt.id}}</p>
                 </el-col>
-                <el-col :span="12">
+                <!-- <el-col :span="12">
                   <div class="cmt-editBtns" v-if="cmt.id == userSession._id">
-                  <el-button @click="cmtEditBtn(cmt)" class="cmt-editBtn">Edit</el-button>
+                  <el-button @click="cmtEditBtn(cmt,index)" class="cmt-editBtn">Edit</el-button>
                   <el-button @click="cmtDelBtn" class="cmt-delBtn" type="danger">Delete</el-button>
                   </div>
-                </el-col>
+                </el-col> -->
               </el-row>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
       </ul>
 
       <!-- COMMENTS - Edit cmt -->
-       <div class="editor-wrap" v-show="open2">
+       <!-- <div class="editor-wrap" v-show="open2">
         <el-form :model="cmtEditForm" class="cmt-Form">
           <el-form-item>
             <editor ref="tuiEditor" v-model="cmtEditForm.content" class="cmt-editor"></editor>
@@ -68,12 +68,12 @@
           <div class="cmt-hidden">
             <el-input v-model="cmtEditForm.cmtUser">{{ userSession._id }}</el-input>
           </div>
-          <div class="cmt-editBtn">
+          <div class="cmt-editBtn"> 
             <el-button type="primary" @click="cmtEditSend">Send</el-button>
             <el-button type="info" @click="cmtEditCancel">Cancel</el-button>
           </div>
         </el-form>
-      </div>
+      </div> -->
 
       <!-- COMMENTS - Create cmts -->
       <div class="editor-wrap" v-show="open">
@@ -122,10 +122,12 @@ export default {
       },
       allCmts: {},
       open: false,
-      open2: false,
-      cmtEditForm: {
-        date: ''
-      }
+      // open2: false,
+      // cmtEditForm: {
+      //   date: '',
+      //   index: ''
+      // },
+      cmtData: []
     }
   },
   created() {
@@ -208,27 +210,27 @@ export default {
         this.$router.push('/login')
       }
     },
-    cmtEditBtn: function(comment) {
-      this.open2 = !this.open2
-      this.cmtEditForm = comment
-      this.cmtEditForm.date = comment.date
-      axios({
-        method:'post',
-        url: 'http://localhost:3000/editCmt',
-        data: this.cmtEditForm
-      }).then(rs => {
-        console.log(rs.data);
-      })
-    },
-    cmtDelBtn: function() {
-      console.log('cmtdelbtn');
-    },
-    cmtEditSend: function() {
-      console.log('something');
-    },
-    cmtEditCancel: function() {
-      console.log('something1');
-    }
+    // cmtEditBtn: function(cmt,index) {
+    //   this.open2 = !this.open2
+    //   this.cmtData.push(cmt)
+    //   this.cmtEditForm = this.cmtData[0]
+    //   this.cmtEditForm.date = this.cmtData[0].date
+    // },
+    // cmtDelBtn: function() {
+    //   console.log('cmtdelbtn');
+    // },
+    // cmtEditSend: function() {
+    //   axios({
+    //     method:'post',
+    //     url: 'http://localhost:3000/editCmt',
+    //     data: this.cmtEditForm
+    //   }).then(rs => {
+    //     console.log(rs.data);
+    //   })
+    // },
+    // cmtEditCancel: function() {
+    //   this.open2 = false
+    // }
   }
 }
 </script>

@@ -35,5 +35,7 @@ export default class Comment {
   static async editCmt(ctx: Context) {
     const editData = ctx.request.body
     console.log(editData);
+    // const editUpdate =  CommentModel.updateOne({_id: editData._id}, {editData})
+    // ctx.body = CommentModel.findOne({_id: editData._id}).lean()
   }
 }

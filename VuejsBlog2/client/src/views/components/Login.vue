@@ -30,13 +30,14 @@
           <!-- USER LOGIN -->
           <el-form ref="form" :model="userLoginInfo" label-width="120px" v-else :rules="userLoginInfoRules" :validate-on-rule-change="false">
             <el-form-item prop="email" label="Email">
-              <el-input @keyup.enter.native="userLogin" type="email" v-model="userLoginInfo.email" placeholder="abc@example.com"></el-input>
+              <el-input @keyup.enter.native="userEnterLogin" type="email" v-model="userLoginInfo.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password">
-              <el-input @keyup.enter.native="userLogin" type="password" v-model="userLoginInfo.password"></el-input>
+              <el-input @keyup.enter.native="userEnterLogin" type="password" v-model="userLoginInfo.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="userLogin">LOGIN</el-button>
+              <el-button type="primary" @click="userEnterLogin" v-show="showBtn1">LOGIN</el-button>
+              <el-button type="primary" :loading="true" v-show="showBtn2" style="margin-left:0;" @click="userLogin">LOGIN</el-button>
               <p @click="registerShow" class="memberCf">Not a member? JOIN US here</p>
               <p @click="forgotPass" class="memberCf">Forgot password?</p>
             </el-form-item>
@@ -111,7 +112,9 @@ export default {
       userLoginInfoRules: {
         email: [{ type: 'email', required: true, message: 'Please input correct email address', trigger: 'change' }],
         password: [{ required: true, message: 'Please input your password', trigger: 'change' }]
-      }
+      },
+      showBtn1: true,
+      showBtn2: false
     }
   },
   methods: {
@@ -137,6 +140,11 @@ export default {
     },
     registerShow: function() {
       this.seen = true
+    },
+    userEnterLogin: function() {
+      this.showBtn2 = true
+      this.showBtn1 = false
+      this.userLogin()
     },
     userLogin: function() {
       axios({

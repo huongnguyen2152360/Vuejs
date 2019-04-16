@@ -1,6 +1,6 @@
 import PostModel from '@/models/PostModel'
 import { Context } from 'koa'
-import UserModel from '@/models/UserModel'
+import CommentModel from '@/models/CommentModel'
 
 interface IPost {
   title: String | ''
@@ -9,6 +9,7 @@ interface IPost {
   authorId: String | ''
   avatar: String | ''
   tags: String | ''
+  // cmtId: String | ''
 }
 
 export default class Post {
@@ -32,8 +33,16 @@ export default class Post {
   }
   static async getAllPosts(ctx: Context) {
     const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    ctx.body = allPostData
+    const allpostcmts = []
+    for (let i = 0; i < allPostData.length; i++) {
+      allpostcmts.push(await CommentModel.findOne({ postId: allPostData[i]._id }).sort([['date', -1]]).lean())
+    }
+    ctx.body = {allPostData,allpostcmts}
   }
+  // static async getHomeCmts(ctx: Context) {
+  //   const postid = ctx.request.body
+  //   console.log(postid);
+  // }
   static async getPostsProfile(ctx: Context) {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)
@@ -54,7 +63,7 @@ export default class Post {
   }
 
   //POST DETAILS
-  static async getpostdetails(ctx:Context) {
+  static async getpostdetails(ctx: Context) {
     const postId = ctx.request.body
     const stringPostId = JSON.stringify(postId)
     const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
