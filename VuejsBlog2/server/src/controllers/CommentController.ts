@@ -1,6 +1,6 @@
 import { Context } from 'koa'
 import CommentModel from '@/models/CommentModel'
-import UserModel from '@/models/UserModel';
+import PostModel from '@/models/PostModel';
 
 interface IComment {
   content: String | ''
@@ -12,12 +12,17 @@ interface IComment {
 export default class Comment {
   static async createCmt(ctx: Context) {
     const cmtContent = ctx.request.body as IComment
+    // console.log(cmtContent);
     if (cmtContent.content && cmtContent.date && cmtContent.cmtUser) {
       await CommentModel.create(cmtContent)
-      ctx.body = await CommentModel.find({ postId: cmtContent.postId })
+      const findPost = await PostModel.findOne({_id: cmtContent.postId}).lean()
+      const findLastCmt = await CommentModel.findOne({ postId: cmtContent.postId }).sort([['date', -1]]).lean()
+      findPost.cmtId = findLastCmt._id
+      await CommentModel.find({ postId: cmtContent.postId })
       .sort([['date', -1]])
       .populate('usercmtinfo')
       .lean()
+      console.log(await PostModel.find({}))
     } else {
       ctx.throw(400, 'Please input your content')
     }

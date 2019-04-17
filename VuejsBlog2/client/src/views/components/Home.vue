@@ -7,53 +7,71 @@
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
         </el-col>
       </el-row>
-      <ul v-for="post in allPosts" :key="post._id">
-        <li style="list-style-type: none">
-          <el-row>
-            <!-- Show Posts Info -->
-            <el-col :span="18">
-              <el-row class="allPosts_row">
-                <el-col :span="2">
-                  <div class="user-avatar">
-                    <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
-                  </div>
-                </el-col>
-                <el-col :span="18">
-                  <router-link :to="`/post/${post._id}`" class="allPosts_title">
-                  <h2>{{post.title}}</h2>
-                  </router-link>
-                  <p class="main-tags">
-                    {{post.tags}} •
-                    <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
-                  </p>
-                </el-col>
-                <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">1</h2>
-                  <p class="main-tags">POSTS</p>
-                </el-col>
-                <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">3</h2>
-                  <p class="main-tags">VIEWS</p>
-                </el-col>
-              </el-row>
-            </el-col>
-            <!-- Show Posts Comments -->
-            <el-col :span="5" :offset="1" class="main-cmts">
-              <el-row class="cmt-line1">
+      <!-- <div v-for="(data,index) in allPosts" :key="index"> -->
+        <ul v-for="(post,index) in allPosts" :key="index">
+          <li style="list-style-type: none">
+            <el-row>
+              <!-- Show Posts Info -->
+              <el-col :span="18">
+                <el-row class="allPosts_row">
+                  <el-col :span="2">
+                    <div class="user-avatar">
+                      <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
+                    </div>
+                  </el-col>
+                  <el-col :span="18">
+                    <router-link :to="`/post/${post._id}`" class="allPosts_title">
+                      <h2>{{post.title}}</h2>
+                    </router-link>
+                    <p class="main-tags">
+                      {{post.tags}} •
+                      <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
+                    </p>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <h2 class="main-count">1</h2>
+                    <p class="main-tags">POSTS</p>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <h2 class="main-count">3</h2>
+                    <p class="main-tags">VIEWS</p>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <!-- Show Posts Comments -->
+              <el-col :span="5" :offset="1" class="main-cmts">
+                <el-row class="cmt-line1">
                 <el-col :span="5">
                   <div class="cmt-avatar">
-                    <img src="https://i.pinimg.com/originals/ba/03/23/ba03237a6d6499f0e2633314826e1526.jpg" alt="cmt-avatar">
+                    <!-- <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar"> -->
                   </div>
                 </el-col>
                 <el-col :span="17" class="cmt-avatar-p">
-                  <p style="font-size: 0.9em">3 days ago</p>
+                  <p style="font-size: 0.9em">date</p>
                 </el-col>
               </el-row>
-              <p style="font-size: 0.8em;padding-top: 5px">Help me with this askdjfhkjwhar</p>
-            </el-col>
-          </el-row>
-        </li>
-      </ul>
+                <p style="font-size: 0.8em;padding-top: 5px">content</p>
+              </el-col>
+              <!-- <el-col :span="5" :offset="1" class="main-cmts" v-if="cmt._id == 'null'">
+                <el-row class="cmt-line1">
+                  <p>bang null</p>
+                </el-row> -->
+                <!-- <el-row class="cmt-line1">
+                <el-col :span="5">
+                  <div class="cmt-avatar">
+                    <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar">
+                  </div>
+                </el-col>
+                <el-col :span="17" class="cmt-avatar-p">
+                  <p style="font-size: 0.9em">{{cmt.date}}}</p>
+                </el-col>
+              </el-row>
+                <p style="font-size: 0.8em;padding-top: 5px">{{cmt.content}}}</p>-->
+              </el-col>
+            </el-row>
+          </li>
+        </ul>
+      <!-- </div> -->
       <!-- New Post Form -->
       <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
         <p class="postForm-intro">What's on your mind?</p>
@@ -67,7 +85,7 @@
             <el-option label="Language" value="Language"></el-option>
           </el-select>
         </el-form-item>
-        <div class="postForm-hidden" >
+        <div class="postForm-hidden">
           <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
           <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
           <el-input v-model="postForm.date">{{ date() }}</el-input>
@@ -78,7 +96,6 @@
           <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
         </div>
       </el-form>
-     
     </el-main>
   </div>
 </template>
@@ -104,9 +121,10 @@ export default {
         authorId: this.$store.store.state.userSession._id,
         avatar: this.$store.store.state.userSession.avatar,
         date: '',
-        // cmtId: ''
+        cmtId: ''
       },
-      allPosts: {}
+      allPosts: {},
+      newData: {}
     }
   },
   created() {
@@ -157,30 +175,36 @@ export default {
         })
     },
     getallPosts: function() {
+      // const newData = {}
       axios({
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
-        // this.allPosts = rs.data
-        console.log(rs.data);
+        this.allPosts = rs.data
+        // for (let i = 0; i < this.allPosts.allPostData.length; i++) {
+        //   newData = {...this.allPosts.allPostData[i], ...this.allPosts.allpostcmts[i]}
+        //   return JSON.stringify(newData)
+        // }
+        // const newdata = {...this.allPosts.allPostData[0], ...this.allPosts.allpostcmts[0]}
+        // console.log(newdata)
       })
+    }
+    // getPostCmts: function() {
+    //   for (let i = 0; i < this.allPosts.length; i ++) {
+    //     console.log(this.allPosts[i]._id);
+    //     console.log('something');
+    //   }
+    //   console.log(this.allPosts[0]);
+    //   console.log(this.allPosts._id);
+    //   axios({
+    //     method: 'post',
+    //     url: 'http://localhost:3000/getHomeCmts',
+    //     data: {...this.allPosts._id}
+    //   }).then(rs => {
+    //     console.log(rs.data);
+    //   })
+    // }
   }
-  // getPostCmts: function() {
-  //   for (let i = 0; i < this.allPosts.length; i ++) {
-  //     console.log(this.allPosts[i]._id);
-  //     console.log('something');
-  //   }
-  //   console.log(this.allPosts[0]);
-  //   console.log(this.allPosts._id);
-  //   axios({
-  //     method: 'post',
-  //     url: 'http://localhost:3000/getHomeCmts',
-  //     data: {...this.allPosts._id}
-  //   }).then(rs => {
-  //     console.log(rs.data);
-  //   })
-  // }
-}
 }
 </script>
 
@@ -272,7 +296,7 @@ p {
   display: none;
 }
 .allPosts_title {
-color: #2c3e50 !important;
+  color: #2c3e50 !important;
 }
 .allPosts_title h2:hover {
   color: #42b983;

@@ -8,7 +8,7 @@ const postSchema = new Schema({
     authorId: Schema.Types.ObjectId,
     avatar: {type: String, default: ''},
     tags: {type: String, default: ''},
-    // cmtId: Schema.Types.ObjectId
+    cmtId: {type: String, default: ''}
 }, {toObject: {virtuals: true}})
 
 postSchema.virtual('userinfo', {
@@ -18,12 +18,12 @@ postSchema.virtual('userinfo', {
     foreignField: '_id' //tên trường thông tin ứng vs userId (_id bên userModel)
 })
 
-// postSchema.virtual('allcmts', {
-//     ref: 'commentModel',
-//     localField: 'cmtId',
-//     justOne: false,
-//     foreignField: '_id',
-//     count: true
-// })
+postSchema.virtual('allcmts', {
+    ref: 'commentModel',
+    localField: 'cmtId',
+    justOne: false,
+    foreignField: '_id',
+    count: true
+})
 
 export default model('postModel', postSchema,'postmodels')

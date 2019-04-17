@@ -9,7 +9,7 @@ interface IPost {
   authorId: String | ''
   avatar: String | ''
   tags: String | ''
-  // cmtId: String | ''
+  cmtId: String | ''
 }
 
 export default class Post {
@@ -32,12 +32,24 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    const allpostcmts = []
-    for (let i = 0; i < allPostData.length; i++) {
-      allpostcmts.push(await CommentModel.findOne({ postId: allPostData[i]._id }).sort([['date', -1]]).lean())
-    }
-    ctx.body = {allPostData,allpostcmts}
+    const allPostData = await PostModel.find({}, function(err,docs) {
+
+    }).populate('allcmts').sort([['date', -1]]).lean()
+    // const allPostData = await PostModel.find({}).populate('userinfo').populate('allcmts').sort([['date', -1]]).lean()
+    console.log(allPostData);
+    // ctx.body = allPostData
+    // const allpostcmts = []
+    // for (let i = 0; i < allPostData.length; i++) {
+    //   allpostcmts.push(await CommentModel.findOne({ postId: allPostData[i]._id }).populate('usercmtinfo').sort([['date', -1]]).lean())
+    // }
+    // for (let i = 0; i < allpostcmts.length; i++) {
+    //   if (allpostcmts[i] === null) {
+    //     allpostcmts[i] = String(allpostcmts[i])
+    //   }
+    // }
+    // console.log(allpostcmts);
+    // console.log(typeof(allPostData));
+    // ctx.body = {allPostData,allpostcmts}
   }
   // static async getHomeCmts(ctx: Context) {
   //   const postid = ctx.request.body
