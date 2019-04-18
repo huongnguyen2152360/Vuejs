@@ -4,8 +4,7 @@ const commentSchema = new Schema({
     content: {type: String, default: ''},
     date: {type: String, default: ''},
     cmtUser: Schema.Types.ObjectId,
-    postId: {type: String, default: ''},
-    _id: {type: String, default: ''}
+    postId: {type: String, default: ''}
 }, { toJSON: { virtuals: true } })
 
 commentSchema.virtual('usercmtinfo', {

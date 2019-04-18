@@ -22,8 +22,7 @@ postSchema.virtual('allcmts', {
     ref: 'commentModel',
     localField: 'cmtId',
     justOne: false,
-    foreignField: '_id',
-    count: true
+    foreignField: '_id'
 })
 
 export default model('postModel', postSchema,'postmodels')

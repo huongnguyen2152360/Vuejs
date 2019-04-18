@@ -23,7 +23,8 @@ router.post('/userAllPosts', bodyParser(), UserController.userAllPosts)
 router.post('/postContent', bodyParser(),PostController.createPost)
 router.get('/getAllPosts',PostController.getAllPosts)
 //Home- Post
-// router.post('/getHomeCmts', bodyParser, PostController.getHomeCmts)
+// router.post('/getHomeCmts', bodyParser(), PostController.getHomeCmts)
+router.post('/getcmtinfo', bodyParser(), PostController.getcmtinfo)
 
 // profile - post profile
 router.post('/getPostsProfile',bodyParser(), PostController.getPostsProfile)

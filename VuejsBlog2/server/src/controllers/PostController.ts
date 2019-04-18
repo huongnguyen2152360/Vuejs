@@ -32,12 +32,18 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const allPostData = await PostModel.find({}, function(err,docs) {
-
-    }).populate('allcmts').sort([['date', -1]]).lean()
-    // const allPostData = await PostModel.find({}).populate('userinfo').populate('allcmts').sort([['date', -1]]).lean()
-    console.log(allPostData);
-    // ctx.body = allPostData
+    // const allPostData = await PostModel.find({}).sort([['date', -1]]).lean()
+    // for (let i = 0; i < allPostData.length; i++) {
+    //   if (allPostData[i].cmtId != '') {
+    //     // console.log(await PostModel.find({cmtId: allPostData[i].cmtId}).populate('allcmts').lean())
+    //     console.log('w cmtId');
+      //   console.log('no cmtId: ' + await PostModel.find({cmtId: allPostData[i].cmtId}).lean())
+    //   // } else if (allPostData[i].cmtId == '') {
+    //   // }
+    // }
+    const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
+    // console.log(allPostData);
+    ctx.body = allPostData
     // const allpostcmts = []
     // for (let i = 0; i < allPostData.length; i++) {
     //   allpostcmts.push(await CommentModel.findOne({ postId: allPostData[i]._id }).populate('usercmtinfo').sort([['date', -1]]).lean())
@@ -51,10 +57,15 @@ export default class Post {
     // console.log(typeof(allPostData));
     // ctx.body = {allPostData,allpostcmts}
   }
-  // static async getHomeCmts(ctx: Context) {
-  //   const postid = ctx.request.body
-  //   console.log(postid);
-  // }
+  static async getcmtinfo(ctx: Context) {
+    const postids = []
+    const postid = ctx.request.body
+    const stringPostId = JSON.stringify(postid)
+    const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
+    postids.push(finalPostId)
+    console.log(postids);
+    // ctx.body = await PostModel.find({cmtId: finalPostId}).populate('allcmts').lean().concat()
+  }
   static async getPostsProfile(ctx: Context) {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)

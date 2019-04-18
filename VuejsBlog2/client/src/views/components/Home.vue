@@ -67,7 +67,7 @@
                 </el-col>
               </el-row>
                 <p style="font-size: 0.8em;padding-top: 5px">{{cmt.content}}}</p>-->
-              </el-col>
+              <!-- </el-col> -->
             </el-row>
           </li>
         </ul>
@@ -181,6 +181,19 @@ export default {
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
         this.allPosts = rs.data
+        this.allPosts.forEach(data => {
+          if (data.cmtId != '') {
+            axios({
+              method: 'post',
+              url: 'http://localhost:3000/getcmtinfo',
+              data: data.cmtId
+            }).then(rs => {
+              console.log(rs.data);
+            })
+          } else {
+            return
+          }
+        })
         // for (let i = 0; i < this.allPosts.allPostData.length; i++) {
         //   newData = {...this.allPosts.allPostData[i], ...this.allPosts.allpostcmts[i]}
         //   return JSON.stringify(newData)
