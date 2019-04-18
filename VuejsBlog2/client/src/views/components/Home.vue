@@ -7,7 +7,6 @@
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
         </el-col>
       </el-row>
-      <!-- <div v-for="(data,index) in allPosts" :key="index"> -->
       <ul v-for="(post,index) in allPosts" :key="index">
         <li style="list-style-type: none">
           <el-row>
@@ -39,63 +38,60 @@
               </el-row>
             </el-col>
             <!-- Show Posts Comments -->
-            <el-col :span="5" :offset="1" class="main-cmts">
+            <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId != ''">
               <el-row class="cmt-line1">
                 <el-col :span="5">
                   <div class="cmt-avatar">
-                    <!-- <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar"> -->
+                    <img :src="post.latestcmt.usercmtinfo.avatar" alt="post.latestcmt.usercmtinfo.displayname">
                   </div>
                 </el-col>
                 <el-col :span="17" class="cmt-avatar-p">
-                  <p style="font-size: 0.9em">date</p>
+                  <p style="font-size: 0.8em;padding-left: 0.5rem;">{{moment(post.latestcmt.date, 'YYYYMMDD').fromNow()}}</p>
                 </el-col>
               </el-row>
-              <p style="font-size: 0.8em;padding-top: 5px">content</p>
+              <p style="font-size: 0.8em;padding-top: 5px" v-if="post.latestcmt.content.length>0 &&post.latestcmt.content.length >=20">{{post.latestcmt.content.substring(0,20)}}</p>
+              <p style="font-size: 0.8em;padding-top: 5px" v-else>{{post.latestcmt.content}}</p>
             </el-col>
-            <!-- <el-col :span="5" :offset="1" class="main-cmts" v-if="cmt._id == 'null'">
-                <el-row class="cmt-line1">
-                  <p>bang null</p>
-            </el-row>-->
-            <!-- <el-row class="cmt-line1">
+            <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId == ''">
+              <el-row class="cmt-line1"></el-row>
+              <el-row class="cmt-line1">
                 <el-col :span="5">
-                  <div class="cmt-avatar">
-                    <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar">
-                  </div>
+                  <div class="cmt-avatar"></div>
                 </el-col>
-                <el-col :span="17" class="cmt-avatar-p">
-                  <p style="font-size: 0.9em">{{cmt.date}}}</p>
-                </el-col>
+                <el-col :span="17" class="cmt-avatar-p"></el-col>
               </el-row>
-            <p style="font-size: 0.8em;padding-top: 5px">{{cmt.content}}}</p>-->
-            <!-- </el-col> -->
+              <p style="font-size: 0.8em;padding-top: 5px;color:white;">something</p>
+            </el-col>
           </el-row>
         </li>
       </ul>
       <!-- </div> -->
       <!-- New Post Form -->
-      <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
-        <p class="postForm-intro">What's on your mind?</p>
-        <el-form-item label="Title">
-          <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
-        </el-form-item>
-        <el-form-item label="Tags">
-          <el-select v-model="postForm.tags" placeholder="Select one tag">
-            <el-option label="General" value="General"></el-option>
-            <el-option label="Support" value="Support"></el-option>
-            <el-option label="Language" value="Language"></el-option>
-          </el-select>
-        </el-form-item>
-        <div class="postForm-hidden">
-          <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
-          <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
-          <el-input v-model="postForm.date">{{ date() }}</el-input>
-        </div>
-        <editor v-model="postForm.content" class="editorText"></editor>
-        <div class="postForm-buttons">
-          <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
-          <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
-        </div>
-      </el-form>
+      <div class="postForm-wrapper" v-show="open">
+        <el-form :model="postForm" class="postForm" v-if="userSession.displayname">
+          <p class="postForm-intro">What's on your mind?</p>
+          <el-form-item label="Title">
+            <el-input v-model="postForm.title" placeholder="Your Title" class="postForm-title-input"></el-input>
+          </el-form-item>
+          <el-form-item label="Tags">
+            <el-select v-model="postForm.tags" placeholder="Select one tag">
+              <el-option label="General" value="General"></el-option>
+              <el-option label="Support" value="Support"></el-option>
+              <el-option label="Language" value="Language"></el-option>
+            </el-select>
+          </el-form-item>
+          <div class="postForm-hidden">
+            <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
+            <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
+            <el-input v-model="postForm.date">{{ date() }}</el-input>
+          </div>
+          <editor v-model="postForm.content" class="editorText"></editor>
+          <div class="postForm-buttons">
+            <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
+            <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
+          </div>
+        </el-form>
+      </div>
     </el-main>
   </div>
 </template>
@@ -129,7 +125,6 @@ export default {
   },
   created() {
     this.getallPosts()
-    // this.getPostCmts()
   },
   computed: {
     userSession() {
@@ -175,7 +170,6 @@ export default {
         })
     },
     getallPosts: function() {
-      // const newData = {}
       axios({
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
@@ -196,25 +190,14 @@ export default {
           data: cmtIds
         }).then(rs => {
           this.allPosts = rs.data.concat(nocmtIds)
-          console.log(this.allPosts);
+          this.allPosts.sort(function(a, b) {
+            var dateA = new Date(a.date),
+              dateB = new Date(b.date)
+            return dateB - dateA
+          })
         })
       })
     }
-    // getPostCmts: function() {
-    //   for (let i = 0; i < this.allPosts.length; i ++) {
-    //     console.log(this.allPosts[i]._id);
-    //     console.log('something');
-    //   }
-    //   console.log(this.allPosts[0]);
-    //   console.log(this.allPosts._id);
-    //   axios({
-    //     method: 'post',
-    //     url: 'http://localhost:3000/getHomeCmts',
-    //     data: {...this.allPosts._id}
-    //   }).then(rs => {
-    //     console.log(rs.data);
-    //   })
-    // }
   }
 }
 </script>
@@ -270,6 +253,14 @@ p {
   padding-top: 1rem;
   height: 350px !important;
 }
+.postForm-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
 .postForm-intro {
   color: white;
   font-style: italic;
@@ -282,7 +273,11 @@ p {
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
-  margin-top: 3rem;
+  margin: 9rem auto;
+  width: 70%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  backface-visibility: hidden;
 }
 .postForm .el-form-item__label {
   font-size: 1rem;

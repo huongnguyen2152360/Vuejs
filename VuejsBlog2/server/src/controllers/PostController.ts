@@ -32,38 +32,16 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    // const allPostData = await PostModel.find({}).sort([['date', -1]]).lean()
-    // for (let i = 0; i < allPostData.length; i++) {
-    //   if (allPostData[i].cmtId != '') {
-    //     // console.log(await PostModel.find({cmtId: allPostData[i].cmtId}).populate('allcmts').lean())
-    //     console.log('w cmtId');
-    //   console.log('no cmtId: ' + await PostModel.find({cmtId: allPostData[i].cmtId}).lean())
-    //   // } else if (allPostData[i].cmtId == '') {
-    //   // }
-    // }
     const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    // console.log(allPostData);
     ctx.body = allPostData
-    // const allpostcmts = []
-    // for (let i = 0; i < allPostData.length; i++) {
-    //   allpostcmts.push(await CommentModel.findOne({ postId: allPostData[i]._id }).populate('usercmtinfo').sort([['date', -1]]).lean())
-    // }
-    // for (let i = 0; i < allpostcmts.length; i++) {
-    //   if (allpostcmts[i] === null) {
-    //     allpostcmts[i] = String(allpostcmts[i])
-    //   }
-    // }
-    // console.log(allpostcmts);
-    // console.log(typeof(allPostData));
-    // ctx.body = {allPostData,allpostcmts}
   }
   static async getcmtinfo(ctx: Context) {
     const postInfo = []
     const cmtInfo = []
     const cmtIdArr = ctx.request.body
     for (let i = 0; i < cmtIdArr.length; i++) {
-      cmtInfo[i] = await CommentModel.findOne({ _id: cmtIdArr[i] }).lean()
-      postInfo[i] = await PostModel.findOne({ cmtId: cmtIdArr[i] }).lean()
+      cmtInfo[i] = await CommentModel.findOne({ _id: cmtIdArr[i] }).populate('usercmtinfo').lean()
+      postInfo[i] = await PostModel.findOne({ cmtId: cmtIdArr[i] }).populate('userinfo').lean()
       postInfo[i].latestcmt = cmtInfo[i]
     }
     ctx.body = postInfo
