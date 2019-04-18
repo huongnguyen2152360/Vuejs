@@ -8,39 +8,39 @@
         </el-col>
       </el-row>
       <!-- <div v-for="(data,index) in allPosts" :key="index"> -->
-        <ul v-for="(post,index) in allPosts" :key="index">
-          <li style="list-style-type: none">
-            <el-row>
-              <!-- Show Posts Info -->
-              <el-col :span="18">
-                <el-row class="allPosts_row">
-                  <el-col :span="2">
-                    <div class="user-avatar">
-                      <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
-                    </div>
-                  </el-col>
-                  <el-col :span="18">
-                    <router-link :to="`/post/${post._id}`" class="allPosts_title">
-                      <h2>{{post.title}}</h2>
-                    </router-link>
-                    <p class="main-tags">
-                      {{post.tags}} •
-                      <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
-                    </p>
-                  </el-col>
-                  <el-col :span="2" style="text-align:center">
-                    <h2 class="main-count">1</h2>
-                    <p class="main-tags">POSTS</p>
-                  </el-col>
-                  <el-col :span="2" style="text-align:center">
-                    <h2 class="main-count">3</h2>
-                    <p class="main-tags">VIEWS</p>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <!-- Show Posts Comments -->
-              <el-col :span="5" :offset="1" class="main-cmts">
-                <el-row class="cmt-line1">
+      <ul v-for="(post,index) in allPosts" :key="index">
+        <li style="list-style-type: none">
+          <el-row>
+            <!-- Show Posts Info -->
+            <el-col :span="18">
+              <el-row class="allPosts_row">
+                <el-col :span="2">
+                  <div class="user-avatar">
+                    <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
+                  </div>
+                </el-col>
+                <el-col :span="18">
+                  <router-link :to="`/post/${post._id}`" class="allPosts_title">
+                    <h2>{{post.title}}</h2>
+                  </router-link>
+                  <p class="main-tags">
+                    {{post.tags}} •
+                    <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
+                  </p>
+                </el-col>
+                <el-col :span="2" style="text-align:center">
+                  <h2 class="main-count">1</h2>
+                  <p class="main-tags">POSTS</p>
+                </el-col>
+                <el-col :span="2" style="text-align:center">
+                  <h2 class="main-count">3</h2>
+                  <p class="main-tags">VIEWS</p>
+                </el-col>
+              </el-row>
+            </el-col>
+            <!-- Show Posts Comments -->
+            <el-col :span="5" :offset="1" class="main-cmts">
+              <el-row class="cmt-line1">
                 <el-col :span="5">
                   <div class="cmt-avatar">
                     <!-- <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar"> -->
@@ -50,13 +50,13 @@
                   <p style="font-size: 0.9em">date</p>
                 </el-col>
               </el-row>
-                <p style="font-size: 0.8em;padding-top: 5px">content</p>
-              </el-col>
-              <!-- <el-col :span="5" :offset="1" class="main-cmts" v-if="cmt._id == 'null'">
+              <p style="font-size: 0.8em;padding-top: 5px">content</p>
+            </el-col>
+            <!-- <el-col :span="5" :offset="1" class="main-cmts" v-if="cmt._id == 'null'">
                 <el-row class="cmt-line1">
                   <p>bang null</p>
-                </el-row> -->
-                <!-- <el-row class="cmt-line1">
+            </el-row>-->
+            <!-- <el-row class="cmt-line1">
                 <el-col :span="5">
                   <div class="cmt-avatar">
                     <img :src="cmt.usercmtinfo.avatar" alt="cmt-avatar">
@@ -66,11 +66,11 @@
                   <p style="font-size: 0.9em">{{cmt.date}}}</p>
                 </el-col>
               </el-row>
-                <p style="font-size: 0.8em;padding-top: 5px">{{cmt.content}}}</p>-->
-              <!-- </el-col> -->
-            </el-row>
-          </li>
-        </ul>
+            <p style="font-size: 0.8em;padding-top: 5px">{{cmt.content}}}</p>-->
+            <!-- </el-col> -->
+          </el-row>
+        </li>
+      </ul>
       <!-- </div> -->
       <!-- New Post Form -->
       <el-form :model="postForm" v-show="open" class="postForm" v-if="userSession.displayname">
@@ -180,26 +180,24 @@ export default {
         method: 'get',
         url: 'http://localhost:3000/getAllPosts'
       }).then(rs => {
+        let cmtIds = []
+        let nocmtIds = []
         this.allPosts = rs.data
         this.allPosts.forEach(data => {
           if (data.cmtId != '') {
-            axios({
-              method: 'post',
-              url: 'http://localhost:3000/getcmtinfo',
-              data: data.cmtId
-            }).then(rs => {
-              console.log(rs.data);
-            })
+            cmtIds.push(data.cmtId)
           } else {
-            return
+            nocmtIds.push(data)
           }
         })
-        // for (let i = 0; i < this.allPosts.allPostData.length; i++) {
-        //   newData = {...this.allPosts.allPostData[i], ...this.allPosts.allpostcmts[i]}
-        //   return JSON.stringify(newData)
-        // }
-        // const newdata = {...this.allPosts.allPostData[0], ...this.allPosts.allpostcmts[0]}
-        // console.log(newdata)
+        axios({
+          method: 'post',
+          url: 'http://localhost:3000/getcmtinfo',
+          data: cmtIds
+        }).then(rs => {
+          this.allPosts = rs.data.concat(nocmtIds)
+          console.log(this.allPosts);
+        })
       })
     }
     // getPostCmts: function() {

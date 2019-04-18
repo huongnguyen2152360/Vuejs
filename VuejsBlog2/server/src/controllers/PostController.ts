@@ -37,7 +37,7 @@ export default class Post {
     //   if (allPostData[i].cmtId != '') {
     //     // console.log(await PostModel.find({cmtId: allPostData[i].cmtId}).populate('allcmts').lean())
     //     console.log('w cmtId');
-      //   console.log('no cmtId: ' + await PostModel.find({cmtId: allPostData[i].cmtId}).lean())
+    //   console.log('no cmtId: ' + await PostModel.find({cmtId: allPostData[i].cmtId}).lean())
     //   // } else if (allPostData[i].cmtId == '') {
     //   // }
     // }
@@ -58,13 +58,15 @@ export default class Post {
     // ctx.body = {allPostData,allpostcmts}
   }
   static async getcmtinfo(ctx: Context) {
-    const postids = []
-    const postid = ctx.request.body
-    const stringPostId = JSON.stringify(postid)
-    const finalPostId = stringPostId.replace(/:|"|{|}/g, '')
-    postids.push(finalPostId)
-    console.log(postids);
-    // ctx.body = await PostModel.find({cmtId: finalPostId}).populate('allcmts').lean().concat()
+    const postInfo = []
+    const cmtInfo = []
+    const cmtIdArr = ctx.request.body
+    for (let i = 0; i < cmtIdArr.length; i++) {
+      cmtInfo[i] = await CommentModel.findOne({ _id: cmtIdArr[i] }).lean()
+      postInfo[i] = await PostModel.findOne({ cmtId: cmtIdArr[i] }).lean()
+      postInfo[i].latestcmt = cmtInfo[i]
+    }
+    ctx.body = postInfo
   }
   static async getPostsProfile(ctx: Context) {
     const userId = ctx.request.body
