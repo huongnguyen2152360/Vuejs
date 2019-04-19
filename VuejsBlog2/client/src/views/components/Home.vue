@@ -19,7 +19,7 @@
                   </div>
                 </el-col>
                 <el-col :span="18">
-                  <router-link :to="`/post/${post._id}`" class="allPosts_title">
+                  <router-link @click.native="countClicks(index)" :to="`/post/${post._id}`" class="allPosts_title">
                     <h2>{{post.title}}</h2>
                   </router-link>
                   <p class="main-tags">
@@ -28,11 +28,11 @@
                   </p>
                 </el-col>
                 <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">1</h2>
+                  <h2 class="main-count">{{post.postCount}}</h2>
                   <p class="main-tags">POSTS</p>
                 </el-col>
                 <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">3</h2>
+                  <h2 class="main-count">{{post.views}}</h2>
                   <p class="main-tags">VIEWS</p>
                 </el-col>
               </el-row>
@@ -117,7 +117,9 @@ export default {
         authorId: this.$store.store.state.userSession._id,
         avatar: this.$store.store.state.userSession.avatar,
         date: '',
-        cmtId: ''
+        cmtId: '',
+        views: 0,
+        postCount: 1
       },
       allPosts: {},
       newData: {}
@@ -155,12 +157,12 @@ export default {
         data: this.postForm
       })
         .then(rs => {
-          this.open = false
           this.allPosts = rs.data
           this.$message({
             type: 'success',
             message: 'Posted successfully'
           })
+          this.open = false
         })
         .catch(error => {
           this.$message({
@@ -196,6 +198,18 @@ export default {
             return dateB - dateA
           })
         })
+      })
+    },
+    countClicks: function(index) {
+      this.allPosts[index].views += 1
+      let postid = this.allPosts[index]._id
+      let clickno = this.allPosts[index].views
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/countviews',
+        data: [postid, clickno]
+      }).then(() => {
+        // this.allPosts[index].views = rs.data.views
       })
     }
   }
@@ -255,7 +269,7 @@ p {
 }
 .postForm-wrapper {
   position: fixed;
-  top: 0;
+  top: 9rem;
   bottom: 0;
   left: 0;
   right: 0;
@@ -273,7 +287,7 @@ p {
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   border-radius: 5px;
   padding: 2rem 2rem 1rem 2rem;
-  margin: 9rem auto;
+  margin: 0 auto;
   width: 70%;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;

@@ -10,13 +10,18 @@ interface IPost {
   avatar: String | ''
   tags: String | ''
   cmtId: String | ''
+  views: Number | 0
+  postCount: Number | 1
 }
 
 export default class Post {
+  // POST - HOME
   static async createPost(ctx: Context) {
     const postData = ctx.request.body as IPost
     if (postData.content && postData.title && postData.tags) {
       await PostModel.create(postData)
+      postData.postCount = 1
+      postData.views = 0
       const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
       ctx.body = allPostData
     } else {
@@ -32,21 +37,39 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
+    const countcmts = []
     const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    // const allPostsCount = 
-    // ctx.body = allPostData
+    for (let i = 0; i < allPostData.length; i++) {
+      countcmts[i] = await CommentModel.countDocuments({ postId: allPostData[i]._id }, (err, count) => {
+        return count
+      })
+      allPostData[i].postCount += countcmts[i]
+    }
+    ctx.body = allPostData
   }
   static async getcmtinfo(ctx: Context) {
     const postInfo = []
     const cmtInfo = []
+    const countPosts = []
     const cmtIdArr = ctx.request.body
     for (let i = 0; i < cmtIdArr.length; i++) {
       cmtInfo[i] = await CommentModel.findOne({ _id: cmtIdArr[i] }).populate('usercmtinfo').lean()
       postInfo[i] = await PostModel.findOne({ cmtId: cmtIdArr[i] }).populate('userinfo').lean()
+      countPosts[i] = await CommentModel.countDocuments({ postId: postInfo[i]._id }, (err, count) => {
+        return count
+      })
       postInfo[i].latestcmt = cmtInfo[i]
+      postInfo[i].postCount = countPosts[i] + 1
     }
     ctx.body = postInfo
   }
+
+  static async countviews(ctx: Context) {
+    const inputData = ctx.request.body
+    const updatedViews = await PostModel.updateOne({_id: inputData[0]},{views: inputData[1]}).lean()
+    ctx.body = updatedViews
+  }
+
   static async getPostsProfile(ctx: Context) {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)

@@ -8,7 +8,9 @@ const postSchema = new Schema({
     authorId: Schema.Types.ObjectId,
     avatar: {type: String, default: ''},
     tags: {type: String, default: ''},
-    cmtId: {type: String, default: ''}
+    cmtId: {type: String, default: ''},
+    views: {type: Number, default: 0},
+    postCount: {type: Number, default: 1},
 }, {toObject: {virtuals: true}})
 
 postSchema.virtual('userinfo', {

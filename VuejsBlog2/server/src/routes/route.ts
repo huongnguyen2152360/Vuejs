@@ -24,6 +24,7 @@ router.post('/postContent', bodyParser(),PostController.createPost)
 router.get('/getAllPosts',PostController.getAllPosts)
 //Home- Post
 router.post('/getcmtinfo', bodyParser(), PostController.getcmtinfo)
+router.post('/countviews', bodyParser(), PostController.countviews)
 
 // profile - post profile
 router.post('/getPostsProfile',bodyParser(), PostController.getPostsProfile)
