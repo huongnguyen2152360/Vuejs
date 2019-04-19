@@ -33,7 +33,8 @@ export default class Post {
   }
   static async getAllPosts(ctx: Context) {
     const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    ctx.body = allPostData
+    // const allPostsCount = 
+    // ctx.body = allPostData
   }
   static async getcmtinfo(ctx: Context) {
     const postInfo = []

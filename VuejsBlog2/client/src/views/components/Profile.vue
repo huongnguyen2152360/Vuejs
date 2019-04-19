@@ -251,7 +251,7 @@ export default {
             this.tableData.splice(index,1)
             this.$message({
             type: 'success',
-            message: 'Delete completed'
+            message: 'Post deleted!'
           });
           })
           

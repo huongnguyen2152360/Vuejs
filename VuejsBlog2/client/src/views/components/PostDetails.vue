@@ -33,7 +33,7 @@
       <!-- COMMENTS - Show cmts -->
       <ul v-for="(cmt,index) in allCmts" :key="index">
         <li style="list-style-type: none">
-          <el-row> 
+          <el-row>
             <el-col :span="2">
               <img :src="cmt.usravatar" :alt="cmt.usrname" class="cmt-user-avatar">
             </el-col>
@@ -47,12 +47,12 @@
                   <p class="cmt-date">{{dateFrNow(cmt.date)}}</p>
                   <p class="cmt-hidden">{{cmt.id}}</p>
                 </el-col>
-                <!-- <el-col :span="12">
+                <el-col :span="12">
                   <div class="cmt-editBtns" v-if="cmt.id == userSession._id">
-                  <el-button @click="cmtEditBtn(cmt,index)" class="cmt-editBtn">Edit</el-button>
-                  <el-button @click="cmtDelBtn" class="cmt-delBtn" type="danger">Delete</el-button>
+                    <!-- <el-button @click="cmtEditBtn(cmt,index)" class="cmt-editBtn">Edit</el-button> -->
+                    <el-button @click="cmtDelBtn(cmt,index)" class="cmt-delBtn" type="danger">Delete</el-button>
                   </div>
-                </el-col> -->
+                </el-col>
               </el-row>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
       </ul>
 
       <!-- COMMENTS - Edit cmt -->
-       <!-- <div class="editor-wrap" v-show="open2">
+      <!-- <div class="editor-wrap" v-show="open2">
         <el-form :model="cmtEditForm" class="cmt-Form">
           <el-form-item>
             <editor ref="tuiEditor" v-model="cmtEditForm.content" class="cmt-editor"></editor>
@@ -73,7 +73,7 @@
             <el-button type="info" @click="cmtEditCancel">Cancel</el-button>
           </div>
         </el-form>
-      </div> -->
+      </div>-->
 
       <!-- COMMENTS - Create cmts -->
       <div class="editor-wrap" v-show="open">
@@ -106,7 +106,7 @@ import moment from 'moment'
 import { Editor } from '@toast-ui/vue-editor'
 import { error } from 'util'
 import { Viewer } from '@toast-ui/vue-editor'
-// const contentedited = editor.getValue()
+
 export default {
   components: {
     appHeader: Header,
@@ -216,9 +216,32 @@ export default {
     //   this.cmtEditForm = this.cmtData[0]
     //   this.cmtEditForm.date = this.cmtData[0].date
     // },
-    // cmtDelBtn: function() {
-    //   console.log('cmtdelbtn');
-    // },
+    cmtDelBtn: function(cmt, index) {
+      this.$confirm('This will permanently delete the post. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
+        .then(() => {
+          axios({
+            method: 'post',
+            url: 'http://localhost:3000/deletecmt',
+            data: cmt._id
+          }).then(() => {
+            this.allCmts.splice(index, 1)
+            this.$message({
+              type: 'success',
+              message: 'Post deleted!'
+            })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        })
+    }
     // cmtEditSend: function() {
     //   axios({
     //     method:'post',
