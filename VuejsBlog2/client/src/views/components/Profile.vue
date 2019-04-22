@@ -51,7 +51,7 @@
         <!-- POSTS -->
         <el-tab-pane label="Posts">
           <h3 class="profile-header">Your Posts</h3>
-          <el-table :data="tableData.filter(data => !search || data.content.toLowerCase().includes(search.toLowerCase()))" style="width: 100%;">
+          <el-table :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))" style="width: 100%;">
             <el-table-column label="Title" prop="title"></el-table-column>
             <el-table-column label="Content" prop="content"></el-table-column>
             <el-table-column label="Tags" prop="tags"></el-table-column>

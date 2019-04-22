@@ -1,9 +1,8 @@
-
 export default {
     facebook: {
-        clientID: "302298083737961",
-        clientSecret: "dc60e04b9da370fb61cc2877addc3b3f",
-        callbackURL: "https://localhost:3000/login/facebook/callback",
+        clientID: "387427091853388",
+        clientSecret: "c72508a8b44ac346616aff6e9208345a",
+        callbackURL: "https://localhost:3000/auth/facebook/callback",
         profileFields: ['id', 'name', 'profile_pic', 'email']
     }
 }

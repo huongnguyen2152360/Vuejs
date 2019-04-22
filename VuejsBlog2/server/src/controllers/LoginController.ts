@@ -1,5 +1,6 @@
 import { Context } from 'koa'
 import UserModel from '@/models/UserModel'
+import keyPassport from '@/configs/keyPassport'
 // import * as session from 'koa-session'
 
 interface IUserLoginInfo {
@@ -18,4 +19,5 @@ export default class UserLogin {
       ctx.throw(400, 'Incorrect Password!')
     }
   }
+  
 }

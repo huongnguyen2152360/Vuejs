@@ -45,9 +45,9 @@
         </el-col>
         <el-col :span="11" :offset="1" class="login-right">
           <h3>Alternative Logins</h3>
-          <a href="http://localhost:3000/auth/login/facebook">
+          <el-button @click="fbLogin" class="fb-button">
             <v-icon name="brands/facebook" scale="3" class="login-fb"/>
-          </a>
+          </el-button>
           <v-icon name="brands/github" scale="3" class="login-github"/>
           <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
         </el-col>
@@ -165,6 +165,9 @@ export default {
     },
     forgotPass: function() {
       this.$router.push('/forgotpass')
+    },
+    fbLogin: function() {
+      console.log('fb login')
     }
   }
 }
@@ -204,5 +207,10 @@ export default {
 .el-button--primary {
   width: 100%;
   margin-top: 1rem;
+}
+.fb-button {
+  padding: 0;
+  background: #ebeef5;
+  border: none;
 }
 </style>
