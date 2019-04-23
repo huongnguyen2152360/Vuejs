@@ -1,8 +1,8 @@
 const Koa = require('koa')
 const cors = require('@koa/cors')
+const passport = require('passport')
 import * as router from '@/routes/route'
 import * as session from 'koa-session';
-// import loginPassport from '@/routes/loginPassport'
 const mongoose = require('mongoose')
 
 const app = new Koa()
@@ -20,6 +20,8 @@ app.use(session(app))
 app.use(async ctx => {
   ctx.body = 'Vuejs Blog Server'
 })
+app.use(passport.initialize())
+app.use(passport.session());
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Running in port 3000");

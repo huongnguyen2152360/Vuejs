@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const router = new Router()
+const passport = require('passport')
 import UserController from '@/controllers/UserController'
 import PostController from '@/controllers/PostController'
 import LoginController from '@/controllers/LoginController'
@@ -19,16 +20,24 @@ router.post('/resetChangePass', bodyParser(), UserController.resetChangePass)
 router.post('/getUserProfile', bodyParser(), UserController.getUserProfile)
 router.post('/userAllPosts', bodyParser(), UserController.userAllPosts)
 
+//UserLoginAuth
+// router.post('/login/facebook', passport.authenticate("facebook"))
+// router.post('/loginfb', LoginController.loginfb)
+// router.post('/auth/facebook/callback', passport.authenticate("facebook", { failureRedirect: '/login' }), 
+// function (req, res) {
+//     res.redirect('/')
+// })
+
 //POST
-router.post('/postContent', bodyParser(),PostController.createPost)
-router.get('/getAllPosts',PostController.getAllPosts)
+router.post('/postContent', bodyParser(), PostController.createPost)
+router.get('/getAllPosts', PostController.getAllPosts)
 //Home- Post
 router.post('/getcmtinfo', bodyParser(), PostController.getcmtinfo)
 router.post('/countviews', bodyParser(), PostController.countviews)
 
 // profile - post profile
-router.post('/getPostsProfile',bodyParser(), PostController.getPostsProfile)
-router.post('/getUserInfo',bodyParser(), PostController.getPostsProfile)
+router.post('/getPostsProfile', bodyParser(), PostController.getPostsProfile)
+router.post('/getUserInfo', bodyParser(), PostController.getPostsProfile)
 router.post('/editPostProfile', bodyParser(), PostController.editPostProfile)
 router.post('/deletePostProfile', bodyParser(), PostController.deletePostProfile)
 

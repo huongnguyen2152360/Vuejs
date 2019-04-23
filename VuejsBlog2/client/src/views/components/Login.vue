@@ -167,7 +167,12 @@ export default {
       this.$router.push('/forgotpass')
     },
     fbLogin: function() {
-      console.log('fb login')
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/login/facebook'
+      }).then(() => {
+       console.log('something');
+      })
     }
   }
 }
