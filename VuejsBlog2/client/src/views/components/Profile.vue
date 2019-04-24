@@ -20,19 +20,20 @@
           <p style="display:none">{{userSession._id}}</p>
           <el-form ref="form" :model="userEdit">
             <el-form-item label="Display Name" class="profile_form-label">
-              <el-input v-model="userEdit.displayname"></el-input>
+              <el-input @keyup.enter.native="userEditProfile" v-model="userEdit.displayname"></el-input>
             </el-form-item>
             <el-form-item prop="email" label="Email" :rules="[
       { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
     ]" class="profile_form-label">
-              <el-input v-model.lazy="userEdit.email" placeholder="abc@example.com"></el-input>
+              <el-input @keyup.enter.native="userEditProfile" v-model.lazy="userEdit.email" placeholder="abc@example.com"></el-input>
             </el-form-item>
             <el-form-item :rules="[
       { type: 'url', message: 'Please input correct URL to your image', trigger: ['blur', 'change'] }
     ]" label="Avatar" class="profile_form-label">
-              <el-input v-model.lazy="userEdit.avatar" placeholder="https://example.com"></el-input>
+              <el-input @keyup.enter.native="userEditProfile" v-model.lazy="userEdit.avatar" placeholder="https://example.com"></el-input>
             </el-form-item>
-            <el-button class="profile-saveBtn" type="primary" plain @click="userEditProfile">Save</el-button>
+            <el-button class="profile-saveBtn" type="primary" plain v-show="saveBtn1" @click="userEditProfile">Save</el-button>
+            <el-button class="profile-saveBtn" type="primary" plain :loading="true" v-show="saveBtn2" style="margin-left:0;" @click="userEditProfile2">Save</el-button>
           </el-form>
         </el-tab-pane>
         <!-- CHANGE PASSWORD -->
@@ -40,12 +41,13 @@
           <h3 class="profile-header">Change Password</h3>
           <el-form :model="userEditPass" status-icon :rules="rulesPass" ref="userEditPass" class="demo-ruleForm">
             <el-form-item label="New Password" prop="pass" class="profile_form-label">
-              <el-input type="password" v-model="userEditPass.pass" autocomplete="off"></el-input>
+              <el-input @keyup.enter.native="userEditPassBtn" type="password" v-model="userEditPass.pass" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="Confirm Password" prop="checkPass" class="profile_form-label">
-              <el-input type="password" v-model="userEditPass.checkPass" autocomplete="off"></el-input>
+              <el-input @keyup.enter.native="userEditPassBtn" type="password" v-model="userEditPass.checkPass" autocomplete="off"></el-input>
             </el-form-item>
-            <el-button class="profile-saveBtn" type="primary" plain @click="userEditPassBtn">Save</el-button>
+            <el-button class="profile-saveBtn" type="primary" plain v-show="savePass1" @click="userEditPassBtn">Save</el-button>
+            <el-button type="primary" plain :loading="true" v-show="savePass2" style="margin-left:0;" @click="userEditPassBtn2">Save</el-button>
           </el-form>
         </el-tab-pane>
         <!-- POSTS -->
@@ -148,7 +150,11 @@ export default {
       editPostForm: {
         date: ''
       },
-      open: false
+      open: false,
+      saveBtn1: true,
+      saveBtn2: false,
+      savePass1: true,
+      savePass2: false
     }
   },
   created() {
@@ -161,6 +167,11 @@ export default {
   },
   methods: {
     userEditProfile: function() {
+      this.saveBtn1 = false
+      this.saveBtn2 = true
+      this.userEditProfile2()
+    },
+    userEditProfile2: function() {
       axios({
         method: 'post',
         url: 'http://localhost:3000/editProfile',
@@ -169,6 +180,8 @@ export default {
           ...this.userEdit
         }
       }).then(rs => {
+        this.saveBtn1 = true
+        this.saveBtn2 = false
         this.$store.store.commit('userSessionInfo', rs.data)
         this.$message({
           type: 'success',
@@ -177,6 +190,11 @@ export default {
       })
     },
     userEditPassBtn: function() {
+      this.savePass1 = false
+      this.savePass2 = true
+      this.userEditPassBtn2()
+    },
+    userEditPassBtn2: function() {
       axios({
         method: 'post',
         url: 'http://localhost:3000/changePassword',
@@ -186,6 +204,8 @@ export default {
         }
       })
         .then(rs => {
+          this.savePass1 = true
+          this.savePass2 = false
           this.$message({
             type: 'success',
             message: 'Password changed successfully'
@@ -194,6 +214,8 @@ export default {
           this.$refs.userEditPass.resetFields()
         })
         .catch(error => {
+          this.savePass1 = true
+          this.savePass2 = false
           this.$message({
             type: 'error',
             message: 'New password must be different'
@@ -247,13 +269,12 @@ export default {
             url: 'http://localhost:3000/deletePostProfile',
             data: row._id
           }).then(() => {
-            this.tableData.splice(index,1)
+            this.tableData.splice(index, 1)
             this.$message({
-            type: 'success',
-            message: 'Post deleted!'
-          });
+              type: 'success',
+              message: 'Post deleted!'
+            })
           })
-          
         })
         .catch(() => {
           this.$message({

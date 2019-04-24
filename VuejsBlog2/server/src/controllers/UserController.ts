@@ -2,6 +2,8 @@ import UserModel from '@/models/UserModel'
 import { Context } from 'koa'
 import PostModel from '@/models/PostModel';
 import CommentModel from '@/models/CommentModel';
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 // const passport = require('passport')
 // const FacebookStrategy = require('passport-facebook').Strategy
 // import keyPassport from '@/configs/keyPassport'
@@ -19,6 +21,7 @@ export default class User {
   static async createUser(ctx: Context) {
     const userData = ctx.request.body as IUserCreateInfo
     userData.avatar = 'https://data.whicdn.com/images/50330982/large.jpg'
+    userData.password = await bcrypt.hash(userData.password, saltRounds)
     const findSameUser = await UserModel.findOne({ email: userData.email }).lean()
     if (findSameUser != null) { //nếu findSameUser khác null => tìm thấy user => đã có user đó
       ctx.throw(400, 'Existed user')
@@ -39,9 +42,11 @@ export default class User {
   static async changePass(ctx: Context) {
     const inputPass = ctx.request.body as IUserCreateInfo
     const userPass = await UserModel.findOne({ _id: inputPass.id }).lean()
-    if (inputPass.password == userPass.password) {
+    const match = await bcrypt.compare(inputPass.password, userPass.password)
+    if (match) {
       ctx.throw(400, 'New password must be different')
     } else {
+      inputPass.password = await bcrypt.hash(inputPass.password,saltRounds)
       await UserModel.updateOne({ _id: inputPass.id }, { ...inputPass })
       const updatedPass = await UserModel.findOne({ _id: inputPass.id }).lean()
       ctx.session.user = updatedPass
@@ -49,13 +54,15 @@ export default class User {
     }
   }
   static async resetChangePass(ctx: Context) {
-    const userResetInfo = ctx.request.body 
-    const findUser = await UserModel.findOne({email: userResetInfo.usrEmail}).lean()
-    if (userResetInfo.password == findUser.password) {
-      ctx.throw(400,'New password must be different')
-    } else if (userResetInfo.password != findUser.password) {
-      await UserModel.updateOne({email: userResetInfo.usrEmail}, {...userResetInfo})
-      const findUpdatedUsr = await UserModel.findOne({email: userResetInfo.usrEmail}).lean()
+    const userResetInfo = ctx.request.body
+    const findUser = await UserModel.findOne({ email: userResetInfo.usrEmail }).lean()
+    const match = await bcrypt.compare(userResetInfo.password, findUser.password)
+    if (match) {
+      ctx.throw(400, 'New password must be different')
+    } else {
+      userResetInfo.password = await bcrypt.hash(userResetInfo.password,saltRounds)
+      await UserModel.updateOne({ email: userResetInfo.usrEmail }, { ...userResetInfo })
+      const findUpdatedUsr = await UserModel.findOne({ email: userResetInfo.usrEmail }).lean()
       ctx.session.user = findUpdatedUsr
       ctx.body = findUpdatedUsr
     }
@@ -65,16 +72,16 @@ export default class User {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)
     const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
-    ctx.body = await UserModel.findOne({_id: finalUserId}).lean()
+    ctx.body = await UserModel.findOne({ _id: finalUserId }).lean()
   }
 
-  static async userAllPosts(ctx:Context) {
+  static async userAllPosts(ctx: Context) {
     const userId = ctx.request.body
     const stringUserId = JSON.stringify(userId)
     const finalUserId = stringUserId.replace(/:|"|{|}/g, '')
-    const postCount = await PostModel.countDocuments({authorId: finalUserId}).lean()
-    const cmtCount = await CommentModel.countDocuments({cmtUser: finalUserId}).lean()
-    ctx.body = {postCount, cmtCount}
+    const postCount = await PostModel.countDocuments({ authorId: finalUserId }).lean()
+    const cmtCount = await CommentModel.countDocuments({ cmtUser: finalUserId }).lean()
+    ctx.body = { postCount, cmtCount }
   }
 
 }

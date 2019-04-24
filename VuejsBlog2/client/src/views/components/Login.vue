@@ -43,14 +43,14 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="11" :offset="1" class="login-right">
+        <!-- <el-col :span="11" :offset="1" class="login-right">
           <h3>Alternative Logins</h3>
           <el-button @click="fbLogin" class="fb-button">
             <v-icon name="brands/facebook" scale="3" class="login-fb"/>
           </el-button>
           <v-icon name="brands/github" scale="3" class="login-github"/>
           <v-icon name="brands/google-plus-square" scale="3" class="login-gg"/>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-main>
   </div>
@@ -157,6 +157,8 @@ export default {
           this.$router.push('/')
         })
         .catch(error => {
+          this.showBtn1 = true
+          this.showBtn2 = false
           this.$message({
             type: 'error',
             message: 'Incorrect Email or Password!'
@@ -165,15 +167,15 @@ export default {
     },
     forgotPass: function() {
       this.$router.push('/forgotpass')
-    },
-    fbLogin: function() {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/login/facebook'
-      }).then(() => {
-       console.log('something');
-      })
     }
+    // fbLogin: function() {
+    //   axios({
+    //     method: 'post',
+    //     url: 'http://localhost:3000/login/facebook'
+    //   }).then(() => {
+    //    console.log('something');
+    //   })
+    // }
   }
 }
 </script>
