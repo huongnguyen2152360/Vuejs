@@ -15,8 +15,6 @@ export default class UserLogin {
   static async loginUser(ctx: Context) {
     const inputData = ctx.request.body as IUserLoginInfo
     const userData = await UserModel.findOne({ email: inputData.email }).lean()
-    console.log(userData.password);
-    
     const match = await bcrypt.compare(inputData.password, userData.password)
     if (match) {
       ctx.session.user = userData

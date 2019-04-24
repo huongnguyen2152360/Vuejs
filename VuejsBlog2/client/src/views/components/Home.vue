@@ -42,15 +42,15 @@
               <el-row class="cmt-line1">
                 <el-col :span="5">
                   <div class="cmt-avatar">
-                    <img :src="post.latestcmt.usercmtinfo.avatar" alt="post.latestcmt.usercmtinfo.displayname">
+                    <img :src="post.cmtAva" alt="post.cmtName">
                   </div>
                 </el-col>
                 <el-col :span="17" class="cmt-avatar-p">
-                  <p style="font-size: 0.8em;padding-left: 0.5rem;">{{moment(post.latestcmt.date, 'YYYYMMDD').fromNow()}}</p>
+                  <p style="font-size: 0.8em;padding-left: 0.5rem;">{{moment(post.cmtDate, 'YYYYMMDD').fromNow()}}</p>
                 </el-col>
               </el-row>
-              <p style="font-size: 0.8em;padding-top: 5px" v-if="post.latestcmt.content.length>0 &&post.latestcmt.content.length >=20">{{post.latestcmt.content.substring(0,20)}}</p>
-              <p style="font-size: 0.8em;padding-top: 5px" v-else>{{post.latestcmt.content}}</p>
+              <p style="font-size: 0.8em;padding-top: 5px" v-if="post.cmtContentLength>0 &&post.cmtContentLength >=20">{{post.cmtContent.substring(0,20)}}</p>
+              <p style="font-size: 0.8em;padding-top: 5px" v-else>{{post.cmtContent}}</p>
             </el-col>
             <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId == ''">
               <el-row class="cmt-line1"></el-row>
@@ -192,6 +192,17 @@ export default {
           data: cmtIds
         }).then(rs => {
           this.allPosts = rs.data.concat(nocmtIds)
+          for (let i = 0; i < rs.data.concat(nocmtIds).length; i++) {
+            if (this.allPosts[i].latestcmt) {
+              this.allPosts[i].cmtAva = rs.data.concat(nocmtIds)[i].latestcmt.usercmtinfo.avatar
+              this.allPosts[i].cmtName = rs.data.concat(nocmtIds)[i].latestcmt.usercmtinfo.displayname
+              this.allPosts[i].cmtDate = rs.data.concat(nocmtIds)[i].latestcmt.date
+              this.allPosts[i].cmtContent = rs.data.concat(nocmtIds)[i].latestcmt.content
+              this.allPosts[i].cmtContentLength = rs.data.concat(nocmtIds)[i].latestcmt.content.length
+            } else {
+              i++
+            }
+          }
           this.allPosts.sort(function(a, b) {
             var dateA = new Date(a.date),
               dateB = new Date(b.date)
