@@ -5,6 +5,7 @@
       <el-row class="user-bg">
         <div class="user-avaname">
           <el-col :span="7" class="user-avatarr">
+            <v-icon name="regular/dot-circle" scale="2" :class="['status__show', getClass()]"></v-icon>
             <img :src="userInfo.avatar" :alt="userInfo.displayname">
           </el-col>
           <el-col :span="17" class="user-displayname">
@@ -19,6 +20,14 @@
           </el-col>
           <el-col :span="17">
             <p>{{userInfo.displayname}}</p>
+          </el-col>
+        </el-row>
+        <el-row style="padding-bottom: 1rem">
+          <el-col :span="7">
+            <p>Status:</p>
+          </el-col>
+          <el-col :span="17">
+            <p>{{userSession.status}}</p>
           </el-col>
         </el-row>
         <el-row style="padding-bottom: 1rem">
@@ -70,6 +79,11 @@ export default {
   created() {
     this.getUserProfile(), this.userAllPosts()
   },
+  computed: {
+    userSession() {
+      return this.$store.store.state.userSession
+    }
+  },
   methods: {
     getUserProfile: function() {
       axios({
@@ -94,6 +108,22 @@ export default {
           this.userTitle = 'Just joined'
         }
       })
+    },
+    getClass: function() {
+      if (this.$store.store.state.userSession.status == 'Online') {
+        return 'status__online'
+      }
+      if (this.$store.store.state.userSession.status == 'Away') {
+        return 'status__away'
+      }
+      if (this.$store.store.state.userSession.status == 'Do not disturb') {
+        return 'status__disturb'
+      }
+      if (this.$store.store.state.userSession.status == 'Invisible') {
+        return 'status__invisible'
+      } else {
+        return 'status__user'
+      }
     }
   }
 }
@@ -122,6 +152,11 @@ export default {
 }
 .user-moreinfo {
   margin-top: 7rem;
+}
+.status__show {
+  position: absolute;
+  left: 10%;
+  top: 10%;
 }
 </style>
 

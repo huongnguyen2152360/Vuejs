@@ -226,7 +226,7 @@ export default {
           axios({
             method: 'post',
             url: 'http://localhost:3000/deletecmt',
-            data: cmt._id
+            data: cmt
           }).then(() => {
             this.allCmts.splice(index, 1)
             this.$message({
@@ -302,7 +302,7 @@ export default {
   font-size: 1rem !important;
 }
 .tui-editor-contents img {
-  max-width: 40% !important;
+  max-width: 30% !important;
 }
 .cmt-user-displayname {
   font-size: 0.9rem;

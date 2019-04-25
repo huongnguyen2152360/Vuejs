@@ -74,6 +74,7 @@
             <el-submenu index="3" class="menu__avatar">
               <template slot="title">
                 <div class="user-avatar">
+                  <v-icon name="regular/dot-circle" :class="['status__show', getClass()]"></v-icon>
                   <img :src="userSession.avatar" alt="user-avatar">
                 </div>
               </template>
@@ -156,7 +157,7 @@ export default {
     },
     sttAway: function() {
       this.$store.store.state.userSession.status = 'Away'
-      console.log(this.$store.store.state.userSession.status);
+      console.log(this.$store.store.state.userSession.status)
     },
     sttDisturb: function() {
       this.$store.store.state.userSession.status = 'Do not disturb'
@@ -235,5 +236,10 @@ export default {
 }
 .el-menu-item a:hover {
   color: #303133;
+}
+.status__show {
+  position: absolute;
+  top: 15%;
+  left: 15%;
 }
 </style>

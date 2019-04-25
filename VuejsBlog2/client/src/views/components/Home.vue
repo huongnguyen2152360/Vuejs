@@ -332,4 +332,9 @@ p {
 .allPosts_title h2:hover {
   color: #42b983;
 }
+.status__show {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+}
 </style>

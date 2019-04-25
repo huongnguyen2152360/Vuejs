@@ -42,8 +42,9 @@ export default class Comment {
   // }
 
   static async deletecmt(ctx: Context) {
-    const cmtId = ctx.request.body
-    const finalcmtId = JSON.stringify(cmtId).replace(/"|{|}|:/g, '')
-    ctx.body = await CommentModel.deleteOne({_id: finalcmtId})
+    const cmt = ctx.request.body
+    await CommentModel.deleteOne({_id: cmt._id})
+    const findLastCmt = await CommentModel.findOne({ postId: cmt.postId }).sort([['date', -1]]).lean()
+    ctx.body = await PostModel.updateOne({ _id: cmt.postId }, { cmtId: findLastCmt._id })
   }
 }
