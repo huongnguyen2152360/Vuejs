@@ -9,6 +9,7 @@ const saltRounds = 10;
 interface IUserLoginInfo {
   email: String | ''
   password: String | ''
+  status: String | ''
 }
 
 export default class UserLogin {

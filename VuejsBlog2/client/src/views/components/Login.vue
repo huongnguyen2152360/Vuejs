@@ -96,7 +96,8 @@ export default {
         password: '',
         repassword: '',
         avatar: '',
-        id: ''
+        id: '',
+        status: 'Online'
       },
       userInfoRules: {
         displayname: [{ required: true, trigger: 'change' }],
@@ -107,7 +108,9 @@ export default {
       seen: true,
       userLoginInfo: {
         email: '',
-        password: ''
+        password: '',
+        status: 'Online'
+
       },
       userLoginInfoRules: {
         email: [{ type: 'email', required: true, message: 'Please input correct email address', trigger: 'change' }],

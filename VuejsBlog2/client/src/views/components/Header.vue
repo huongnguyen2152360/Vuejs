@@ -78,22 +78,27 @@
                 </div>
               </template>
               <el-menu-item index="3-1" class="menu__user-name">
-                <router-link to="/profile"><v-icon name="regular/circle" class="status__user"></v-icon>{{userSession.displayname}}</router-link>
+                <router-link to="/profile">
+                  <v-icon name="regular/circle" :class="getClass()"></v-icon>
+                  {{userSession.displayname}}
+                </router-link>
               </el-menu-item>
-              <el-menu-item index="3-2">
+              <el-menu-item index="3-2" @click="sttOnline">
                 <v-icon name="regular/circle" class="status__online"></v-icon>Online
               </el-menu-item>
-              <el-menu-item index="3-3">
+              <el-menu-item index="3-3" @click="sttAway">
                 <v-icon name="regular/circle" class="status__away"></v-icon>Away
               </el-menu-item>
-              <el-menu-item index="3-4">
+              <el-menu-item index="3-4" @click="sttDisturb">
                 <v-icon name="regular/circle" class="status__disturb"></v-icon>Do not disturb
               </el-menu-item>
-              <el-menu-item index="3-5">
+              <el-menu-item index="3-5" @click="sttInvisible">
                 <v-icon name="regular/circle" class="status__invisible"></v-icon>Invisible
               </el-menu-item>
               <el-menu-item index="3-6">
-                <router-link to="/profile" style="margin:0" exact><v-icon name="regular/edit" class="user__edit"></v-icon>Edit Profile</router-link>
+                <router-link to="/profile" style="margin:0" exact>
+                  <v-icon name="regular/edit" class="user__edit"></v-icon>Edit Profile
+                </router-link>
               </el-menu-item>
               <el-menu-item index="3-7" @click="userSignOut">
                 <v-icon name="sign-out-alt" class="user__signout"></v-icon>Sign out
@@ -114,10 +119,8 @@
 
 <script>
 export default {
-  // props: ['user'],
   computed: {
     userSession() {
-      // console.log(this.$store.store.state.userSession);
       return this.$store.store.state.userSession
     }
   },
@@ -131,6 +134,35 @@ export default {
     userSignOut: function() {
       this.$store.store.state.userSession = {}
       this.$router.push('/')
+    },
+    getClass: function() {
+      if (this.$store.store.state.userSession.status == 'Online') {
+        return 'status__online'
+      }
+      if (this.$store.store.state.userSession.status == 'Away') {
+        return 'status__away'
+      }
+      if (this.$store.store.state.userSession.status == 'Do not disturb') {
+        return 'status__disturb'
+      }
+      if (this.$store.store.state.userSession.status == 'Invisible') {
+        return 'status__invisible'
+      } else {
+        return 'status__user'
+      }
+    },
+    sttOnline: function() {
+      this.$store.store.state.userSession.status = 'Online'
+    },
+    sttAway: function() {
+      this.$store.store.state.userSession.status = 'Away'
+      console.log(this.$store.store.state.userSession.status);
+    },
+    sttDisturb: function() {
+      this.$store.store.state.userSession.status = 'Do not disturb'
+    },
+    sttInvisible: function() {
+      this.$store.store.state.userSession.status = 'Invisible'
     }
   }
 }

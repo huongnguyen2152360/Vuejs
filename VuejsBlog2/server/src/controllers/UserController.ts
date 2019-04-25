@@ -15,6 +15,7 @@ interface IUserCreateInfo {
   password: String | ''
   avatar: String | ''
   id: String | ''
+  status: String | ''
 }
 
 export default class User {
