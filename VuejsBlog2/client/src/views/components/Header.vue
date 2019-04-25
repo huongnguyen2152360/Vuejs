@@ -17,8 +17,10 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="3">
-              <el-tooltip class="item" effect="dark" content="Categories" placement="bottom">
-                <i class="el-icon-menu"></i>
+              <el-tooltip class="item" effect="dark" content="Recent" placement="bottom">
+              <router-link to="/" exact>
+                <v-icon name="regular/clock"></v-icon>
+              </router-link>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item index="4">
