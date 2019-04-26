@@ -1,5 +1,5 @@
 <template>
-  <div id="appmain">
+  <div id="postscmts">
     <app-header></app-header>
     <el-main>
       <el-row>
@@ -65,7 +65,6 @@
           </el-row>
         </li>
       </ul>
-      <!-- </div> -->
       <!-- New Post Form -->
       <div class="postForm-wrapper" v-show="open">
         <el-form :model="postForm" class="postForm" v-if="userSession.displayname">
@@ -81,8 +80,6 @@
             </el-select>
           </el-form-item>
           <div class="postForm-hidden">
-            <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
-            <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
             <el-input v-model="postForm.date">{{ date() }}</el-input>
           </div>
           <editor v-model="postForm.content" class="editorText"></editor>
@@ -204,9 +201,13 @@ export default {
             }
           }
           this.allPosts.sort(function(a, b) {
-            var dateA = new Date(a.date),
-              dateB = new Date(b.date)
-            return dateB - dateA
+            if (a.postCount < b.postCount) {
+              return 1
+            }
+            if (a.postCount > b.postCount) {
+              return -1
+            }
+            return 0
           })
         })
       })
@@ -219,8 +220,7 @@ export default {
         method: 'post',
         url: 'http://localhost:3000/countviews',
         data: [postid, clickno]
-      }).then(() => {
-      })
+      }).then(() => {})
     }
   }
 }
@@ -257,7 +257,6 @@ p {
   font-weight: normal;
 }
 .main-cmts {
-  /* background-color: palevioletred; */
   border-left: 3px solid palevioletred;
   padding-left: 15px;
 }

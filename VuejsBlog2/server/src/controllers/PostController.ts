@@ -37,14 +37,14 @@ export default class Post {
     }
   }
   static async getAllPosts(ctx: Context) {
-    const countcmts = []
-    const allPostData = await PostModel.find({}).populate('userinfo').sort([['date', -1]]).lean()
-    for (let i = 0; i < allPostData.length; i++) {
-      countcmts[i] = await CommentModel.countDocuments({ postId: allPostData[i]._id }, (err, count) => {
-        return count
-      })
-      allPostData[i].postCount += countcmts[i]
-    }
+    // const countcmts = []
+    const allPostData = await PostModel.find({}).populate('userinfo').lean()
+    // for (let i = 0; i < allPostData.length; i++) {
+    //   countcmts[i] = await CommentModel.countDocuments({ postId: allPostData[i]._id }, (err, count) => {
+    //     return count
+    //   })
+    //   allPostData[i].postCount += countcmts[i]
+    // }
     ctx.body = allPostData
   }
   static async getcmtinfo(ctx: Context) {
@@ -63,10 +63,48 @@ export default class Post {
     }
     ctx.body = postInfo
   }
+  static async getAllPostsGeneral(ctx: Context) {
+    // const countcmts = []
+    const allPostData = await PostModel.find({ tags: 'General' }).populate('userinfo').sort([['date', -1]]).lean()
+    // for (let i = 0; i < allPostData.length; i++) {
+    //   countcmts[i] = await CommentModel.countDocuments({ postId: allPostData[i]._id }, (err, count) => {
+    //     return count
+    //   })
+    //   allPostData[i].postCount += countcmts[i]
+    // }
+    ctx.body = allPostData
+  }
+
+  static async getAllPostsLanguage(ctx: Context) {
+    // const countcmts = []
+    const allPostData = await PostModel.find({ tags: 'Language' }).populate('userinfo').sort([['date', -1]]).lean()
+    // for (let i = 0; i < allPostData.length; i++) {
+    //   countcmts[i] = await CommentModel.countDocuments({ postId: allPostData[i]._id }, (err, count) => {
+    //     return count
+    //   })
+    //   allPostData[i].postCount += countcmts[i]
+    // }
+    ctx.body = allPostData
+  }
+
+  static async getAllPostsSupport(ctx: Context) {
+    const allPostData = await PostModel.find({ tags: 'Support' }).populate('userinfo').sort([['date', -1]]).lean()
+    ctx.body = allPostData
+  }
+
+  static async getAllPostsViews(ctx: Context) {
+    const allPostData = await PostModel.find({}).populate('userinfo').sort([['views', -1]]).lean()
+    ctx.body = allPostData
+  }
+
+  // static async getAllPostsCmts(ctx: Context) {
+  //   const allPostData = await PostModel.find({}).populate('userinfo').lean()
+  //   ctx.body = allPostData
+  // }
 
   static async countviews(ctx: Context) {
     const inputData = ctx.request.body
-    const updatedViews = await PostModel.updateOne({_id: inputData[0]},{views: inputData[1]}).lean()
+    const updatedViews = await PostModel.updateOne({ _id: inputData[0] }, { views: inputData[1] }).lean()
     ctx.body = updatedViews
   }
 

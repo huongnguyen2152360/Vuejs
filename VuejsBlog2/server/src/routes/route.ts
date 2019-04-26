@@ -31,6 +31,11 @@ router.post('/userAllPosts', bodyParser(), UserController.userAllPosts)
 //POST
 router.post('/postContent', bodyParser(), PostController.createPost)
 router.get('/getAllPosts', PostController.getAllPosts)
+router.get('/getAllPostsGeneral', PostController.getAllPostsGeneral)
+router.get('/getAllPostsLanguage', PostController.getAllPostsLanguage)
+router.get('/getAllPostsSupport', PostController.getAllPostsSupport)
+router.get('/getAllPostsViews', PostController.getAllPostsViews)
+// // router.get('/getAllPostsCmts', PostController.getAllPostsCmts)
 //Home- Post
 router.post('/getcmtinfo', bodyParser(), PostController.getcmtinfo)
 router.post('/countviews', bodyParser(), PostController.countviews)

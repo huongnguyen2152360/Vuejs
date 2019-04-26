@@ -1,5 +1,5 @@
 <template>
-  <div id="appmain">
+  <div id="postsviews">
     <app-header></app-header>
     <el-main>
       <el-row>
@@ -81,8 +81,6 @@
             </el-select>
           </el-form-item>
           <div class="postForm-hidden">
-            <!-- <el-input v-model="postForm.authorId">{{userSession._id}}</el-input> -->
-            <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
             <el-input v-model="postForm.date">{{ date() }}</el-input>
           </div>
           <editor v-model="postForm.content" class="editorText"></editor>
@@ -174,7 +172,7 @@ export default {
     getallPosts: function() {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/getAllPosts'
+        url: 'http://localhost:3000/getAllPostsViews'
       }).then(rs => {
         let cmtIds = []
         let nocmtIds = []
@@ -203,11 +201,6 @@ export default {
               i++
             }
           }
-          this.allPosts.sort(function(a, b) {
-            var dateA = new Date(a.date),
-              dateB = new Date(b.date)
-            return dateB - dateA
-          })
         })
       })
     },
@@ -219,8 +212,7 @@ export default {
         method: 'post',
         url: 'http://localhost:3000/countviews',
         data: [postid, clickno]
-      }).then(() => {
-      })
+      }).then(() => {})
     }
   }
 }
@@ -257,7 +249,6 @@ p {
   font-weight: normal;
 }
 .main-cmts {
-  /* background-color: palevioletred; */
   border-left: 3px solid palevioletred;
   padding-left: 15px;
 }

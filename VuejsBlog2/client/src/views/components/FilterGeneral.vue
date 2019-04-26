@@ -1,5 +1,5 @@
 <template>
-  <div id="appmain">
+  <div id="tagsGeneral">
     <app-header></app-header>
     <el-main>
       <el-row>
@@ -7,65 +7,69 @@
           <el-button type="primary" class="newtopic-btn" @click="newTopicBtn">New Topic</el-button>
         </el-col>
       </el-row>
-      <ul v-for="(post,index) in allPosts" :key="index">
-        <li style="list-style-type: none">
-          <el-row>
-            <!-- Show Posts Info -->
-            <el-col :span="18">
-              <el-row class="allPosts_row">
-                <el-col :span="2">
-                  <div class="user-avatar">
-                    <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
-                  </div>
-                </el-col>
-                <el-col :span="18">
-                  <router-link @click.native="countClicks(index)" :to="`/post/${post._id}`" class="allPosts_title">
-                    <h2>{{post.title}}</h2>
-                  </router-link>
-                  <p class="main-tags">
-                    {{post.tags}} •
-                    <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
-                  </p>
-                </el-col>
-                <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">{{post.postCount}}</h2>
-                  <p class="main-tags">POSTS</p>
-                </el-col>
-                <el-col :span="2" style="text-align:center">
-                  <h2 class="main-count">{{post.views}}</h2>
-                  <p class="main-tags">VIEWS</p>
-                </el-col>
-              </el-row>
-            </el-col>
-            <!-- Show Posts Comments -->
-            <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId != ''">
-              <el-row class="cmt-line1">
-                <el-col :span="5">
-                  <div class="cmt-avatar">
-                    <img :src="post.cmtAva" alt="post.cmtName">
-                  </div>
-                </el-col>
-                <el-col :span="17" class="cmt-avatar-p">
-                  <p style="font-size: 0.8em;padding-left: 0.5rem;">{{moment(post.cmtDate, 'YYYYMMDD').fromNow()}}</p>
-                </el-col>
-              </el-row>
-              <p style="font-size: 0.8em;padding-top: 5px" v-if="post.cmtContentLength>0 &&post.cmtContentLength >=20">{{post.cmtContent.substring(0,20)}}</p>
-              <p style="font-size: 0.8em;padding-top: 5px" v-else>{{post.cmtContent}}</p>
-            </el-col>
-            <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId == ''">
-              <el-row class="cmt-line1"></el-row>
-              <el-row class="cmt-line1">
-                <el-col :span="5">
-                  <div class="cmt-avatar"></div>
-                </el-col>
-                <el-col :span="17" class="cmt-avatar-p"></el-col>
-              </el-row>
-              <p style="font-size: 0.8em;padding-top: 5px;color:white;">something</p>
-            </el-col>
-          </el-row>
-        </li>
-      </ul>
-      <!-- </div> -->
+      <div v-if="allPosts != ''">
+        <ul v-for="(post,index) in allPosts" :key="index">
+          <li style="list-style-type: none">
+            <el-row>
+              <!-- Show Posts Info -->
+              <el-col :span="18">
+                <el-row class="allPosts_row">
+                  <el-col :span="2">
+                    <div class="user-avatar">
+                      <img :src="post.userinfo.avatar" :alt="post.userinfo.displayname">
+                    </div>
+                  </el-col>
+                  <el-col :span="18">
+                    <router-link @click.native="countClicks(index)" :to="`/post/${post._id}`" class="allPosts_title">
+                      <h2>{{post.title}}</h2>
+                    </router-link>
+                    <p class="main-tags">
+                      {{post.tags}} •
+                      <span>{{moment(post.date, 'YYYYMMDD').fromNow()}}</span>
+                    </p>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <h2 class="main-count">{{post.postCount}}</h2>
+                    <p class="main-tags">POSTS</p>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <h2 class="main-count">{{post.views}}</h2>
+                    <p class="main-tags">VIEWS</p>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <!-- Show Posts Comments -->
+              <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId != ''">
+                <el-row class="cmt-line1">
+                  <el-col :span="5">
+                    <div class="cmt-avatar">
+                      <img :src="post.cmtAva" alt="post.cmtName">
+                    </div>
+                  </el-col>
+                  <el-col :span="17" class="cmt-avatar-p">
+                    <p style="font-size: 0.8em;padding-left: 0.5rem;">{{moment(post.cmtDate, 'YYYYMMDD').fromNow()}}</p>
+                  </el-col>
+                </el-row>
+                <p style="font-size: 0.8em;padding-top: 5px" v-if="post.cmtContentLength>0 &&post.cmtContentLength >=20">{{post.cmtContent.substring(0,20)}}</p>
+                <p style="font-size: 0.8em;padding-top: 5px" v-else>{{post.cmtContent}}</p>
+              </el-col>
+              <el-col :span="5" :offset="1" class="main-cmts" v-if="post.cmtId == ''">
+                <el-row class="cmt-line1"></el-row>
+                <el-row class="cmt-line1">
+                  <el-col :span="5">
+                    <div class="cmt-avatar"></div>
+                  </el-col>
+                  <el-col :span="17" class="cmt-avatar-p"></el-col>
+                </el-row>
+                <p style="font-size: 0.8em;padding-top: 5px;color:white;">something</p>
+              </el-col>
+            </el-row>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <p class="no-general">Oops! Seems like there are no General posts yet. Why don't you create one then?</p>
+      </div>
       <!-- New Post Form -->
       <div class="postForm-wrapper" v-show="open">
         <el-form :model="postForm" class="postForm" v-if="userSession.displayname">
@@ -174,7 +178,7 @@ export default {
     getallPosts: function() {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/getAllPosts'
+        url: 'http://localhost:3000/getAllPostsGeneral'
       }).then(rs => {
         let cmtIds = []
         let nocmtIds = []
@@ -192,21 +196,14 @@ export default {
           data: cmtIds
         }).then(rs => {
           this.allPosts = rs.data.concat(nocmtIds)
-          for (let i = 0; i < rs.data.concat(nocmtIds).length; i++) {
-            if (this.allPosts[i].latestcmt) {
-              this.allPosts[i].cmtAva = rs.data.concat(nocmtIds)[i].latestcmt.usercmtinfo.avatar
-              this.allPosts[i].cmtName = rs.data.concat(nocmtIds)[i].latestcmt.usercmtinfo.displayname
-              this.allPosts[i].cmtDate = rs.data.concat(nocmtIds)[i].latestcmt.date
-              this.allPosts[i].cmtContent = rs.data.concat(nocmtIds)[i].latestcmt.content
-              this.allPosts[i].cmtContentLength = rs.data.concat(nocmtIds)[i].latestcmt.content.length
-            } else {
-              i++
+          this.allPosts.forEach(post => {
+            if (post.latestcmt) {
+              post.cmtAva = post.latestcmt.usercmtinfo.avatar
+              post.cmtName = post.latestcmt.usercmtinfo.displayname
+              post.cmtDate = post.latestcmt.date
+              post.cmtContent = post.latestcmt.content
+              post.cmtContentLength = post.latestcmt.content.length
             }
-          }
-          this.allPosts.sort(function(a, b) {
-            var dateA = new Date(a.date),
-              dateB = new Date(b.date)
-            return dateB - dateA
           })
         })
       })
@@ -257,7 +254,6 @@ p {
   font-weight: normal;
 }
 .main-cmts {
-  /* background-color: palevioletred; */
   border-left: 3px solid palevioletred;
   padding-left: 15px;
 }
@@ -335,5 +331,8 @@ p {
   position: absolute;
   top: 15%;
   left: 15%;
+}
+.no-general {
+  font-style: italic;
 }
 </style>

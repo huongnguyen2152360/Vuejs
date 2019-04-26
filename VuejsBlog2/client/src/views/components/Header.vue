@@ -17,45 +17,38 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="3">
-              <el-tooltip class="item" effect="dark" content="Recent" placement="bottom">
-              <router-link to="/" exact>
-                <v-icon name="regular/clock"></v-icon>
-              </router-link>
+              <el-tooltip class="item" effect="dark" content="General" placement="bottom">
+                <router-link to="/tags/general" exact>
+                <v-icon name="tag"></v-icon>
+                </router-link>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item index="4">
-              <el-tooltip class="item" effect="dark" content="Recent" placement="bottom">
-                <i class="el-icon-time"></i>
+              <el-tooltip class="item" effect="dark" content="Language" placement="bottom">
+                <router-link to="/tags/language" exact>
+                <v-icon name="tag"></v-icon>
+                </router-link>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item index="5">
-              <el-tooltip class="item" effect="dark" content="Unread" placement="bottom">
-                <i class="el-icon-document"></i>
+             <el-tooltip class="item" effect="dark" content="Support" placement="bottom">
+                <router-link to="/tags/support" exact>
+                <v-icon name="tag"></v-icon>
+                </router-link>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item index="6">
-              <el-tooltip class="item" effect="dark" content="Tags" placement="bottom">
-                <i class="el-icon-menu"></i>
+             <el-tooltip class="item" effect="dark" content="Views" placement="bottom">
+                <router-link to="/posts/views" exact>
+                <v-icon name="regular/eye"></v-icon>
+                </router-link>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item index="7">
-              <el-tooltip class="item" effect="dark" content="Popular" placement="bottom">
-                <i class="el-icon-menu"></i>
-              </el-tooltip>
-            </el-menu-item>
-            <el-menu-item index="8">
-              <el-tooltip class="item" effect="dark" content="Users" placement="bottom">
-                <i class="el-icon-menu"></i>
-              </el-tooltip>
-            </el-menu-item>
-            <el-menu-item index="9">
-              <el-tooltip class="item" effect="dark" content="Groups" placement="bottom">
-                <i class="el-icon-menu"></i>
-              </el-tooltip>
-            </el-menu-item>
-            <el-menu-item index="10">
-              <el-tooltip class="item" effect="dark" content="Search" placement="bottom">
-                <i class="el-icon-search"></i>
+              <el-tooltip class="item" effect="dark" content="Comments" placement="bottom">
+                <router-link to="/posts/cmts" exact>
+                <v-icon name="regular/comments"></v-icon>
+                </router-link>
               </el-tooltip>
             </el-menu-item>
           </el-menu>
