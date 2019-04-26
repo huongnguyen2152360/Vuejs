@@ -124,7 +124,7 @@ export default {
     userRegister: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/register',
+        url: 'https://vuejsblog-server.herokuapp.com/register',
         data: { ...this.userInfo }
       })
         .then(rs => {
@@ -152,7 +152,7 @@ export default {
     userLogin: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/login',
+        url: 'https://vuejsblog-server.herokuapp.com/login',
         data: this.userLoginInfo
       })
         .then(rs => {
@@ -174,7 +174,7 @@ export default {
     // fbLogin: function() {
     //   axios({
     //     method: 'post',
-    //     url: 'http://localhost:3000/login/facebook'
+    //     url: 'https://vuejsblog-server.herokuapp.com/login/facebook'
     //   }).then(() => {
     //    console.log('something');
     //   })

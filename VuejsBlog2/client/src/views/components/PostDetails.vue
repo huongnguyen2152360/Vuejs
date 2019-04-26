@@ -142,7 +142,7 @@ export default {
     getPostDetails: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getpostdetails',
+        url: 'https://vuejsblog-server.herokuapp.com/getpostdetails',
         data: this.$route.params.id
       }).then(rs => {
         this.postDetails = rs.data
@@ -163,7 +163,7 @@ export default {
       this.cmtForm.postId = this.$route.params.id
       axios({
         method: 'post',
-        url: 'http://localhost:3000/createCmt',
+        url: 'https://vuejsblog-server.herokuapp.com/createCmt',
         data: this.cmtForm
       })
         .then(rs => {
@@ -192,7 +192,7 @@ export default {
     getPostCmts: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getPostCmt',
+        url: 'https://vuejsblog-server.herokuapp.com/getPostCmt',
         data: this.$route.params.id
       }).then(rs => {
         this.allCmts = rs.data
@@ -225,7 +225,7 @@ export default {
         .then(() => {
           axios({
             method: 'post',
-            url: 'http://localhost:3000/deletecmt',
+            url: 'https://vuejsblog-server.herokuapp.com/deletecmt',
             data: cmt
           }).then(() => {
             this.allCmts.splice(index, 1)
@@ -245,7 +245,7 @@ export default {
     // cmtEditSend: function() {
     //   axios({
     //     method:'post',
-    //     url: 'http://localhost:3000/editCmt',
+    //     url: 'https://vuejsblog-server.herokuapp.com/editCmt',
     //     data: this.cmtEditForm
     //   }).then(rs => {
     //     console.log(rs.data);

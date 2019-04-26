@@ -47,7 +47,7 @@ export default {
       forgotBtn: function() {
         axios({
           method: 'post',
-          url: 'http://localhost:3000/resetPassword',
+          url: 'https://vuejsblog-server.herokuapp.com/resetPassword',
           data: this.userForgotPassInfo
         }).then(rs => {
           this.$message({

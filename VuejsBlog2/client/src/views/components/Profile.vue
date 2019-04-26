@@ -174,7 +174,7 @@ export default {
     userEditProfile2: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/editProfile',
+        url: 'https://vuejsblog-server.herokuapp.com/editProfile',
         data: {
           id: this.userSession._id,
           ...this.userEdit
@@ -197,7 +197,7 @@ export default {
     userEditPassBtn2: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/changePassword',
+        url: 'https://vuejsblog-server.herokuapp.com/changePassword',
         data: {
           id: this.userSession._id,
           password: this.userEditPass.pass
@@ -226,7 +226,7 @@ export default {
     getTableData: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getPostsProfile',
+        url: 'https://vuejsblog-server.herokuapp.com/getPostsProfile',
         data: this.userSession._id
       }).then(rs => {
         this.tableData = rs.data
@@ -249,7 +249,7 @@ export default {
     editPostBtn: function(index, row) {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/getPostsProfile',
+        url: 'https://vuejsblog-server.herokuapp.com/getPostsProfile',
         data: this.userSession._id
       }).then(rs => {
         this.editPostForm = rs.data[index]
@@ -266,7 +266,7 @@ export default {
         .then(() => {
           axios({
             method: 'post',
-            url: 'http://localhost:3000/deletePostProfile',
+            url: 'https://vuejsblog-server.herokuapp.com/deletePostProfile',
             data: row._id
           }).then(() => {
             this.tableData.splice(index, 1)
@@ -286,7 +286,7 @@ export default {
     editpostConfirm: function() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/editPostProfile',
+        url: 'https://vuejsblog-server.herokuapp.com/editPostProfile',
         data: this.editPostForm
       }).then(rs => {
         this.tableData[this.editPostForm.index] = rs.data

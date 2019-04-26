@@ -81,7 +81,7 @@ export default {
       let usrEmail = this.$route.params.email
       axios({
         method: 'post',
-        url: 'http://localhost:3000/resetChangePass',
+        url: 'https://vuejsblog-server.herokuapp.com/resetChangePass',
         data: {
           ...this.userResetPassInfo,
           usrEmail
