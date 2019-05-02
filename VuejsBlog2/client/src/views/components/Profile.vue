@@ -85,8 +85,6 @@
             </el-select>
           </el-form-item>
           <div class="editPostForm-hidden">
-            <!-- <el-input v-model="editPostForm.authorId">{{userSession._id}}</el-input> -->
-            <!-- <el-input v-model="editPostForm.avatar">{{userSession.avatar}}</el-input> -->
             <el-input v-model="editPostForm.date">{{ date() }}</el-input>
           </div>
           <editor v-model="editPostForm.content" class="editPostForm-editor"></editor>
@@ -109,6 +107,10 @@ import 'tui-editor/dist/tui-editor.css'
 import 'tui-editor/dist/tui-editor-contents.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
+import 'tui-image-editor/dist/svg/icon-a.svg';
+import 'tui-image-editor/dist/svg/icon-b.svg';
+import 'tui-image-editor/dist/svg/icon-c.svg';
+import 'tui-image-editor/dist/svg/icon-d.svg';
 export default {
   components: {
     appHeader: Header,
@@ -299,10 +301,18 @@ export default {
           }
         })
         this.open = false
+        this.$message({
+          type: 'success',
+          message: 'Post edited!'
+        })
       })
     },
     editpostCancel: function() {
       this.open = false
+      this.$message({
+          type: 'info',
+          message: 'Edit cancelled!'
+        })
     }
   }
 }
