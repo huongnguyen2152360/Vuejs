@@ -107,10 +107,7 @@ import 'tui-editor/dist/tui-editor.css'
 import 'tui-editor/dist/tui-editor-contents.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
-import 'tui-image-editor/dist/svg/icon-a.svg';
-import 'tui-image-editor/dist/svg/icon-b.svg';
-import 'tui-image-editor/dist/svg/icon-c.svg';
-import 'tui-image-editor/dist/svg/icon-d.svg';
+
 export default {
   components: {
     appHeader: Header,

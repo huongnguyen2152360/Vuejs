@@ -109,10 +109,7 @@ import Header from './Header'
 import moment from 'moment'
 import axios from 'axios'
 import { clearTimeout } from 'timers'
-import 'tui-image-editor/dist/svg/icon-a.svg';
-import 'tui-image-editor/dist/svg/icon-b.svg';
-import 'tui-image-editor/dist/svg/icon-c.svg';
-import 'tui-image-editor/dist/svg/icon-d.svg';
+
 export default {
   components: {
     appHeader: Header,

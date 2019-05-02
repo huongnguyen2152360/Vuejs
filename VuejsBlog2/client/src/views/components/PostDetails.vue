@@ -106,10 +106,6 @@ import moment from 'moment'
 import { Editor } from '@toast-ui/vue-editor'
 import { error } from 'util'
 import { Viewer } from '@toast-ui/vue-editor'
-import 'tui-image-editor/dist/svg/icon-a.svg';
-import 'tui-image-editor/dist/svg/icon-b.svg';
-import 'tui-image-editor/dist/svg/icon-c.svg';
-import 'tui-image-editor/dist/svg/icon-d.svg';
 
 export default {
   components: {
