@@ -4,12 +4,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-  // mode: 'production',
-  // using mode: "production" attaches the following configuration:
-  // optimization: {
-  //   minimize: true,
-  //   minimizer: [new UglifyJsPlugin()]
-  // },
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
