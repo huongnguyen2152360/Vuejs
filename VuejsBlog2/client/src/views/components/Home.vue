@@ -85,7 +85,7 @@
             <!-- <el-input v-model="postForm.avatar">{{userSession.avatar}}</el-input> -->
             <el-input v-model="postForm.date">{{ date() }}</el-input>
           </div>
-          <editor v-model="postForm.content" :options="editorOptions" class="editorText"></editor>
+          <editor v-model="postForm.content" class="editorText"></editor>
           <div class="postForm-buttons">
             <el-button type="success" class="postForm-buttons-post" @click="postConfirm">POST</el-button>
             <el-button type="info" class="postForm-buttons-cancel" @click="postCancel">CANCEL</el-button>
@@ -113,14 +113,6 @@ export default {
   },
   data() {
     return {
-      editorOptions: {
-        language: 'en_US',
-        useCommandShortcut: true,
-        useDefaultHTMLSanitizer: true,
-        usageStatistics: true,
-        hideModeSwitch: false,
-        toolbarItems: ['heading', 'bold', 'italic', 'strike', 'divider', 'hr', 'quote', 'divider', 'ul', 'ol', 'task', 'indent', 'outdent', 'divider', 'table', 'image', 'link', 'divider', 'code', 'codeblock']
-      },
       open: false,
       postForm: {
         authorId: this.$store.store.state.userSession._id,
