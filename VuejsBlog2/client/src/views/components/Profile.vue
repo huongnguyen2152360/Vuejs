@@ -59,7 +59,7 @@
             <el-table-column label="Tags" prop="tags"></el-table-column>
             <el-table-column label="Date" prop="date"></el-table-column>
             <el-table-column align="right">
-              <template slot="header">
+              <template slot="header" slot-scope="{}">
                 <el-input v-model="search" size="mini" placeholder="Type to search"/>
               </template>
               <template slot-scope="scope">
