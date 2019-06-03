@@ -1,3 +1,6 @@
 .no-margin {
     margin: 0 !important;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
   }

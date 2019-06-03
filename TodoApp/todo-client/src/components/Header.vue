@@ -14,5 +14,19 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang ="scss" scoped>
+#main-header {
+  padding: 20px 0;
+  background: rgba(0,0,0,.35)
+}
+.logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  p {
+    margin:0;
+    padding-left: 10px;
+  }
+}
 </style>
