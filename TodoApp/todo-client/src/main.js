@@ -14,10 +14,16 @@ Vue.use(BootstrapVue)
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
+//V-click-outside
+import vClickOutside from 'v-click-outside'
+Vue.use(vClickOutside)
+
 Vue.config.productionTip = false
 
 //CSS
 import './assets/css/style.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 //Vue-awesome
 library.add(fas)
