@@ -29,7 +29,8 @@ export default {
   background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2560x1920/f8d31d44523704b13367069081b5f380/photo-1544991337-95176b5233c4');
   height: 100%;
 //   width:100%;
-  position: relative;
+  position: fixed;
+  width: 100%;
   z-index: 1;
   overflow: hidden;
   background-position: 50%;

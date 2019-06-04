@@ -1,25 +1,21 @@
 <template>
   <div id="main-content">
     <div class="todo-create-board">
-      <font-awesome-icon icon="plus-square" class="create-btn"></font-awesome-icon>
+      <font-awesome-icon icon="plus-square" class="create-btn" @click="createBoard"></font-awesome-icon>
       <span>Create a new board</span>
     </div>
-    <div class="boards">
-      <div class="board-created">
-        <div class="board-created-header">
-          <div class="board-header-title">
-            <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." @keyup.enter="createBoard" v-if="!showBoardTitle" v-click-outside="createBoard"></b-form-input>
-            <p v-if="showBoardTitle" @click="showBoardInput">{{boardTitle}}</p>
+    <div class="boards" :key="index" v-for="(board, index) in boards">
+      <div class="boards-board-created" :key="index" v-for="(board, index) in boards">
+        <div class="board-created">
+          <div class="board-created-header">
+            <div class="board-header-title">
+              <p>{{board.title}}</p>
+              <!-- <p v-if="showBoardTitle" @click="showBoardInput">{{boardTitle}}</p> -->
+
+              <!-- <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." @keyup.enter="updateBoard" v-if="!showBoardTitle"></b-form-input> -->
+            </div>
+            <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
           </div>
-          <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
-        </div>
-      </div>
-      <div class="board-created">
-        <div class="board-created-header">
-          <div class="board-header-title">
-            <p>Title</p>
-          </div>
-          <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
         </div>
       </div>
     </div>
@@ -28,30 +24,59 @@
 
 <script>
 import config from '../config'
+import { close } from 'fs'
 export default {
   name: 'Content',
   data() {
     return {
+      boards: [],
       boardTitle: '',
-      showBoardTitle: false
+      showBoard: false
     }
+  },
+  mounted() {
+    let self = this
+    this.$http.get(config.api.getBoardList).then(res => {
+      self.boards = res.body
+    })
   },
   methods: {
     createBoard() {
-      this.showBoardTitle = true
-      this.$http.post(config.api.createBoard, {
-        title: this.boardTitle
-      })
-    },
-    showBoardInput() {
-      this.showBoardTitle = false
+      this.showBoard = true
+      if (this.boardTitle.replace(/\s/g, '') == '') {
+        this.boardTitle = 'My new board'
+      }
+      this.$http
+        .post(config.api.createBoard, {
+          title: this.boardTitle
+        })
+        .then(
+          res => {
+            this.boards.push(res.body)
+          },
+          err => {
+            console.log(err.body)
+          }
+        )
     }
+    // updateBoard() {
+    //   this.showBoardTitle = true
+    //   // this.$http.post(config.api.updateBoard, {
+    //   //   title: this.boardTitle
+    //   // })
+    // },
+    // showBoardInput() {
+    //   this.showBoardTitle = false
+    // }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang ="scss" scoped>
+#main-content {
+  overflow: scroll;
+}
 .todo-create-board {
   display: flex;
   align-items: center;
@@ -72,7 +97,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  .board-created:not(:first-child) {
+  .boards-board-created:not(:first-child) {
     margin-left: 20px;
   }
 }
@@ -82,7 +107,7 @@ export default {
   background-color: #000000a6;
   margin-top: 20px;
   border-radius: 5px;
-  padding: 10px;
+  padding: 15px;
   .board-created-header {
     display: flex;
     flex-direction: row;
@@ -90,6 +115,9 @@ export default {
     .board-header-title {
       flex: 1;
       margin-right: 10px;
+      p {
+        margin-bottom: 0;
+      }
     }
     .create-todo-btn {
       color: gray;
