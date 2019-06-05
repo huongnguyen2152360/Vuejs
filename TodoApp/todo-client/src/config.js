@@ -4,6 +4,7 @@ export default {
     api: {
         createBoard: `${baseUrl}/api/board/create-board/`,
         getBoardList: `${baseUrl}/api/board/get-board-list/`,
+        deleteBoard: `${baseUrl}/api/board/delete-board/`,
         updateBoard: `${baseUrl}/api/board/update-board/`
     }
 }

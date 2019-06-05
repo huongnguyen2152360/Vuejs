@@ -9,12 +9,11 @@
         <div class="board-created">
           <div class="board-created-header">
             <div class="board-header-title">
-              <p>{{board.title}}</p>
-              <!-- <p v-if="showBoardTitle" @click="showBoardInput">{{boardTitle}}</p> -->
-
-              <!-- <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." @keyup.enter="updateBoard" v-if="!showBoardTitle"></b-form-input> -->
+              <p @click="showBoardInput(board.id,index)" :id="board.id + 'p' + index">{{board.title}}</p>
+              <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." :id="board.id + 'input' + index" class="board-header-title-input" @keyup.enter="updateBoard(board.id, index)"></b-form-input>
             </div>
             <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
+            <font-awesome-icon icon="minus-square" class="del-board-btn" @click="deleteBoard(board.id,index)"></font-awesome-icon>
           </div>
         </div>
       </div>
@@ -30,8 +29,7 @@ export default {
   data() {
     return {
       boards: [],
-      boardTitle: '',
-      showBoard: false
+      boardTitle: ''
     }
   },
   mounted() {
@@ -58,16 +56,28 @@ export default {
             console.log(err.body)
           }
         )
+    },
+    deleteBoard(boardId, index) {
+      this.$http.put(config.api.deleteBoard, {
+        id: boardId
+      })
+      this.boards.splice(index, 1)
+    },
+    updateBoard(boardId,index) {
+      document.getElementById(boardId + 'p' + index).style.display = 'flex'
+      document.getElementById(boardId + 'input' + index).style.display = 'none'
+      this.$http.post(config.api.updateBoard, {
+        title: this.boardTitle,
+        id: boardId
+      }).then(res=> {
+        console.log('updated')
+      })
+    },
+    showBoardInput(boardId, index) {
+      document.getElementById(boardId + 'p' + index).style.display = 'none'
+      document.getElementById(boardId + 'input' + index).style.display = 'flex'
+      document.getElementById(boardId + 'input' + index).focus()
     }
-    // updateBoard() {
-    //   this.showBoardTitle = true
-    //   // this.$http.post(config.api.updateBoard, {
-    //   //   title: this.boardTitle
-    //   // })
-    // },
-    // showBoardInput() {
-    //   this.showBoardTitle = false
-    // }
   }
 }
 </script>
@@ -103,7 +113,7 @@ export default {
 }
 .board-created {
   height: 300px;
-  width: 200px;
+  width: 250px;
   background-color: #000000a6;
   margin-top: 20px;
   border-radius: 5px;
@@ -117,12 +127,28 @@ export default {
       margin-right: 10px;
       p {
         margin-bottom: 0;
+        padding: 4px;
+      }
+      .board-header-title-input {
+        display: none;
       }
     }
     .create-todo-btn {
       color: gray;
       font-size: 1.5em;
       cursor: pointer;
+      &:hover {
+        color: rgba(0, 0, 0, 0.3);
+      }
+    }
+    .del-board-btn {
+      color: gray;
+      font-size: 1.5em;
+      cursor: pointer;
+      margin-left: 5px;
+      &:hover {
+        color: rgba(0, 0, 0, 0.3);
+      }
     }
   }
 }

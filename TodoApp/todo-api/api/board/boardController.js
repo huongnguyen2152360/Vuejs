@@ -15,3 +15,9 @@ exports.getBoardList = function (req, res) {
         handleError(res, err);
     });
 }
+
+exports.deleteBoard = function(req,res) {
+    Model.Board.destroy({where: {
+        id: req.body.id
+    }})
+}
