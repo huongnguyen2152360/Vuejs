@@ -9,11 +9,14 @@
         <div class="board-created">
           <div class="board-created-header">
             <div class="board-header-title">
-              <p @click="showBoardInput(board.id,index)" :id="board.id + 'p' + index">{{board.title}}</p>
-              <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." :id="board.id + 'input' + index" class="board-header-title-input" @keyup.enter="updateBoard(board.id, index)"></b-form-input>
+              <p @click="showBoardInput(board,index)" :id="board.id + 'p' + index">{{board.title}}</p>
+              <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." :id="board.id + 'input' + index" class="board-header-title-input" @keyup.enter="updateBoard(board,index)"></b-form-input>
             </div>
             <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
             <font-awesome-icon icon="minus-square" class="del-board-btn" @click="deleteBoard(board.id,index)"></font-awesome-icon>
+          </div>
+          <div class="board-content">
+            <div class="board-todo"></div>
           </div>
         </div>
       </div>
@@ -36,6 +39,9 @@ export default {
     let self = this
     this.$http.get(config.api.getBoardList).then(res => {
       self.boards = res.body
+      self.boards.sort(function(a, b) {
+        return a.id - b.id
+      })
     })
   },
   methods: {
@@ -63,20 +69,33 @@ export default {
       })
       this.boards.splice(index, 1)
     },
-    updateBoard(boardId,index) {
-      document.getElementById(boardId + 'p' + index).style.display = 'flex'
-      document.getElementById(boardId + 'input' + index).style.display = 'none'
-      this.$http.post(config.api.updateBoard, {
-        title: this.boardTitle,
-        id: boardId
-      }).then(res=> {
-        console.log('updated')
+    updateBoard(board, index) {
+      let self = this
+      document.getElementById(board.id + 'p' + index).style.display = 'flex'
+      document.getElementById(board.id + 'input' + index).style.display = 'none'
+      this.$http
+        .put(config.api.updateBoard, {
+          title: self.boardTitle,
+          id: board.id
+        })
+        .then(
+          () => {
+            console.log('something')
+          },
+          err => {
+            console.log(err.body)
+          }
+        )
+      board.title = this.boardTitle
+      this.boards.sort(function(a, b) {
+        return a.id - b.id
       })
     },
-    showBoardInput(boardId, index) {
-      document.getElementById(boardId + 'p' + index).style.display = 'none'
-      document.getElementById(boardId + 'input' + index).style.display = 'flex'
-      document.getElementById(boardId + 'input' + index).focus()
+    showBoardInput(board, index) {
+      document.getElementById(board.id + 'p' + index).style.display = 'none'
+      document.getElementById(board.id + 'input' + index).style.display = 'flex'
+      document.getElementById(board.id + 'input' + index).focus()
+      this.boardTitle = board.title
     }
   }
 }
@@ -113,8 +132,8 @@ export default {
 }
 .board-created {
   height: 300px;
-  width: 250px;
-  background-color: #000000a6;
+  width: 280px;
+  background-color: #dfe1e6;
   margin-top: 20px;
   border-radius: 5px;
   padding: 15px;
@@ -125,9 +144,18 @@ export default {
     .board-header-title {
       flex: 1;
       margin-right: 10px;
+      width: 55%;
       p {
         margin-bottom: 0;
         padding: 4px;
+        margin-bottom: 0;
+        padding: 4px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        color: #172b4d;
+        text-transform: uppercase;
+        font-weight: 500;
       }
       .board-header-title-input {
         display: none;
@@ -150,6 +178,13 @@ export default {
         color: rgba(0, 0, 0, 0.3);
       }
     }
+  }
+}
+.board-content {
+  .board-todo {
+    height: 100px;
+    width: 100%;
+    background-color: grey;
   }
 }
 </style>
