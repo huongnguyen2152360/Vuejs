@@ -8,7 +8,14 @@ module.exports = (sequelize, DataType) => {
             validate: {
                 len: [1, 50]
             }
+        },
+        deleted: {
+            type: DataType.BOOLEAN,
+            defaultValue: false
         }
-    });
+    },{});
+    Board.associate = function (models) {
+        models.Todo.belongsTo(models.Board, { foreignKey: 'boardId' });
+    };
     return Board
 }

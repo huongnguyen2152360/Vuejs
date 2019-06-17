@@ -4,19 +4,19 @@
       <font-awesome-icon icon="plus-square" class="create-btn" @click="createBoard"></font-awesome-icon>
       <span>Create a new board</span>
     </div>
-    <div class="boards" :key="index" v-for="(board, index) in boards">
+    <div class="boards">
       <div class="boards-board-created" :key="index" v-for="(board, index) in boards">
         <div class="board-created">
           <div class="board-created-header">
             <div class="board-header-title">
-              <p @click="showBoardInput(board,index)" :id="board.id + 'p' + index">{{board.title}}</p>
-              <b-form-input size="sm" v-model="boardTitle" placeholder="Your Board Title ..." :id="board.id + 'input' + index" class="board-header-title-input" @keyup.enter="updateBoard(board,index)"></b-form-input>
+              <p @click="showBoardInput(board,index)" :id="board.id + 'p' + index" :class="['board-header-title-p', 'show-board-title',(something == 'showTitle' + index ? 'active' : 'unactive') ]">{{board.title}}</p>
+              <b-form-input size="sm" v-model="boardTitle" placeholder="Your board title ..." :id="board.id + 'input' + index" :class="['board-header-title-input',(something == 'showInput' + index ? 'active' : 'unactive') ]" @keyup.enter="updateBoard(board,index)"></b-form-input>
             </div>
-            <font-awesome-icon icon="plus-square" class="create-todo-btn"></font-awesome-icon>
+            <font-awesome-icon icon="plus-square" class="create-todo-btn" @click="createTodo(board,index)"></font-awesome-icon>
             <font-awesome-icon icon="minus-square" class="del-board-btn" @click="deleteBoard(board.id,index)"></font-awesome-icon>
           </div>
           <div class="board-content">
-            <div class="board-todo"></div>
+            <Todo :boardId="board.id"></Todo>
           </div>
         </div>
       </div>
@@ -26,13 +26,17 @@
 
 <script>
 import config from '../config'
-import { close } from 'fs'
+import Todo from './Todo'
 export default {
   name: 'Content',
+  components: {
+    Todo: Todo
+  },
   data() {
     return {
       boards: [],
-      boardTitle: ''
+      boardTitle: '',
+      something: ''
     }
   },
   mounted() {
@@ -64,26 +68,25 @@ export default {
         )
     },
     deleteBoard(boardId, index) {
-      this.$http.put(config.api.deleteBoard, {
-        id: boardId
+      this.$http.put(config.api.updateBoard + boardId, {
+        deleted: true
       })
       this.boards.splice(index, 1)
     },
     updateBoard(board, index) {
+      this.something == 'showTitle' + index
+      console.log('show title',this.something)
       let self = this
-      document.getElementById(board.id + 'p' + index).style.display = 'flex'
-      document.getElementById(board.id + 'input' + index).style.display = 'none'
       this.$http
-        .put(config.api.updateBoard, {
-          title: self.boardTitle,
-          id: board.id
+        .put(config.api.updateBoard + board.id, {
+          title: self.boardTitle
         })
         .then(
-          () => {
-            console.log('something')
+          res => {
+            return res.body
           },
           err => {
-            console.log(err.body)
+            return err.body
           }
         )
       board.title = this.boardTitle
@@ -92,11 +95,16 @@ export default {
       })
     },
     showBoardInput(board, index) {
-      document.getElementById(board.id + 'p' + index).style.display = 'none'
-      document.getElementById(board.id + 'input' + index).style.display = 'flex'
-      document.getElementById(board.id + 'input' + index).focus()
+      document.getElementById(board.id + 'p' + index).classList.remove('show-board-title')
+      // document.getElementById(board.id + 'input' + index).style.display = 'flex'
+      // document.getElementById(board.id + 'input' + index).focus()
+      this.something = 'showInput' + index
+      console.log('show input',this.something)
       this.boardTitle = board.title
-    }
+    },
+    // createTodo(board, index) {
+
+    // }
   }
 }
 </script>
@@ -145,17 +153,17 @@ export default {
       flex: 1;
       margin-right: 10px;
       width: 55%;
-      p {
+      .board-header-title-p {
         margin-bottom: 0;
         padding: 4px;
         margin-bottom: 0;
         padding: 4px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         color: #172b4d;
         text-transform: uppercase;
         font-weight: 500;
+      }
+      .show-board-title {
+        display: block;
       }
       .board-header-title-input {
         display: none;
@@ -180,11 +188,10 @@ export default {
     }
   }
 }
-.board-content {
-  .board-todo {
-    height: 100px;
-    width: 100%;
-    background-color: grey;
-  }
+.active {
+  display: block !important;
+}
+.unactive {
+  display: none;
 }
 </style>

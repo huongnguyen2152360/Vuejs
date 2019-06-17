@@ -9,26 +9,33 @@ exports.createBoard = function (req, res) {
 }
 
 exports.getBoardList = function (req, res) {
-    Model.Board.findAll().then(data => {
+    Model.Board.findAll({
+        where: {
+            deleted: false
+        }
+    }).then(data => {
         return res.status(200).json(data)
     }).catch(err => {
         handleError(res, err);
     });
 }
 
-exports.deleteBoard = function (req, res) {
-    Model.Board.destroy({
-        where: {
-            id: req.body.id
-        }
-    })
-}
 exports.updateBoard = function (req, res) {
-    Model.Board.update({ title: req.body.title }, {
-        where: {
-            id: req.body.id
-        }
-    }).then(data => {
-        console.log(data);
-    })
+    if (req.body.deleted) {
+        Model.Board.update({ deleted: true },
+            {
+                where: {
+                    id: req.params.id
+                }
+            })
+    }
+    Model.Board.update(
+        { title: req.body.title }
+        , {
+            where: {
+                id: req.params.id
+            }
+        }).then(data => {
+            return res.status(200).json(data)
+        })
 }
