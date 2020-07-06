@@ -1,18 +1,25 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <Greeting msg="msg" isAdmin="isAdmin"/> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import Greeting from './components/Greeting.vue';
+import {shallowMount} from "@vue/test-utils";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    // Greeting
+  },
+  // data() {
+  //   return {
+  //     msg: "hello greeting",
+  //     isAdmin: true
+  //   }
+  // }
 }
 </script>
 
